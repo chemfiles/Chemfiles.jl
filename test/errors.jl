@@ -1,11 +1,11 @@
+
 facts("Error functions") do
     @fact Chemharp.last_error() => ""
 
-    Chemharp.logfile("chemharp.log")
+    # Functions called in the runtests.jl file
+    # Chemharp.logfile("chemharp.log")
+    # Chemharp.log_to_stderr()
     @fact isfile("chemharp.log") => true
 
-    # Just calling the functions to check the interface
     Chemharp.loglevel(Chemharp.ERROR)
-    Chemharp.log_to_stderr()
-    rm("chemharp.log")
 end

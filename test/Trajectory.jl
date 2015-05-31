@@ -3,11 +3,8 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
 
 facts("Trajectory type") do
     context("Errors handling") do
-        Chemharp.logfile("tmp.log")
         @fact_throws Trajectory(joinpath(DATAPATH, "not-here.xyz"))
         @fact_throws Trajectory(joinpath(DATAPATH, "empty.unknown"))
-        Chemharp.log_to_stderr()
-        rm("tmp.log")
     end
 
     context("Read frames") do
