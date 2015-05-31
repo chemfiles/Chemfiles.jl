@@ -1,4 +1,4 @@
-export positions, positions!, set_positions!, velocities, velocities!, set_velocities,
+export positions, positions!, set_positions!, velocities, velocities!, set_velocities!,
        has_velocities, set_cell!, set_topology!, set_step!, guess_topology!
 
 function Frame(natoms::Integer = 0)
@@ -29,14 +29,14 @@ end
 
 function positions!(frame::Frame, data::Array{Float32, 2})
     check(
-        lib.chrp_frame_positions(frame.handle, pointer(data), size(data, 2))
+        lib.chrp_frame_positions(frame.handle, pointer(data), UInt64(size(data, 2)))
     )
     return data
 end
 
 function set_positions!(frame::Frame, data::Array{Float32, 2})
     check(
-        lib.chrp_frame_positions_set(frame.handle, pointer(data), size(data, 2))
+        lib.chrp_frame_positions_set(frame.handle, pointer(data), UInt64(size(data, 2)))
     )
     return nothing
 end
@@ -49,14 +49,14 @@ end
 
 function velocities!(frame::Frame, data::Array{Float32, 2})
     check(
-        lib.chrp_frame_velocities(frame.handle, pointer(data), size(data, 2))
+        lib.chrp_frame_velocities(frame.handle, pointer(data), UInt64(size(data, 2)))
     )
     return data
 end
 
 function set_velocities!(frame::Frame, data::Array{Float32, 2})
     check(
-        lib.chrp_frame_velocities_set(frame.handle, pointer(data), size(data, 2))
+        lib.chrp_frame_velocities_set(frame.handle, pointer(data), UInt64(size(data, 2)))
     )
     return nothing
 end

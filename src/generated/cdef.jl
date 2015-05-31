@@ -66,20 +66,20 @@ function chrp_frame_size(frame::Ptr{CHRP_FRAME},natoms::Ptr{Csize_t})
     ccall((:chrp_frame_size,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Csize_t}),frame,natoms)
 end
 
-function chrp_frame_positions(frame::Ptr{CHRP_FRAME},data::Ptr{Void},size::Csize_t)
-    ccall((:chrp_frame_positions,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Void},Csize_t),frame,data,size)
+function chrp_frame_positions(frame::Ptr{CHRP_FRAME},data::Ptr{Cfloat},size::Csize_t)
+    ccall((:chrp_frame_positions,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Cfloat},Csize_t),frame,data,size)
 end
 
-function chrp_frame_positions_set(frame::Ptr{CHRP_FRAME},data::Ptr{Void},size::Csize_t)
-    ccall((:chrp_frame_positions_set,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Void},Csize_t),frame,data,size)
+function chrp_frame_positions_set(frame::Ptr{CHRP_FRAME},data::Ptr{Cfloat},size::Csize_t)
+    ccall((:chrp_frame_positions_set,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Cfloat},Csize_t),frame,data,size)
 end
 
-function chrp_frame_velocities(frame::Ptr{CHRP_FRAME},data::Ptr{Void},size::Csize_t)
-    ccall((:chrp_frame_velocities,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Void},Csize_t),frame,data,size)
+function chrp_frame_velocities(frame::Ptr{CHRP_FRAME},data::Ptr{Cfloat},size::Csize_t)
+    ccall((:chrp_frame_velocities,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Cfloat},Csize_t),frame,data,size)
 end
 
-function chrp_frame_velocities_set(frame::Ptr{CHRP_FRAME},data::Ptr{Void},size::Csize_t)
-    ccall((:chrp_frame_velocities_set,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Void},Csize_t),frame,data,size)
+function chrp_frame_velocities_set(frame::Ptr{CHRP_FRAME},data::Ptr{Cfloat},size::Csize_t)
+    ccall((:chrp_frame_velocities_set,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Cfloat},Csize_t),frame,data,size)
 end
 
 function chrp_frame_has_velocities(frame::Ptr{CHRP_FRAME},has_vel::Ptr{Bool})
