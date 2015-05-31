@@ -9,7 +9,6 @@ export positions, positions!, set_positions!, velocities, velocities!, set_veloc
 
 function Frame(natoms::Integer = 0)
     handle = lib.chrp_frame(Csize_t(natoms))
-    check(handle, "Error while creating Frame")
     return Frame(handle)
 end
 

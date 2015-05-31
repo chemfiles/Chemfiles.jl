@@ -8,8 +8,7 @@ export mass, setmass!, charge, setcharge!, name, setname!,
        fullname, vdw_radius, covalent_radius, atomic_number
 
 function Atom(name::ASCIIString)
-    handle = lib.chrp_atom(pointer(name))
-    return Atom(handle)
+    return Atom(lib.chrp_atom(pointer(name)))
 end
 
 function Atom(frame::Frame, index::Integer)

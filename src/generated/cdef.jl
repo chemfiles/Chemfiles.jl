@@ -202,16 +202,16 @@ function chrp_topology_dihedrals_count(topology::Ptr{CHRP_TOPOLOGY},ndihedrals::
     ccall((:chrp_topology_dihedrals_count,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Csize_t}),topology,ndihedrals)
 end
 
-function chrp_topology_bonds(topology::Ptr{CHRP_TOPOLOGY},data::Ptr{Void},nbonds::Csize_t)
-    ccall((:chrp_topology_bonds,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Void},Csize_t),topology,data,nbonds)
+function chrp_topology_bonds(topology::Ptr{CHRP_TOPOLOGY},data::Ptr{Csize_t},nbonds::Csize_t)
+    ccall((:chrp_topology_bonds,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Csize_t},Csize_t),topology,data,nbonds)
 end
 
-function chrp_topology_angles(topology::Ptr{CHRP_TOPOLOGY},data::Ptr{Void},nangles::Csize_t)
-    ccall((:chrp_topology_angles,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Void},Csize_t),topology,data,nangles)
+function chrp_topology_angles(topology::Ptr{CHRP_TOPOLOGY},data::Ptr{Csize_t},nangles::Csize_t)
+    ccall((:chrp_topology_angles,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Csize_t},Csize_t),topology,data,nangles)
 end
 
-function chrp_topology_dihedrals(topology::Ptr{CHRP_TOPOLOGY},data::Ptr{Void},ndihedrals::Csize_t)
-    ccall((:chrp_topology_dihedrals,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Void},Csize_t),topology,data,ndihedrals)
+function chrp_topology_dihedrals(topology::Ptr{CHRP_TOPOLOGY},data::Ptr{Csize_t},ndihedrals::Csize_t)
+    ccall((:chrp_topology_dihedrals,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Csize_t},Csize_t),topology,data,ndihedrals)
 end
 
 function chrp_topology_add_bond(topology::Ptr{CHRP_TOPOLOGY},i::Csize_t,j::Csize_t)
