@@ -1,6 +1,13 @@
 module Chemharp
+
     module lib
-        const libchemharp = "libchemharp"
+        module deps
+            using BinDeps
+            @BinDeps.load_dependencies
+        end
+        # Extract the library path
+        const libchemharp = deps.libchemharp[1][2]
+
         include("generated/types.jl")
         include("generated/cdef.jl")
     end
