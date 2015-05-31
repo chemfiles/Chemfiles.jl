@@ -10,8 +10,8 @@ function chrp_last_error()
     ccall((:chrp_last_error,libchemharp),Ptr{Uint8},())
 end
 
-function chrp_loglevel(level::chrp_log_level_t)
-    ccall((:chrp_loglevel,libchemharp),Cint,(chrp_log_level_t,),level)
+function chrp_loglevel(level::LogLevel)
+    ccall((:chrp_loglevel,libchemharp),Cint,(LogLevel,),level)
 end
 
 function chrp_logfile(file::Ptr{Uint8})
@@ -134,16 +134,16 @@ function chrp_cell_angles_set(cell::Ptr{CHRP_CELL},alpha::Cdouble,beta::Cdouble,
     ccall((:chrp_cell_angles_set,libchemharp),Cint,(Ptr{CHRP_CELL},Cdouble,Cdouble,Cdouble),cell,alpha,beta,gamma)
 end
 
-function chrp_cell_matrix(cell::Ptr{CHRP_CELL},mat::Ptr{Array_3_Cdouble})
-    ccall((:chrp_cell_matrix,libchemharp),Cint,(Ptr{CHRP_CELL},Ptr{Array_3_Cdouble}),cell,mat)
+function chrp_cell_matrix(cell::Ptr{CHRP_CELL},mat::Ptr{Cdouble})
+    ccall((:chrp_cell_matrix,libchemharp),Cint,(Ptr{CHRP_CELL},Ptr{Cdouble}),cell,mat)
 end
 
-function chrp_cell_type(cell::Ptr{CHRP_CELL},_type::Ptr{chrp_cell_type_t})
-    ccall((:chrp_cell_type,libchemharp),Cint,(Ptr{CHRP_CELL},Ptr{chrp_cell_type_t}),cell,_type)
+function chrp_cell_type(cell::Ptr{CHRP_CELL},_type::Ptr{CellType})
+    ccall((:chrp_cell_type,libchemharp),Cint,(Ptr{CHRP_CELL},Ptr{CellType}),cell,_type)
 end
 
-function chrp_cell_type_set(cell::Ptr{CHRP_CELL},_type::chrp_cell_type_t)
-    ccall((:chrp_cell_type_set,libchemharp),Cint,(Ptr{CHRP_CELL},chrp_cell_type_t),cell,_type)
+function chrp_cell_type_set(cell::Ptr{CHRP_CELL},_type::CellType)
+    ccall((:chrp_cell_type_set,libchemharp),Cint,(Ptr{CHRP_CELL},CellType),cell,_type)
 end
 
 function chrp_cell_periodicity(cell::Ptr{CHRP_CELL},x::Ptr{Bool},y::Ptr{Bool},z::Ptr{Bool})

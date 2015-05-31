@@ -16,8 +16,8 @@ module Chemharp
         include("generated/types.jl")
         include("generated/cdef.jl")
     end
-    import .lib: NONE, ERROR, WARNING, INFO, DEBUG
-    import .lib: ORTHOROMBIC, TRICLINIC, INFINITE
+    import .lib: NONE, ERROR, WARNING, INFO, DEBUG, LogLevel
+    import .lib: ORTHOROMBIC, TRICLINIC, INFINITE, CellType
 
     include("errors.jl")
 

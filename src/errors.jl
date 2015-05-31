@@ -42,7 +42,7 @@ function last_error()
     bytestring(lib.chrp_last_error())
 end
 
-function loglevel(level::lib.chrp_log_level_t)
+function loglevel(level::LogLevel)
     check(
         lib.chrp_loglevel(level)
     )
