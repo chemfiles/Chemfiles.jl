@@ -14,7 +14,11 @@ function check(result::Integer, message = "Unknown error")
     if result != 0
         str = message
         try
-            str = bytestring(lib.chrp_strerror(result))
+            str = last_error()
+        catch
+            try
+                str = bytestring(lib.chrp_strerror(result))
+            end
         end
         throw(ChemharpError(str))
     end
