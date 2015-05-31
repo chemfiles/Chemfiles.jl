@@ -9,6 +9,22 @@ function Atom(name::ASCIIString)
     return Atom(handle)
 end
 
+function Atom(frame::Frame, index::Integer)
+    handle = lib.chrp_atom_from_frame(frame.handle, Csize_t(index))
+    if Int(handle) == 0
+        throw(ChemharpError("Error while creating Atom from Frame"))
+    end
+    return Atom(handle)
+end
+
+function Atom(topology::Topology, index::Integer)
+    handle = lib.chrp_atom_from_topology(topology.handle, Csize_t(index))
+    if Int(handle) == 0
+        throw(ChemharpError("Error while creating Atom from Topology"))
+    end
+    return Atom(handle)
+end
+
 function free(atom::Atom)
     lib.chrp_atom_free(atom.handle)
 end
@@ -92,7 +108,3 @@ function atomic_number(atom::Atom)
     )
     return number[1]
 end
-
-# TODO
-# chrp_atom_from_frame
-# chrp_atom_from_topology
