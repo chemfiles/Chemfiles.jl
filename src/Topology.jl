@@ -12,7 +12,7 @@ function Topology()
 end
 
 function Topology(frame::Frame)
-    return Topology(lib.chrp_topology_from_frame(frame.handle)
+    return Topology(lib.chrp_topology_from_frame(frame.handle))
 end
 
 function free(topology::Topology)
@@ -46,7 +46,7 @@ end
 function isbond(topology::Topology, i::Integer, j::Integer)
     res = Bool[false]
     check(
-        lib.chrp_topology_isbond(topology, Csize_t(i), Csize_t(j), pointer(res))
+        lib.chrp_topology_isbond(topology.handle, Csize_t(i), Csize_t(j), pointer(res))
     )
     return res[1]
 end
@@ -54,7 +54,7 @@ end
 function isangle(topology::Topology, i::Integer, j::Integer, k::Integer)
     res = Bool[false]
     check(
-        lib.chrp_topology_isangle(topology, Csize_t(i), Csize_t(j), Csize_t(k), pointer(res))
+        lib.chrp_topology_isangle(topology.handle, Csize_t(i), Csize_t(j), Csize_t(k), pointer(res))
     )
     return res[1]
 end
@@ -62,7 +62,7 @@ end
 function isdihedral(topology::Topology, i::Integer, j::Integer, k::Integer, m::Integer)
     res = Bool[false]
     check(
-        lib.chrp_topology_isdihedral(topology, Csize_t(i), Csize_t(j), Csize_t(j), Csize_t(k), pointer(res))
+        lib.chrp_topology_isdihedral(topology.handle, Csize_t(i), Csize_t(j), Csize_t(k), Csize_t(m), pointer(res))
     )
     return res[1]
 end
@@ -92,25 +92,28 @@ function ndihedrals(topology::Topology)
 end
 
 function bonds(topology::Topology)
-    res = Array(Csize_t, 2, nbonds(topology))
+    count = nbonds(topology)
+    res = Array(Csize_t, 2, count)
     check(
-        lib.chrp_topology_bonds(topology.handle, pointer(res))
+        lib.chrp_topology_bonds(topology.handle, pointer(res), count)
     )
     return res
 end
 
 function angles(topology::Topology)
-    res = Array(Csize_t, 3, nangles(topology))
+    count = nangles(topology)
+    res = Array(Csize_t, 3, count)
     check(
-        lib.chrp_topology_angles(topology.handle, pointer(res))
+        lib.chrp_topology_angles(topology.handle, pointer(res), count)
     )
     return res
 end
 
 function dihedrals(topology::Topology)
-    res = Array(Csize_t, 4, ndihedrals(topology))
+    count = ndihedrals(topology)
+    res = Array(Csize_t, 4, count)
     check(
-        lib.chrp_topology_dihedrals_count(topology.handle, pointer(res))
+        lib.chrp_topology_dihedrals_count(topology.handle, pointer(res), count)
     )
     return res
 end
