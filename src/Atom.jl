@@ -1,14 +1,5 @@
-export Atom, mass, setmass!, charge, setcharge!, name, setname!,
+export mass, setmass!, charge, setcharge!, name, setname!,
        fullname, vdw_radius, covalent_radius, atomic_number
-
-type Atom
-    handle :: Ptr{lib.CHRP_ATOM}
-    function Atom(ptr::Ptr{lib.CHRP_ATOM})
-        this = new(ptr)
-        finalizer(this, free)
-        return this
-    end
-end
 
 function Atom(name::ASCIIString)
     handle = lib.chrp_atom(pointer(name))

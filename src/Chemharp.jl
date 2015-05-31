@@ -12,21 +12,58 @@ module Chemharp
         include("generated/cdef.jl")
     end
 
-    type ChemharpError <: Exception
-        message::String
-    end
-    Base.show(io::IO, e::ChemharpError) = show(io, "Chemharp error: $(e.message)")
-    export ChemharpError
+    include("errors.jl")
 
-    function check(result)
-        if result != 0
-            str = "Unlnown error"
-            try
-                str = lib.chrp_strerror(result)
-            end
-            throw(ChemharpError(str))
+    export Trajectory, Topology, Atom, UnitCell, Frame
+
+    type Trajectory
+        handle :: Ptr{lib.CHRP_TRAJECTORY}
+        function Frame(ptr::Ptr{lib.CHRP_TRAJECTORY})
+            this = new(ptr)
+            finalizer(this, free)
+            return this
+        end
+    end
+
+    type Topology
+        handle :: Ptr{lib.CHRP_TOPOLOGY}
+        function Frame(ptr::Ptr{lib.CHRP_TOPOLOGY})
+            this = new(ptr)
+            finalizer(this, free)
+            return this
+        end
+    end
+
+    type Atom
+        handle :: Ptr{lib.CHRP_ATOM}
+        function Atom(ptr::Ptr{lib.CHRP_ATOM})
+            this = new(ptr)
+            finalizer(this, free)
+            return this
+        end
+    end
+
+    type UnitCell
+        handle :: Ptr{lib.CHRP_CELL}
+        function Frame(ptr::Ptr{lib.CHRP_CELL})
+            this = new(ptr)
+            finalizer(this, free)
+            return this
+        end
+    end
+
+    type Frame
+        handle :: Ptr{lib.CHRP_FRAME}
+        function Frame(ptr::Ptr{lib.CHRP_FRAME})
+            this = new(ptr)
+            finalizer(this, free)
+            return this
         end
     end
 
     include("Atom.jl")
+    include("Frame.jl")
+    include("Topology.jl")
+    include("Trajectory.jl")
+    include("UnitCell.jl")
 end
