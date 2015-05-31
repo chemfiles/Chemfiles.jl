@@ -81,4 +81,4 @@ function Base.close(file::Trajectory)
     return nothing
 end
 
-Base.isopen(file::Trajectory) = (file.handle != Ptr{CHRP_TRAJECTORY}(0))
+Base.isopen(file::Trajectory) = (file.handle != Ptr{lib.CHRP_TRAJECTORY}(0))

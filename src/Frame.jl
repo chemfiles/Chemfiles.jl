@@ -83,7 +83,7 @@ end
 
 function set_topology!(frame::Frame, topology::Topology)
     check(
-        lib.chrp_frame_cell_set(frame.handle, topology.handle)
+        lib.chrp_frame_topology_set(frame.handle, topology.handle)
     )
     return nothing
 end

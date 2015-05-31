@@ -16,23 +16,21 @@ facts("Trajectory type") do
         @fact pos[:, 1] => Float32[0.417219, 8.303366, 11.737172]
         @fact pos[:, 125] => Float32[5.099554, -0.045104, 14.153846]
 
-        # topology = Topology(frame)
-        # @fact natom_types(topology) => 2
-        # @fact natoms(topology) => 297
-        # @fact name(topology[0]) => "O"
+        topology = Topology(frame)
+        @fact natoms(topology) => 297
+        @fact name(Atom(topology, 0)) => "O"
 
         read_step!(file, 41, frame)
         pos = positions(frame)
         @fact pos[:, 1] => Float32[0.761277, 8.106125, 10.622949]
         @fact pos[:, 125] => Float32[5.13242, 0.079862, 14.194161]
 
-        # topology = Topology(frame)
-        # @fact natom_types(topology) => 2
-        # @fact natoms(topology) => 297
-        # @fact name(topology[0]) => "O"
+        topology = Topology(frame)
+        @fact natoms(topology) => 297
+        @fact name(Atom(topology, 0)) => "O"
     end
 
-    #= context("Write frames") do
+    context("Write frames") do
         expected_content = """4
                               Written by Chemharp
                               X 1 2 3
@@ -46,7 +44,8 @@ facts("Trajectory type") do
                               X 4 5 6
                               X 4 5 6
                               X 4 5 6
-                              X 4 5 6"""
+                              X 4 5 6
+                              """
 
         pos = Array(Float32, 3, 4)
         for i=1:4
@@ -64,12 +63,12 @@ facts("Trajectory type") do
         file = Trajectory("test-tmp.xyz", "w");
         write(file, frame)
 
-        pos = Array(Float32, 3, 4)
-        for i=1:4
+        pos = Array(Float32, 3, 6)
+        for i=1:6
             pos[:, i] = Float32[4, 5, 6]
         end
         top = Topology()
-        for i=1:4
+        for i=1:6
             push!(top, Atom("X"))
         end
         set_positions!(frame, pos)
@@ -85,5 +84,5 @@ facts("Trajectory type") do
         end
 
         rm("test-tmp.xyz")
-    end =#
+    end
 end
