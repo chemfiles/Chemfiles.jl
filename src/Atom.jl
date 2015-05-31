@@ -9,25 +9,19 @@ export mass, setmass!, charge, setcharge!, name, setname!,
 
 function Atom(name::ASCIIString)
     handle = lib.chrp_atom(pointer(name))
-    if Int(handle) == 0
-        throw(ChemharpError("Error while creating Atom"))
-    end
+    check(handle, "Error while creating Atom")
     return Atom(handle)
 end
 
 function Atom(frame::Frame, index::Integer)
     handle = lib.chrp_atom_from_frame(frame.handle, Csize_t(index))
-    if Int(handle) == 0
-        throw(ChemharpError("Error while creating Atom from Frame"))
-    end
+    check(handle, "Error while creating Atom from Frame")
     return Atom(handle)
 end
 
 function Atom(topology::Topology, index::Integer)
     handle = lib.chrp_atom_from_topology(topology.handle, Csize_t(index))
-    if Int(handle) == 0
-        throw(ChemharpError("Error while creating Atom from Topology"))
-    end
+    check(handle, "Error while creating Atom from Topology")
     return Atom(handle)
 end
 

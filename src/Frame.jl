@@ -9,9 +9,7 @@ export positions, positions!, set_positions!, velocities, velocities!, set_veloc
 
 function Frame(natoms::Integer = 0)
     handle = lib.chrp_frame(Csize_t(natoms))
-    if Int(handle) == 0
-        throw(ChemharpError("Error while creating Frame"))
-    end
+    check(handle, "Error while creating Frame")
     return Frame(handle)
 end
 
