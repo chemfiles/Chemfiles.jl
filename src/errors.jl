@@ -10,8 +10,19 @@ end
 Base.show(io::IO, e::ChemharpError) = show(io, "Chemharp error: $(e.message)")
 export ChemharpError
 
-function check(result, message = "Unknown error")
-    if Int(result) != 0
+function check(result::Integer, message = "Unknown error")
+    if result != 0
+        str = message
+        try
+            str = bytestring(lib.chrp_strerror(result))
+        end
+        throw(ChemharpError(str))
+    end
+    return nothing
+end
+
+function check(result::Ptr, message = "Unknown error")
+    if Int(result) == 0
         str = message
         try
             str = bytestring(lib.chrp_strerror(result))

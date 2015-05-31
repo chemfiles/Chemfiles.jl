@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 export positions, positions!, set_positions!, velocities, velocities!, set_velocities!,
-       has_velocities, set_cell!, set_topology!, set_step!, guess_topology!
+       has_velocities, set_cell!, set_topology!, set_step!, guess_topology!, natoms
 
 function Frame(natoms::Integer = 0)
     handle = lib.chrp_frame(Csize_t(natoms))
@@ -17,13 +17,15 @@ function free(frame::Frame)
     lib.chrp_frame_free(frame.handle)
 end
 
-function Base.size(frame::Frame)
+function natoms(frame::Frame)
     n = Csize_t[0]
     check(
         lib.chrp_frame_size(frame.handle, pointer(n))
     )
     return n[1]
 end
+
+Base.size(frame::Frame) = natoms(frame)
 
 function positions(frame::Frame)
     natoms = size(frame)

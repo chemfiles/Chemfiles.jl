@@ -25,7 +25,8 @@ module Chemharp
 
     type Trajectory
         handle :: Ptr{lib.CHRP_TRAJECTORY}
-        function Frame(ptr::Ptr{lib.CHRP_TRAJECTORY})
+        function Trajectory(ptr::Ptr{lib.CHRP_TRAJECTORY})
+            check(ptr)
             this = new(ptr)
             finalizer(this, free)
             return this
@@ -34,7 +35,8 @@ module Chemharp
 
     type Topology
         handle :: Ptr{lib.CHRP_TOPOLOGY}
-        function Frame(ptr::Ptr{lib.CHRP_TOPOLOGY})
+        function Topology(ptr::Ptr{lib.CHRP_TOPOLOGY})
+            check(ptr)
             this = new(ptr)
             finalizer(this, free)
             return this
@@ -44,6 +46,7 @@ module Chemharp
     type Atom
         handle :: Ptr{lib.CHRP_ATOM}
         function Atom(ptr::Ptr{lib.CHRP_ATOM})
+            check(ptr)
             this = new(ptr)
             finalizer(this, free)
             return this
@@ -52,7 +55,8 @@ module Chemharp
 
     type UnitCell
         handle :: Ptr{lib.CHRP_CELL}
-        function Frame(ptr::Ptr{lib.CHRP_CELL})
+        function UnitCell(ptr::Ptr{lib.CHRP_CELL})
+            check(ptr)
             this = new(ptr)
             finalizer(this, free)
             return this
@@ -62,6 +66,7 @@ module Chemharp
     type Frame
         handle :: Ptr{lib.CHRP_FRAME}
         function Frame(ptr::Ptr{lib.CHRP_FRAME})
+            check(ptr)
             this = new(ptr)
             finalizer(this, free)
             return this
