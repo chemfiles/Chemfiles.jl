@@ -1,10 +1,23 @@
 language: julia
-os:
-  - linux
-  - osx
 julia:
   - release
   - nightly
+install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y  # gcc-4.9
+  - sudo add-apt-repository ppa:boost-latest/ppa -y         # boost-1.55.0
+  - sudo apt-get update -qq
+  # Compilers
+  - sudo apt-get install -y g++-4.9
+  # Libraries
+  - sudo apt-get install -y libboost1.55-dev
+  - sudo apt-get install -y libboost-filesystem1.55.0 libboost-filesystem1.55-dev
+  # Setting environement
+  - export CC=gcc-4.9
+  - export CXX=g++-4.9
+  - wget http://www.cmake.org/files/v3.2/cmake-3.2.1-Linux-x86_64.sh
+  - sudo sh cmake-3.2.1-Linux-x86_64.sh --prefix=/usr --exclude-subdir
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("Chemharp"); Pkg.test("Chemharp"; coverage=true)'
+  - julia --check-bounds=yes --inline=no -e 'Pkg.clone(pwd()); Pkg.build("Chemharp"); Pkg.test("Chemharp"; coverage=true)'
+after_success:
+  - julia -e 'cd(Pkg.dir("Jumos")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
