@@ -2,10 +2,7 @@ using BinDeps
 @BinDeps.setup
 
 libchemharp = library_dependency("libchemharp")
-
-#@BinDeps.if_install begin
-
-version = "0.2.0"
+version = "master"
 
 provides(Sources,
          URI("https://github.com/Luthaf/Chemharp/archive/$version.tar.gz"),
