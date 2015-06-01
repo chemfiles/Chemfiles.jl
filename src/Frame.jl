@@ -41,7 +41,7 @@ end
 
 function set_positions!(frame::Frame, data::Array{Float32, 2})
     check(
-        lib.chrp_frame_positions_set(frame.handle, pointer(data), UInt64(size(data, 2)))
+        lib.chrp_frame_set_positions(frame.handle, pointer(data), UInt64(size(data, 2)))
     )
     return nothing
 end
@@ -61,7 +61,7 @@ end
 
 function set_velocities!(frame::Frame, data::Array{Float32, 2})
     check(
-        lib.chrp_frame_velocities_set(frame.handle, pointer(data), UInt64(size(data, 2)))
+        lib.chrp_frame_set_velocities(frame.handle, pointer(data), UInt64(size(data, 2)))
     )
     return nothing
 end
@@ -76,14 +76,14 @@ end
 
 function set_cell!(frame::Frame, cell::UnitCell)
     check(
-        lib.chrp_frame_cell_set(frame.handle, cell.handle)
+        lib.chrp_frame_set_cell(frame.handle, cell.handle)
     )
     return nothing
 end
 
 function set_topology!(frame::Frame, topology::Topology)
     check(
-        lib.chrp_frame_topology_set(frame.handle, topology.handle)
+        lib.chrp_frame_set_topology(frame.handle, topology.handle)
     )
     return nothing
 end
@@ -98,7 +98,7 @@ end
 
 function set_step!(frame::Frame, step::Integer)
     check(
-        lib.chrp_frame_step_set(frame.handle, Csize_t(step))
+        lib.chrp_frame_set_step(frame.handle, Csize_t(step))
     )
     return nothing
 end

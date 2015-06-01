@@ -35,7 +35,7 @@ end
 
 function set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
     check(
-        lib.chrp_cell_lengths_set(cell.handle, Cdouble(a), Cdouble(b), Cdouble(c))
+        lib.chrp_cell_set_lengths(cell.handle, Cdouble(a), Cdouble(b), Cdouble(c))
     )
     return nothing
 end
@@ -50,7 +50,7 @@ end
 
 function set_angles!(cell::UnitCell, alpha::Real, beta::Real, gamma::Real)
     check(
-        lib.chrp_cell_angles_set(cell.handle, Cdouble(alpha), Cdouble(beta), Cdouble(gamma))
+        lib.chrp_cell_set_angles(cell.handle, Cdouble(alpha), Cdouble(beta), Cdouble(gamma))
     )
     return nothing
 end
@@ -77,7 +77,7 @@ end
 
 function set_cell_type!(cell::UnitCell, cell_type::CellType)
     check(
-        lib.chrp_cell_type_set(cell.handle, cell_type)
+        lib.chrp_cell_set_type(cell.handle, cell_type)
     )
     return nothing
 end
@@ -92,7 +92,7 @@ end
 
 function set_periodicity!(cell::UnitCell, x::Bool, y::Bool, z::Bool)
     check(
-        lib.chrp_cell_periodicity_set(cell.handle, x, y, z)
+        lib.chrp_cell_set_periodicity(cell.handle, x, y, z)
     )
     return nothing
 end

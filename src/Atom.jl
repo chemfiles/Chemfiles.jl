@@ -35,7 +35,7 @@ end
 
 function setmass!(atom::Atom, m)
     check(
-        lib.chrp_atom_mass_set(atom.handle, Cfloat(m))
+        lib.chrp_atom_set_mass(atom.handle, Cfloat(m))
     )
     return nothing
 end
@@ -50,7 +50,7 @@ end
 
 function setcharge!(atom::Atom, c)
     check(
-        lib.chrp_atom_charge_set(atom.handle, Cfloat(c))
+        lib.chrp_atom_set_charge(atom.handle, Cfloat(c))
     )
     return nothing
 end
@@ -66,7 +66,7 @@ end
 
 function setname!(atom::Atom, name::ASCIIString)
     check(
-        lib.chrp_atom_name_set(atom.handle, pointer(name))
+        lib.chrp_atom_set_name(atom.handle, pointer(name))
     )
     # Remove spaces and null char
     return nothing
