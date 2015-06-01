@@ -1,6 +1,5 @@
 language: julia
 julia:
-  - release
   - nightly
 install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y  # gcc-4.9

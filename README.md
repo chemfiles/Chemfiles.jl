@@ -12,14 +12,20 @@ For a list of supported formats, please see the
 
 ## Installation
 
-To install the Chemharp Julia package, you will need to compile the C++ Chemharp library
+Only the version 0.4 of julia is supported. The 0.3 version could be supported, but would necessitate some work.
+
+To install, run the following command:
+```julia
+julia> Pkg.clone("http://github.com/Luthaf/Chemharp.jl")
+```
+
+In order to use the Chemharp Julia binding, you will need to compile the C++ Chemharp library
 from source. This requires a recent C++ compiler, [cmake](http://cmake.org) and a recent
 version of the [boost](http://boost.org/) library. Then, running:
 ```julia
-julia> Pkg.add("https://github.com/Luthaf/Chemharp.jl")
+julia> Pkg.build("Chemharp")
 ```
-
-at Julia prompt will download an install everything. I plan to add pre-built binaries when
+at Julia prompt will download an install the C++ library. I plan to add pre-built binaries when
 the library will be stable.
 
 ## Testing
