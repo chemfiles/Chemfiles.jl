@@ -27,7 +27,7 @@ end
 
 function read_step!(file::Trajectory, step::Integer, frame::Frame)
     check(
-        lib.chrp_trajectory_read_at(file.handle, Csize_t(step), frame.handle)
+        lib.chrp_trajectory_read_step(file.handle, Csize_t(step), frame.handle)
     )
     return frame
 end

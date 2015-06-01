@@ -30,8 +30,8 @@ function chrp_trajectory_read(file::Ptr{CHRP_TRAJECTORY},frame::Ptr{CHRP_FRAME})
     ccall((:chrp_trajectory_read,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{CHRP_FRAME}),file,frame)
 end
 
-function chrp_trajectory_read_at(file::Ptr{CHRP_TRAJECTORY},step::Csize_t,frame::Ptr{CHRP_FRAME})
-    ccall((:chrp_trajectory_read_at,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Csize_t,Ptr{CHRP_FRAME}),file,step,frame)
+function chrp_trajectory_read_step(file::Ptr{CHRP_TRAJECTORY},step::Csize_t,frame::Ptr{CHRP_FRAME})
+    ccall((:chrp_trajectory_read_step,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Csize_t,Ptr{CHRP_FRAME}),file,step,frame)
 end
 
 function chrp_trajectory_write(file::Ptr{CHRP_TRAJECTORY},frame::Ptr{CHRP_FRAME})
