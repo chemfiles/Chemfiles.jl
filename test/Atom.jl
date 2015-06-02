@@ -17,11 +17,4 @@ facts("Atom type") do
     @fact vdw_radius(a) => roughly(2.1)
     @fact covalent_radius(a) => roughly(1.31)
     @fact atomic_number(a) => 30
-
-    frame = Frame()
-    # topology = Topology(frame)
-    topology = 42
-
-    @pending Atom(frame, 2) => :TODO
-    @pending Atom(topology, 1) => :TODO
 end

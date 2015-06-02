@@ -28,6 +28,7 @@ facts("Trajectory type") do
         topology = Topology(frame)
         @fact natoms(topology) => 297
         @fact name(Atom(topology, 0)) => "O"
+        @fact name(Atom(frame, 1)) => "H"
     end
 
     context("Write frames") do
