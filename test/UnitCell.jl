@@ -2,11 +2,11 @@
 facts("UnitCell type") do
     cell = UnitCell(2, 3, 4)
 
-    @pending lengths(cell) => Float64[2, 3, 4]
-    @pending angles(cell) => Float64[90, 90, 90]
+    @fact lengths(cell) => (2.0, 3.0, 4.0)
+    @fact angles(cell) => (90.0, 90.0, 90.0)
 
     set_lengths!(cell, 10, 20, 30)
-    @pending lengths(cell) => Float64[10, 20, 30]
+    @fact lengths(cell) => (10.0, 20.0, 30.0)
 
     # Can not set angles for ORTHOROMBIC cell
     @fact_throws set_angles!(cell, 80, 89, 100)
@@ -22,7 +22,7 @@ facts("UnitCell type") do
     @fact cell_type(cell) => Chemharp.TRICLINIC
 
     set_angles!(cell, 80, 89, 100)
-    @pending angles(cell) => Float64[80, 89, 100]
+    @fact angles(cell) => (80.0, 89.0, 100.0)
 
     @fact periodicity(cell) => [true, true, true]
     set_periodicity!(cell, false, true, false)

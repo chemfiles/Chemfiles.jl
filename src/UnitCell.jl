@@ -26,11 +26,13 @@ function free(cell::UnitCell)
 end
 
 function lengths(cell::UnitCell)
-    res = Cdouble[0, 0, 0]
+    a = Cdouble[0]
+    b = Cdouble[0]
+    c = Cdouble[0]
     check(
-        lib.chrp_cell_lengths(cell.handle, pointer(res), pointer(res)+1, pointer(res)+2)
+        lib.chrp_cell_lengths(cell.handle, pointer(a), pointer(b), pointer(c))
     )
-    return res
+    return (a[1], b[1], c[1])
 end
 
 function set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
@@ -41,11 +43,13 @@ function set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
 end
 
 function angles(cell::UnitCell)
-    res = Cdouble[0, 0, 0]
+    alpha = Cdouble[0]
+    beta = Cdouble[0]
+    gamma = Cdouble[0]
     check(
-        lib.chrp_cell_angles(cell.handle, pointer(res), pointer(res)+1, pointer(res)+2)
+        lib.chrp_cell_angles(cell.handle, pointer(alpha), pointer(beta), pointer(gamma))
     )
-    return res
+    return (alpha[1], beta[1], gamma[1])
 end
 
 function set_angles!(cell::UnitCell, alpha::Real, beta::Real, gamma::Real)
