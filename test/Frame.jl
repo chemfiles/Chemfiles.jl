@@ -20,12 +20,20 @@ facts("Frame type") do
 
     @fact has_velocities(frame) => true
 
-    # set_cell!(frame, cell)
-    # set_topology!(frame, topology)
+    set_cell!(frame, UnitCell(3, 4, 5))
+    cell = UnitCell(frame)
+    @fact lengths(cell) => (3.0, 4.0, 5.0)
+
+    top = Topology()
+    push!(top, Atom("Zn"))
+    push!(top, Atom("Ar"))
+    set_topology!(frame, top)
+    new_top = Topology(frame)
+
+    @fact name(Atom(new_top, 0)) => "Zn"
+    @fact name(Atom(new_top, 1)) => "Ar"
 
     @fact step(frame) => 0
     set_step!(frame, 42)
     @fact step(frame) => 42
-
-    # guess_topology!(frame)
 end
