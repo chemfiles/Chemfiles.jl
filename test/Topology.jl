@@ -30,18 +30,16 @@ facts("Topology type") do
     @fact isdihedral(top, 0, 1, 2, 3) => true
     @fact isdihedral(top, 0, 1, 3, 2) => false
 
-    top_bonds = reshape(Csize_t[2, 3,
-                                1, 2,
-                                0, 1], (2, 3))
+    top_bonds = reshape(Csize_t[2, 3,   1, 2,   0, 1], (2, 3))
 
     @fact bonds(top) => top_bonds
-    @pending angles(top) => :TODO
-    @pending dihedrals(top) => :TODO
+    @fact angles(top) => reshape(Csize_t[0, 1, 2,   1, 2, 3,], (3, 2))
+    @fact dihedrals(top) => reshape(Csize_t[0, 1, 2, 3], (4,1))
 
-    remove_bond!(top, 2, 4)
-    @pending nbonds(top) => 2
-    @pending nangles(top) => 1
-    @pending ndihedrals(top) => 0
+    remove_bond!(top, 2, 3)
+    @fact nbonds(top) => 2
+    @fact nangles(top) => 1
+    @fact ndihedrals(top) => 0
 
     remove!(top, 3)
     @fact natoms(top) => 3

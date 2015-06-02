@@ -113,7 +113,7 @@ function dihedrals(topology::Topology)
     count = ndihedrals(topology)
     res = Array(Csize_t, 4, count)
     check(
-        lib.chrp_topology_dihedrals_count(topology.handle, pointer(res), count)
+        lib.chrp_topology_dihedrals(topology.handle, pointer(res), count)
     )
     return res
 end
