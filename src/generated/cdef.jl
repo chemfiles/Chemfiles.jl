@@ -38,16 +38,16 @@ function chrp_trajectory_write(file::Ptr{CHRP_TRAJECTORY},frame::Ptr{CHRP_FRAME}
     ccall((:chrp_trajectory_write,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{CHRP_FRAME}),file,frame)
 end
 
-function chrp_trajectory_topology(file::Ptr{CHRP_TRAJECTORY},topology::Ptr{CHRP_TOPOLOGY})
-    ccall((:chrp_trajectory_topology,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{CHRP_TOPOLOGY}),file,topology)
+function chrp_trajectory_set_topology(file::Ptr{CHRP_TRAJECTORY},topology::Ptr{CHRP_TOPOLOGY})
+    ccall((:chrp_trajectory_set_topology,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{CHRP_TOPOLOGY}),file,topology)
 end
 
-function chrp_trajectory_topology_file(file::Ptr{CHRP_TRAJECTORY},filename::Ptr{Uint8})
-    ccall((:chrp_trajectory_topology_file,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{Uint8}),file,filename)
+function chrp_trajectory_set_topology_file(file::Ptr{CHRP_TRAJECTORY},filename::Ptr{Uint8})
+    ccall((:chrp_trajectory_set_topology_file,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{Uint8}),file,filename)
 end
 
-function chrp_trajectory_cell(file::Ptr{CHRP_TRAJECTORY},cell::Ptr{CHRP_CELL})
-    ccall((:chrp_trajectory_cell,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{CHRP_CELL}),file,cell)
+function chrp_trajectory_set_cell(file::Ptr{CHRP_TRAJECTORY},cell::Ptr{CHRP_CELL})
+    ccall((:chrp_trajectory_set_cell,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{CHRP_CELL}),file,cell)
 end
 
 function chrp_trajectory_nsteps(file::Ptr{CHRP_TRAJECTORY},nsteps::Ptr{Csize_t})

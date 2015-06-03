@@ -46,21 +46,21 @@ end
 
 function set_topology!(file::Trajectory, topology::Topology)
     check(
-        lib.chrp_trajectory_topology(file.handle, topology.handle)
+        lib.chrp_trajectory_set_topology(file.handle, topology.handle)
     )
     return nothing
 end
 
 function set_topology!(file::Trajectory, filename::AbstractString)
     check(
-        lib.chrp_trajectory_topology_file(file.handle, pointer(filename))
+        lib.chrp_trajectory_set_topology_file(file.handle, pointer(filename))
     )
     return nothing
 end
 
 function set_cell!(file::Trajectory, cell::UnitCell)
     check(
-        lib.chrp_trajectory_cell(file.handle, cell.handle)
+        lib.chrp_trajectory_set_cell(file.handle, cell.handle)
     )
     return nothing
 end
