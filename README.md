@@ -1,6 +1,7 @@
 # Chemharp
 
 [![Build Status](https://travis-ci.org/Luthaf/Chemharp.jl.svg?branch=master)](https://travis-ci.org/Luthaf/Chemharp.jl)
+[![Coverage Status](https://coveralls.io/repos/Luthaf/Chemharp.jl/badge.svg?branch=master)](https://coveralls.io/r/Luthaf/Chemharp.jl?branch=master)
 
 This package is aJulia binding for the [Chemharp](https://github.com/Luthaf/Chemharp)
 chemistry IO library. It allow you, as a programmer, to read and write chemistry
