@@ -3,6 +3,7 @@ facts("Topology type") do
     top = Topology()
 
     @fact natoms(top) => 0
+    @fact size(top) => 0
 
     # Creating some H2O2
     push!(top, Atom("H"))

@@ -15,10 +15,6 @@ function check(result::Integer, message = "Unknown error")
         str = message
         try
             str = last_error()
-        catch
-            try
-                str = bytestring(lib.chrp_strerror(result))
-            end
         end
         throw(ChemharpError(str))
     end
@@ -44,6 +40,10 @@ These functions are not exported, and should be called by there fully qualified 
 
 function last_error()
     bytestring(lib.chrp_last_error())
+end
+
+function strerror(status::Integer)
+    bytestring(lib.chrp_strerror(Cint(status)))
 end
 
 function loglevel(level::LogLevel)

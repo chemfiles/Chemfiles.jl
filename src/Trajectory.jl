@@ -32,7 +32,7 @@ function read_step!(file::Trajectory, step::Integer, frame::Frame)
     return frame
 end
 
-function read_step(file::Trajectory, step::Integer, frame::Frame)
+function read_step(file::Trajectory, step::Integer)
     frame = Frame()
     return read_step!(file, step, frame)
 end
