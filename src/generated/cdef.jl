@@ -118,6 +118,10 @@ function chrp_cell_from_frame(frame::Ptr{CHRP_FRAME})
     ccall((:chrp_cell_from_frame,libchemharp),Ptr{CHRP_CELL},(Ptr{CHRP_FRAME},),frame)
 end
 
+function chrp_cell_volume(cell::Ptr{CHRP_CELL},V::Ptr{Cdouble})
+    ccall((:chrp_cell_volume,libchemharp),Cint,(Ptr{CHRP_CELL},Ptr{Cdouble}),cell,V)
+end
+
 function chrp_cell_lengths(cell::Ptr{CHRP_CELL},a::Ptr{Cdouble},b::Ptr{Cdouble},c::Ptr{Cdouble})
     ccall((:chrp_cell_lengths,libchemharp),Cint,(Ptr{CHRP_CELL},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble}),cell,a,b,c)
 end

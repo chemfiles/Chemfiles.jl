@@ -5,6 +5,8 @@ facts("UnitCell type") do
     @fact lengths(cell) => (2.0, 3.0, 4.0)
     @fact angles(cell) => (90.0, 90.0, 90.0)
 
+    @fact volume(cell) => 2.0*3.0*4.0
+
     set_lengths!(cell, 10, 20, 30)
     @fact lengths(cell) => (10.0, 20.0, 30.0)
 

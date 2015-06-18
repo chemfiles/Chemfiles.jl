@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 export lengths, set_lengths!, angles, set_angles!, cell_matrix, cell_matrix!,
-       cell_type, set_cell_type!, periodicity, set_periodicity!
+       cell_type, set_cell_type!, periodicity, set_periodicity!, volume
 
 function UnitCell(a::Number, b::Number, c::Number,
                   alpha::Number=90, beta::Number=90, gamma::Number=90)
@@ -23,6 +23,14 @@ function free(cell::UnitCell)
         lib.chrp_cell_free(cell.handle)
     )
     return nothing
+end
+
+function volume(cell::UnitCell)
+    V = Cdouble[0]
+    check(
+        lib.chrp_cell_volume(cell.handle, pointer(V))
+    )
+    return V[1]
 end
 
 function lengths(cell::UnitCell)
