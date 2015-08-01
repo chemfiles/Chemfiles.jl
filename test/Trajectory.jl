@@ -10,37 +10,37 @@ facts("Trajectory type") do
     context("Read frames") do
         file = Trajectory(joinpath(DATAPATH, "water.xyz"))
 
-        @fact nsteps(file) => 100
+        @fact nsteps(file) --> 100
 
         frame = read(file)
 
-        @fact natoms(frame) => 297
+        @fact natoms(frame) --> 297
         pos = positions(frame)
-        @fact pos[:, 1] => Float32[0.417219, 8.303366, 11.737172]
-        @fact pos[:, 125] => Float32[5.099554, -0.045104, 14.153846]
+        @fact pos[:, 1] --> Float32[0.417219, 8.303366, 11.737172]
+        @fact pos[:, 125] --> Float32[5.099554, -0.045104, 14.153846]
 
         topology = Topology(frame)
-        @fact natoms(topology) => 297
-        @fact name(Atom(topology, 0)) => "O"
-        @fact name(Atom(frame, 1)) => "H"
+        @fact natoms(topology) --> 297
+        @fact name(Atom(topology, 0)) --> "O"
+        @fact name(Atom(frame, 1)) --> "H"
 
         set_cell!(file, UnitCell(30, 30, 30))
         frame = read_step(file, 41)
 
-        @fact lengths(UnitCell(frame)) => (30.0, 30.0, 30.0)
+        @fact lengths(UnitCell(frame)) --> (30.0, 30.0, 30.0)
 
         pos = positions(frame)
-        @fact pos[:, 1] => Float32[0.761277, 8.106125, 10.622949]
-        @fact pos[:, 125] => Float32[5.13242, 0.079862, 14.194161]
+        @fact pos[:, 1] --> Float32[0.761277, 8.106125, 10.622949]
+        @fact pos[:, 125] --> Float32[5.13242, 0.079862, 14.194161]
 
         topology = Topology(frame)
-        @fact natoms(topology) => 297
-        @fact nbonds(topology) => 0
+        @fact natoms(topology) --> 297
+        @fact nbonds(topology) --> 0
 
         guess_topology!(frame)
         topology = Topology(frame)
-        @fact nbonds(topology) => 181
-        @fact nangles(topology) => 87
+        @fact nbonds(topology) --> 181
+        @fact nangles(topology) --> 87
 
         topology = Topology()
         a = Atom("Cs")
@@ -50,11 +50,11 @@ facts("Trajectory type") do
 
         set_topology!(file, topology)
         frame = read_step(file, 10)
-        @fact name(Atom(frame, 10)) => "Cs"
+        @fact name(Atom(frame, 10)) --> "Cs"
 
         set_topology!(file, joinpath(DATAPATH, "topology.xyz"))
         frame = read(file)
-        @fact name(Atom(frame, 100)) => "Rd"
+        @fact name(Atom(frame, 100)) --> "Rd"
     end
 
     context("Write frames") do
@@ -104,10 +104,10 @@ facts("Trajectory type") do
         write(file, frame)
         close(file)
 
-        @fact isopen(file) => false
+        @fact isopen(file) --> false
 
         open("test-tmp.xyz") do fd
-            @fact readall(fd) => expected_content
+            @fact readall(fd) --> expected_content
         end
 
         rm("test-tmp.xyz")
