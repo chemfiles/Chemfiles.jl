@@ -13,12 +13,7 @@ prefix = joinpath(BinDeps.depsdir(libchemharp), "usr")
 srcdir = joinpath(BinDeps.depsdir(libchemharp), "src", "Chemharp-$version")
 builddir = joinpath(BinDeps.depsdir(libchemharp), "builds", "Chemharp-$version")
 
-if VERSION >= v"0.4.0-dev"
-    dlext = Libdl.dlext
-else
-    dlext = Base.Sys.shlib_ext
-end
-
+DL_EXT = VERSION >= v"0.4.0-dev" ? Libdl.dlext : Base.Sys.shlib_ext
 
 provides(BuildProcess,
     (@build_steps begin
@@ -26,7 +21,7 @@ provides(BuildProcess,
         CreateDirectory(builddir)
         @build_steps begin
             ChangeDirectory(builddir)
-            FileRule(joinpath(prefix, "lib", "libchemharp.$(dlext)"),
+            FileRule(joinpath(prefix, "lib", "libchemharp.$(DL_EXT)"),
                 @build_steps begin
                     `cmake -DCMAKE_INSTALL_PREFIX="$prefix" $srcdir`
                     `make`
@@ -35,5 +30,18 @@ provides(BuildProcess,
             )
         end
     end), libchemharp)
+
+@osx_only begin
+    if Pkg.installed("Homebrew") === nothing
+            error("Homebrew package not installed, please run Pkg.add(\"Homebrew\")")
+    end
+    using Homebrew
+    provides(Homebrew.HB, "chemharp", libchemharp, os = :Darwin, onload =
+    """
+    function __init__()
+        ENV["CHRP_MOLFILES"] = joinpath("$(Homebrew.prefix("chemharp"))","lib")
+    end
+    """ )
+end
 
 @BinDeps.install
