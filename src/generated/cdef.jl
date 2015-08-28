@@ -62,8 +62,8 @@ function chrp_frame(natoms::Csize_t)
     ccall((:chrp_frame,libchemharp),Ptr{CHRP_FRAME},(Csize_t,),natoms)
 end
 
-function chrp_frame_size(frame::Ptr{CHRP_FRAME},natoms::Ptr{Csize_t})
-    ccall((:chrp_frame_size,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Csize_t}),frame,natoms)
+function chrp_frame_atoms_count(frame::Ptr{CHRP_FRAME},natoms::Ptr{Csize_t})
+    ccall((:chrp_frame_atoms_count,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Csize_t}),frame,natoms)
 end
 
 function chrp_frame_positions(frame::Ptr{CHRP_FRAME},data::Ptr{Cfloat},size::Csize_t)
@@ -170,8 +170,8 @@ function chrp_topology_from_frame(frame::Ptr{CHRP_FRAME})
     ccall((:chrp_topology_from_frame,libchemharp),Ptr{CHRP_TOPOLOGY},(Ptr{CHRP_FRAME},),frame)
 end
 
-function chrp_topology_size(topology::Ptr{CHRP_TOPOLOGY},natoms::Ptr{Csize_t})
-    ccall((:chrp_topology_size,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Csize_t}),topology,natoms)
+function chrp_topology_atoms_count(topology::Ptr{CHRP_TOPOLOGY},natoms::Ptr{Csize_t})
+    ccall((:chrp_topology_atoms_count,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Csize_t}),topology,natoms)
 end
 
 function chrp_topology_append(topology::Ptr{CHRP_TOPOLOGY},atom::Ptr{CHRP_ATOM})

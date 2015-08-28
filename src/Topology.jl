@@ -22,7 +22,7 @@ end
 function natoms(topology::Topology)
     n = Csize_t[0]
     check(
-        lib.chrp_topology_size(topology.handle, pointer(n))
+        lib.chrp_topology_atoms_count(topology.handle, pointer(n))
     )
     return n[1]
 end

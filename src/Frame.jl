@@ -19,7 +19,7 @@ end
 function natoms(frame::Frame)
     n = Csize_t[0]
     check(
-        lib.chrp_frame_size(frame.handle, pointer(n))
+        lib.chrp_frame_atoms_count(frame.handle, pointer(n))
     )
     return n[1]
 end
