@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-VERSION >= v"0.4.0-dev+6521" && __precompile__()
+@unix_only VERSION >= v"0.4.0-dev+6521" && __precompile__()
 
 module Chemharp
     module lib
