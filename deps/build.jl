@@ -4,6 +4,32 @@ using BinDeps
 libchemharp = library_dependency("libchemharp")
 version = "0.3.1"
 
+@osx_only begin
+    if Pkg.installed("Homebrew") === nothing
+            error("Homebrew package not installed, please run Pkg.add(\"Homebrew\")")
+    end
+    using Homebrew
+    provides(Homebrew.HB, "chemharp", libchemharp, os = :Darwin, onload =
+    """
+    function __init__()
+        ENV["CHRP_MOLFILES"] = joinpath("$(Homebrew.prefix("chemharp"))","lib")
+    end
+    """ )
+end
+
+@windows_only begin
+    using WinRPM
+    push!(WinRPM.sources, "http://download.opensuse.org/repositories/home:Luthaf/openSUSE_13.2/")
+    WinRPM.update()
+    provides(WinRPM.RPM, "Chemharp", [libchemharp], os = :Windows, onload =
+    """
+    function __init__()
+        ENV["CHRP_MOLFILES"] = joinpath($(WinRPM.installdir), "lib", "molfiles")
+        println!(ENV["CHRP_MOLFILES"])
+    end
+    """ )
+end
+
 provides(Sources,
          URI("https://github.com/Luthaf/Chemharp/archive/$version.tar.gz"),
          libchemharp,
@@ -30,18 +56,5 @@ provides(BuildProcess,
             )
         end
     end), libchemharp)
-
-@osx_only begin
-    if Pkg.installed("Homebrew") === nothing
-            error("Homebrew package not installed, please run Pkg.add(\"Homebrew\")")
-    end
-    using Homebrew
-    provides(Homebrew.HB, "chemharp", libchemharp, os = :Darwin, onload =
-    """
-    function __init__()
-        ENV["CHRP_MOLFILES"] = joinpath("$(Homebrew.prefix("chemharp"))","lib")
-    end
-    """ )
-end
 
 @BinDeps.install
