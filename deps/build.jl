@@ -4,15 +4,16 @@ using BinDeps
 libchemharp = library_dependency("libchemharp")
 version = "0.3.1"
 
-@osx_only begin
-    if Pkg.installed("Homebrew") === nothing
-            error("Homebrew package not installed, please run Pkg.add(\"Homebrew\")")
+@unix_only begin
+    if Pkg.installed("Conda") === nothing
+        error("Conda package not installed, please run Pkg.add(\"Conda\")")
     end
-    using Homebrew
-    provides(Homebrew.HB, "chemharp", libchemharp, os = :Darwin, onload =
+    using Conda
+    push!(Conda.CHANNELS, "https://conda.binstar.org/luthaf")
+    provides(Conda.Manager, "chemharp", libchemharp, os = :Unix, onload =
     """
     function __init__()
-        ENV["CHRP_MOLFILES"] = joinpath("$(Homebrew.prefix("chemharp"))","lib")
+        ENV["CHRP_MOLFILES"] = joinpath("$(Conda.PREFIX)","lib")
     end
     """ )
 end
@@ -28,7 +29,6 @@ end
             $(WinRPM.installdir), "usr", "$(Sys.ARCH)-w64-mingw32",
             "sys-root", "mingw", "bin", "molfiles"
         )
-    end
     """ )
 end
 
