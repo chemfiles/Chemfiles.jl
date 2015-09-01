@@ -1,6 +1,7 @@
 # Chemharp
 
-[![Build Status](https://travis-ci.org/Luthaf/Chemharp.jl.svg?branch=master)](https://travis-ci.org/Luthaf/Chemharp.jl)
+[![Build Status -- Linux](https://travis-ci.org/Luthaf/Chemharp.jl.svg?branch=master)](https://travis-ci.org/Luthaf/Chemharp.jl)
+[![Build status -- Windows](https://ci.appveyor.com/api/projects/status/vyn7bbg7xi8q8093/branch/master?svg=true)](https://ci.appveyor.com/project/Luthaf/chemharp-jl/branch/master)
 [![Coverage Status](https://coveralls.io/repos/Luthaf/Chemharp.jl/badge.svg?branch=master)](https://coveralls.io/r/Luthaf/Chemharp.jl?branch=master)
 
 This package is aJulia binding for the [Chemharp](https://github.com/Luthaf/Chemharp)
