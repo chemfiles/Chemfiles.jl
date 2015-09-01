@@ -12,35 +12,28 @@ For more information, please read the [introduction to Chemharp](http://chemharp
 For a list of supported formats, please see the
 [documentation](http://chemharp.readthedocs.org/en/latest/formats.html).
 
-## Installation
-
-Only the version 0.4 of julia is supported. The 0.3 version could be supported, but would necessitate some work.
-
-To install, run the following command:
-```julia
-julia> Pkg.clone("http://github.com/Luthaf/Chemharp.jl")
-```
-
-In order to use the Chemharp Julia binding, you will need to compile the C++ Chemharp library
-from source. This requires a recent C++ compiler, [cmake](http://cmake.org) and a recent
-version of the [boost](http://boost.org/) library. Then, running:
-```julia
-julia> Pkg.build("Chemharp")
-```
-at Julia prompt will download an install the C++ library. I plan to add pre-built binaries when
-the library will be stable.
-
-## Testing
-
-You can test the Julia interface with:
-```julia
-julia> Pkg.test("Chemharp")
-```
-
-All the tests should pass. If they don't, please open [an issue!](https://github.com/Luthaf/Chemharp.jl/issues/new)
-
 ## Documentation
 
 Please see the
 [Julia interface](chemharp.readthedocs.org/en/latest/bindings/julia-api.html) section of
 the documentation of Chemharp.
+
+
+## Installation
+
+Only the version 0.4 of julia is supported. The 0.3 version could be supported, but would
+necessitate some work.
+
+To install, run the following commands:
+```julia
+julia> Pkg.clone("http://github.com/Luthaf/Chemharp.jl")
+
+julia> Pkg.build("Chemharp")
+```
+
+You can also test the Julia interface with:
+```julia
+julia> Pkg.test("Chemharp")
+```
+
+All the tests should pass. If they don't, please open [an issue!](https://github.com/Luthaf/Chemharp.jl/issues/new)
