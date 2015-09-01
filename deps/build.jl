@@ -19,7 +19,7 @@ end
 
 @windows_only begin
     using WinRPM
-    push!(WinRPM.sources, "http://download.opensuse.org/repositories/home:Luthaf/openSUSE_13.2/")
+    push!(WinRPM.sources, "http://download.opensuse.org/repositories/home:Luthaf/openSUSE_13.1/")
     WinRPM.update()
     provides(WinRPM.RPM, "Chemharp", [libchemharp], os = :Windows, onload =
     """
