@@ -21,7 +21,7 @@ end
     using WinRPM
     push!(WinRPM.sources, "http://download.opensuse.org/repositories/home:Luthaf/openSUSE_13.1/")
     WinRPM.update()
-    provides(WinRPM.RPM, "Chemharp", [libchemharp], os = :Windows, onload =
+    provides(WinRPM.RPM, "chemharp", [libchemharp], os = :Windows, onload =
     """
     function __init__()
         ENV["CHRP_MOLFILES"] = joinpath($(WinRPM.installdir), "lib", "molfiles")
