@@ -34,14 +34,14 @@ end
 
 function positions!(frame::Frame, data::Array{Float32, 2})
     check(
-        lib.chrp_frame_positions(frame.handle, pointer(data), UInt64(size(data, 2)))
+        lib.chrp_frame_positions(frame.handle, pointer(data), Csize_t(size(data, 2)))
     )
     return data
 end
 
 function set_positions!(frame::Frame, data::Array{Float32, 2})
     check(
-        lib.chrp_frame_set_positions(frame.handle, pointer(data), UInt64(size(data, 2)))
+        lib.chrp_frame_set_positions(frame.handle, pointer(data), Csize_t(size(data, 2)))
     )
     return nothing
 end
@@ -54,14 +54,14 @@ end
 
 function velocities!(frame::Frame, data::Array{Float32, 2})
     check(
-        lib.chrp_frame_velocities(frame.handle, pointer(data), UInt64(size(data, 2)))
+        lib.chrp_frame_velocities(frame.handle, pointer(data), Csize_t(size(data, 2)))
     )
     return data
 end
 
 function set_velocities!(frame::Frame, data::Array{Float32, 2})
     check(
-        lib.chrp_frame_set_velocities(frame.handle, pointer(data), UInt64(size(data, 2)))
+        lib.chrp_frame_set_velocities(frame.handle, pointer(data), Csize_t(size(data, 2)))
     )
     return nothing
 end

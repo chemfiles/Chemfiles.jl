@@ -58,7 +58,7 @@ end
 function name(atom::Atom)
     str = " " ^ 10
     check(
-        lib.chrp_atom_name(atom.handle, pointer(str), UInt(length(str)))
+        lib.chrp_atom_name(atom.handle, pointer(str), Csize_t(length(str)))
     )
     # Remove spaces and null char
     return strip(str)[1:end-1]
@@ -75,7 +75,7 @@ end
 function Base.fullname(atom::Atom)
     str = " " ^ 96
     check(
-        lib.chrp_atom_full_name(atom.handle, pointer(str), UInt(length(str)))
+        lib.chrp_atom_full_name(atom.handle, pointer(str), Csize_t(length(str)))
     )
     # Remove spaces and null char
     return strip(str)[1:end-1]
