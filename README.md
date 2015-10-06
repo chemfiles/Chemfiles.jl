@@ -37,3 +37,24 @@ julia> Pkg.test("Chemharp")
 ```
 
 All the tests should pass. If they don't, please open [an issue!](https://github.com/Luthaf/Chemharp.jl/issues/new)
+
+## Usage example
+
+Here is a simple usage example for Chemharp.jl. Please see the `examples` folder for more
+examples.
+
+```julia
+using Chemharp
+
+trajectory = Trajectory("filename.xyz")
+frame = read(trajectory)
+
+println("There are $(natoms(frame)) atoms in the frame")
+positions = positions(frame)
+
+# Do awesome things with the positions here !
+```
+
+## Bug reports, feature requests
+
+Please report any bug you find and any feature you may want as a [github issue](https://github.com/Luthaf/Chemharp.jl/issues/new).
