@@ -6,8 +6,12 @@ function chfl_last_error()
     ccall((:chfl_last_error, libchemfiles),Ptr{ UInt8},())
 end
 
-function chfl_loglevel(level::LogLevel)
-    ccall((:chfl_loglevel, libchemfiles),Cint,(LogLevel,),level)
+function chfl_loglevel(level::Ptr{LogLevel})
+    ccall((:chfl_loglevel, libchemfiles),Cint,(Ptr{LogLevel},),level)
+end
+
+function chfl_set_loglevel(level::LogLevel)
+    ccall((:chfl_set_loglevel, libchemfiles),Cint,(LogLevel,),level)
 end
 
 function chfl_logfile(file::Ptr{UInt8})
@@ -18,8 +22,8 @@ function chfl_log_stderr()
     ccall((:chfl_log_stderr, libchemfiles),Cint,())
 end
 
-function chfl_open(filename::Ptr{UInt8},mode::Ptr{UInt8})
-    ccall((:chfl_open, libchemfiles),Ptr{CHFL_TRAJECTORY},(Ptr{UInt8},Ptr{UInt8}),filename,mode)
+function chfl_trajectory_open(filename::Ptr{UInt8},mode::Ptr{UInt8})
+    ccall((:chfl_trajectory_open, libchemfiles),Ptr{CHFL_TRAJECTORY},(Ptr{UInt8},Ptr{UInt8}),filename,mode)
 end
 
 function chfl_trajectory_read(file::Ptr{CHFL_TRAJECTORY},frame::Ptr{CHFL_FRAME})
@@ -48,6 +52,10 @@ end
 
 function chfl_trajectory_nsteps(file::Ptr{CHFL_TRAJECTORY},nsteps::Ptr{Csize_t})
     ccall((:chfl_trajectory_nsteps, libchemfiles),Cint,(Ptr{CHFL_TRAJECTORY},Ptr{Csize_t}),file,nsteps)
+end
+
+function chfl_trajectory_sync(file::Ptr{CHFL_TRAJECTORY})
+    ccall((:chfl_trajectory_sync, libchemfiles),Cint,(Ptr{CHFL_TRAJECTORY},),file)
 end
 
 function chfl_trajectory_close(file::Ptr{CHFL_TRAJECTORY})

@@ -15,5 +15,6 @@ facts("Error functions") do
     # Chemfiles.log_to_stderr()
     @fact isfile("chemfiles.log") --> true
 
-    Chemfiles.loglevel(Chemfiles.ERROR)
+    @fact Chemfiles.loglevel() --> Chemfiles.WARNING
+    Chemfiles.set_loglevel(Chemfiles.ERROR)
 end

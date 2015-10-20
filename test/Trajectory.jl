@@ -102,14 +102,15 @@ facts("Trajectory type") do
         set_topology!(frame, top)
 
         write(file, frame)
-        close(file)
-
-        @fact isopen(file) --> false
+        sync(file)
 
         open("test-tmp.xyz") do fd
             @fact readall(fd) --> expected_content
         end
 
         rm("test-tmp.xyz")
+
+        close(file)
+        @fact isopen(file) --> false
     end
 end

@@ -46,11 +46,19 @@ function strerror(status::Integer)
     bytestring(lib.chfl_strerror(Cint(status)))
 end
 
-function loglevel(level::LogLevel)
+function set_loglevel(level::LogLevel)
     check(
-        lib.chfl_loglevel(level)
+        lib.chfl_set_loglevel(level)
     )
     return nothing
+end
+
+function loglevel()
+    level = LogLevel[0]
+    check(
+        lib.chfl_loglevel(pointer(level))
+    )
+    return level[1]
 end
 
 function logfile(file::AbstractString)
