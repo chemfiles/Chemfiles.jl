@@ -1,25 +1,25 @@
 function chfl_strerror(status::Cint)
-    ccall((:chfl_strerror, libchemfiles),Ptr{Uint8},(Cint,),status)
+    ccall((:chfl_strerror, libchemfiles),Ptr{ UInt8},(Cint,),status)
 end
 
 function chfl_last_error()
-    ccall((:chfl_last_error, libchemfiles),Ptr{Uint8},())
+    ccall((:chfl_last_error, libchemfiles),Ptr{ UInt8},())
 end
 
 function chfl_loglevel(level::LogLevel)
     ccall((:chfl_loglevel, libchemfiles),Cint,(LogLevel,),level)
 end
 
-function chfl_logfile(file::Ptr{Uint8})
-    ccall((:chfl_logfile, libchemfiles),Cint,(Ptr{Uint8},),file)
+function chfl_logfile(file::Ptr{UInt8})
+    ccall((:chfl_logfile, libchemfiles),Cint,(Ptr{UInt8},),file)
 end
 
 function chfl_log_stderr()
     ccall((:chfl_log_stderr, libchemfiles),Cint,())
 end
 
-function chfl_open(filename::Ptr{Uint8},mode::Ptr{Uint8})
-    ccall((:chfl_open, libchemfiles),Ptr{CHFL_TRAJECTORY},(Ptr{Uint8},Ptr{Uint8}),filename,mode)
+function chfl_open(filename::Ptr{UInt8},mode::Ptr{UInt8})
+    ccall((:chfl_open, libchemfiles),Ptr{CHFL_TRAJECTORY},(Ptr{UInt8},Ptr{UInt8}),filename,mode)
 end
 
 function chfl_trajectory_read(file::Ptr{CHFL_TRAJECTORY},frame::Ptr{CHFL_FRAME})
@@ -38,8 +38,8 @@ function chfl_trajectory_set_topology(file::Ptr{CHFL_TRAJECTORY},topology::Ptr{C
     ccall((:chfl_trajectory_set_topology, libchemfiles),Cint,(Ptr{CHFL_TRAJECTORY},Ptr{CHFL_TOPOLOGY}),file,topology)
 end
 
-function chfl_trajectory_set_topology_file(file::Ptr{CHFL_TRAJECTORY},filename::Ptr{Uint8})
-    ccall((:chfl_trajectory_set_topology_file, libchemfiles),Cint,(Ptr{CHFL_TRAJECTORY},Ptr{Uint8}),file,filename)
+function chfl_trajectory_set_topology_file(file::Ptr{CHFL_TRAJECTORY},filename::Ptr{ UInt8})
+    ccall((:chfl_trajectory_set_topology_file, libchemfiles),Cint,(Ptr{CHFL_TRAJECTORY},Ptr{ UInt8}),file,filename)
 end
 
 function chfl_trajectory_set_cell(file::Ptr{CHFL_TRAJECTORY},cell::Ptr{CHFL_CELL})
@@ -226,8 +226,8 @@ function chfl_topology_free(topology::Ptr{CHFL_TOPOLOGY})
     ccall((:chfl_topology_free, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},),topology)
 end
 
-function chfl_atom(name::Ptr{Uint8})
-    ccall((:chfl_atom, libchemfiles),Ptr{CHFL_ATOM},(Ptr{Uint8},),name)
+function chfl_atom(name::Ptr{ UInt8})
+    ccall((:chfl_atom, libchemfiles),Ptr{CHFL_ATOM},(Ptr{ UInt8},),name)
 end
 
 function chfl_atom_from_frame(frame::Ptr{CHFL_FRAME},idx::Csize_t)
@@ -254,16 +254,16 @@ function chfl_atom_set_charge(atom::Ptr{CHFL_ATOM},charge::Cfloat)
     ccall((:chfl_atom_set_charge, libchemfiles),Cint,(Ptr{CHFL_ATOM},Cfloat),atom,charge)
 end
 
-function chfl_atom_name(atom::Ptr{CHFL_ATOM},name::Ptr{Uint8},buffsize::Csize_t)
-    ccall((:chfl_atom_name, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{Uint8},Csize_t),atom,name,buffsize)
+function chfl_atom_name(atom::Ptr{CHFL_ATOM},name::Ptr{ UInt8},buffsize::Csize_t)
+    ccall((:chfl_atom_name, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{ UInt8},Csize_t),atom,name,buffsize)
 end
 
-function chfl_atom_set_name(atom::Ptr{CHFL_ATOM},name::Ptr{Uint8})
-    ccall((:chfl_atom_set_name, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{Uint8}),atom,name)
+function chfl_atom_set_name(atom::Ptr{CHFL_ATOM},name::Ptr{ UInt8})
+    ccall((:chfl_atom_set_name, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{ UInt8}),atom,name)
 end
 
-function chfl_atom_full_name(atom::Ptr{CHFL_ATOM},name::Ptr{Uint8},buffsize::Csize_t)
-    ccall((:chfl_atom_full_name, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{Uint8},Csize_t),atom,name,buffsize)
+function chfl_atom_full_name(atom::Ptr{CHFL_ATOM},name::Ptr{ UInt8},buffsize::Csize_t)
+    ccall((:chfl_atom_full_name, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{ UInt8},Csize_t),atom,name,buffsize)
 end
 
 function chfl_atom_vdw_radius(atom::Ptr{CHFL_ATOM},radius::Ptr{Cdouble})

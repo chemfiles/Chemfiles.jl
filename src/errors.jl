@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 type ChemfilesError <: Exception
-    message::String
+    message::AbstractString
 end
 Base.show(io::IO, e::ChemfilesError) = show(io, "Chemfiles error: $(e.message)")
 export ChemfilesError
