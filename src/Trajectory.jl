@@ -7,7 +7,7 @@
 export read_step, read_step!, set_topology!, set_cell!, nsteps
 
 function Trajectory(filename::AbstractString, mode="r")
-    handle = lib.chrp_open(pointer(filename), pointer(mode))
+    handle = lib.chfl_open(pointer(filename), pointer(mode))
     return Trajectory(handle)
 end
 
@@ -15,7 +15,7 @@ free(file::Trajectory) = close(file)
 
 function Base.read!(file::Trajectory, frame::Frame)
     check(
-        lib.chrp_trajectory_read(file.handle, frame.handle)
+        lib.chfl_trajectory_read(file.handle, frame.handle)
     )
     return frame
 end
@@ -27,7 +27,7 @@ end
 
 function read_step!(file::Trajectory, step::Integer, frame::Frame)
     check(
-        lib.chrp_trajectory_read_step(file.handle, Csize_t(step), frame.handle)
+        lib.chfl_trajectory_read_step(file.handle, Csize_t(step), frame.handle)
     )
     return frame
 end
@@ -39,28 +39,28 @@ end
 
 function Base.write(file::Trajectory, frame::Frame)
     check(
-        lib.chrp_trajectory_write(file.handle, frame.handle)
+        lib.chfl_trajectory_write(file.handle, frame.handle)
     )
     return nothing
 end
 
 function set_topology!(file::Trajectory, topology::Topology)
     check(
-        lib.chrp_trajectory_set_topology(file.handle, topology.handle)
+        lib.chfl_trajectory_set_topology(file.handle, topology.handle)
     )
     return nothing
 end
 
 function set_topology!(file::Trajectory, filename::AbstractString)
     check(
-        lib.chrp_trajectory_set_topology_file(file.handle, pointer(filename))
+        lib.chfl_trajectory_set_topology_file(file.handle, pointer(filename))
     )
     return nothing
 end
 
 function set_cell!(file::Trajectory, cell::UnitCell)
     check(
-        lib.chrp_trajectory_set_cell(file.handle, cell.handle)
+        lib.chfl_trajectory_set_cell(file.handle, cell.handle)
     )
     return nothing
 end
@@ -68,17 +68,17 @@ end
 function nsteps(file::Trajectory)
     res = Csize_t[0]
     check(
-        lib.chrp_trajectory_nsteps(file.handle, pointer(res))
+        lib.chfl_trajectory_nsteps(file.handle, pointer(res))
     )
     return res[1]
 end
 
 function Base.close(file::Trajectory)
     check(
-        lib.chrp_trajectory_close(file.handle)
+        lib.chfl_trajectory_close(file.handle)
     )
-    file.handle = Ptr{lib.CHRP_TRAJECTORY}(0)
+    file.handle = Ptr{lib.CHFL_TRAJECTORY}(0)
     return nothing
 end
 
-Base.isopen(file::Trajectory) = (file.handle != Ptr{lib.CHRP_TRAJECTORY}(0))
+Base.isopen(file::Trajectory) = (file.handle != Ptr{lib.CHFL_TRAJECTORY}(0))

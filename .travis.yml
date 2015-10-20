@@ -7,8 +7,8 @@ julia:
 install:
   - git fetch --unshallow
   - julia -e 'Pkg.clone(pwd())'
-  - julia -e 'Pkg.build("Chemharp")'
+  - julia -e 'Pkg.build("Chemfiles")'
 script:
-  - julia --check-bounds=yes --inline=no -e 'Pkg.test("Chemharp"; coverage=true)'
+  - julia --check-bounds=yes --inline=no -e 'Pkg.test("Chemfiles"; coverage=true)'
 after_success:
-  - julia -e 'cd(Pkg.dir("Chemharp")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
+  - julia -e 'cd(Pkg.dir("Chemfiles")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'

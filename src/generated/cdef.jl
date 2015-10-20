@@ -1,287 +1,283 @@
-# Julia wrapper for header: /usr/local/include/chemharp.h
-# Automatically generated using Clang.jl wrap_c, version 0.0.0
-
-
-function chrp_strerror(status::Cint)
-    ccall((:chrp_strerror,libchemharp),Ptr{Uint8},(Cint,),status)
+function chfl_strerror(status::Cint)
+    ccall((:chfl_strerror, libchemfiles),Ptr{Uint8},(Cint,),status)
 end
 
-function chrp_last_error()
-    ccall((:chrp_last_error,libchemharp),Ptr{Uint8},())
+function chfl_last_error()
+    ccall((:chfl_last_error, libchemfiles),Ptr{Uint8},())
 end
 
-function chrp_loglevel(level::LogLevel)
-    ccall((:chrp_loglevel,libchemharp),Cint,(LogLevel,),level)
+function chfl_loglevel(level::LogLevel)
+    ccall((:chfl_loglevel, libchemfiles),Cint,(LogLevel,),level)
 end
 
-function chrp_logfile(file::Ptr{Uint8})
-    ccall((:chrp_logfile,libchemharp),Cint,(Ptr{Uint8},),file)
+function chfl_logfile(file::Ptr{Uint8})
+    ccall((:chfl_logfile, libchemfiles),Cint,(Ptr{Uint8},),file)
 end
 
-function chrp_log_stderr()
-    ccall((:chrp_log_stderr,libchemharp),Cint,())
+function chfl_log_stderr()
+    ccall((:chfl_log_stderr, libchemfiles),Cint,())
 end
 
-function chrp_open(filename::Ptr{Uint8},mode::Ptr{Uint8})
-    ccall((:chrp_open,libchemharp),Ptr{CHRP_TRAJECTORY},(Ptr{Uint8},Ptr{Uint8}),filename,mode)
+function chfl_open(filename::Ptr{Uint8},mode::Ptr{Uint8})
+    ccall((:chfl_open, libchemfiles),Ptr{CHFL_TRAJECTORY},(Ptr{Uint8},Ptr{Uint8}),filename,mode)
 end
 
-function chrp_trajectory_read(file::Ptr{CHRP_TRAJECTORY},frame::Ptr{CHRP_FRAME})
-    ccall((:chrp_trajectory_read,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{CHRP_FRAME}),file,frame)
+function chfl_trajectory_read(file::Ptr{CHFL_TRAJECTORY},frame::Ptr{CHFL_FRAME})
+    ccall((:chfl_trajectory_read, libchemfiles),Cint,(Ptr{CHFL_TRAJECTORY},Ptr{CHFL_FRAME}),file,frame)
 end
 
-function chrp_trajectory_read_step(file::Ptr{CHRP_TRAJECTORY},step::Csize_t,frame::Ptr{CHRP_FRAME})
-    ccall((:chrp_trajectory_read_step,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Csize_t,Ptr{CHRP_FRAME}),file,step,frame)
+function chfl_trajectory_read_step(file::Ptr{CHFL_TRAJECTORY},step::Csize_t,frame::Ptr{CHFL_FRAME})
+    ccall((:chfl_trajectory_read_step, libchemfiles),Cint,(Ptr{CHFL_TRAJECTORY},Csize_t,Ptr{CHFL_FRAME}),file,step,frame)
 end
 
-function chrp_trajectory_write(file::Ptr{CHRP_TRAJECTORY},frame::Ptr{CHRP_FRAME})
-    ccall((:chrp_trajectory_write,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{CHRP_FRAME}),file,frame)
+function chfl_trajectory_write(file::Ptr{CHFL_TRAJECTORY},frame::Ptr{CHFL_FRAME})
+    ccall((:chfl_trajectory_write, libchemfiles),Cint,(Ptr{CHFL_TRAJECTORY},Ptr{CHFL_FRAME}),file,frame)
 end
 
-function chrp_trajectory_set_topology(file::Ptr{CHRP_TRAJECTORY},topology::Ptr{CHRP_TOPOLOGY})
-    ccall((:chrp_trajectory_set_topology,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{CHRP_TOPOLOGY}),file,topology)
+function chfl_trajectory_set_topology(file::Ptr{CHFL_TRAJECTORY},topology::Ptr{CHFL_TOPOLOGY})
+    ccall((:chfl_trajectory_set_topology, libchemfiles),Cint,(Ptr{CHFL_TRAJECTORY},Ptr{CHFL_TOPOLOGY}),file,topology)
 end
 
-function chrp_trajectory_set_topology_file(file::Ptr{CHRP_TRAJECTORY},filename::Ptr{Uint8})
-    ccall((:chrp_trajectory_set_topology_file,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{Uint8}),file,filename)
+function chfl_trajectory_set_topology_file(file::Ptr{CHFL_TRAJECTORY},filename::Ptr{Uint8})
+    ccall((:chfl_trajectory_set_topology_file, libchemfiles),Cint,(Ptr{CHFL_TRAJECTORY},Ptr{Uint8}),file,filename)
 end
 
-function chrp_trajectory_set_cell(file::Ptr{CHRP_TRAJECTORY},cell::Ptr{CHRP_CELL})
-    ccall((:chrp_trajectory_set_cell,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{CHRP_CELL}),file,cell)
+function chfl_trajectory_set_cell(file::Ptr{CHFL_TRAJECTORY},cell::Ptr{CHFL_CELL})
+    ccall((:chfl_trajectory_set_cell, libchemfiles),Cint,(Ptr{CHFL_TRAJECTORY},Ptr{CHFL_CELL}),file,cell)
 end
 
-function chrp_trajectory_nsteps(file::Ptr{CHRP_TRAJECTORY},nsteps::Ptr{Csize_t})
-    ccall((:chrp_trajectory_nsteps,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},Ptr{Csize_t}),file,nsteps)
+function chfl_trajectory_nsteps(file::Ptr{CHFL_TRAJECTORY},nsteps::Ptr{Csize_t})
+    ccall((:chfl_trajectory_nsteps, libchemfiles),Cint,(Ptr{CHFL_TRAJECTORY},Ptr{Csize_t}),file,nsteps)
 end
 
-function chrp_trajectory_close(file::Ptr{CHRP_TRAJECTORY})
-    ccall((:chrp_trajectory_close,libchemharp),Cint,(Ptr{CHRP_TRAJECTORY},),file)
+function chfl_trajectory_close(file::Ptr{CHFL_TRAJECTORY})
+    ccall((:chfl_trajectory_close, libchemfiles),Cint,(Ptr{CHFL_TRAJECTORY},),file)
 end
 
-function chrp_frame(natoms::Csize_t)
-    ccall((:chrp_frame,libchemharp),Ptr{CHRP_FRAME},(Csize_t,),natoms)
+function chfl_frame(natoms::Csize_t)
+    ccall((:chfl_frame, libchemfiles),Ptr{CHFL_FRAME},(Csize_t,),natoms)
 end
 
-function chrp_frame_atoms_count(frame::Ptr{CHRP_FRAME},natoms::Ptr{Csize_t})
-    ccall((:chrp_frame_atoms_count,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Csize_t}),frame,natoms)
+function chfl_frame_atoms_count(frame::Ptr{CHFL_FRAME},natoms::Ptr{Csize_t})
+    ccall((:chfl_frame_atoms_count, libchemfiles),Cint,(Ptr{CHFL_FRAME},Ptr{Csize_t}),frame,natoms)
 end
 
-function chrp_frame_positions(frame::Ptr{CHRP_FRAME},data::Ptr{Cfloat},size::Csize_t)
-    ccall((:chrp_frame_positions,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Cfloat},Csize_t),frame,data,size)
+function chfl_frame_positions(frame::Ptr{CHFL_FRAME},data::Ptr{Cfloat},size::Csize_t)
+    ccall((:chfl_frame_positions, libchemfiles),Cint,(Ptr{CHFL_FRAME},Ptr{Cfloat},Csize_t),frame,data,size)
 end
 
-function chrp_frame_set_positions(frame::Ptr{CHRP_FRAME},data::Ptr{Cfloat},size::Csize_t)
-    ccall((:chrp_frame_set_positions,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Cfloat},Csize_t),frame,data,size)
+function chfl_frame_set_positions(frame::Ptr{CHFL_FRAME},data::Ptr{Cfloat},size::Csize_t)
+    ccall((:chfl_frame_set_positions, libchemfiles),Cint,(Ptr{CHFL_FRAME},Ptr{Cfloat},Csize_t),frame,data,size)
 end
 
-function chrp_frame_velocities(frame::Ptr{CHRP_FRAME},data::Ptr{Cfloat},size::Csize_t)
-    ccall((:chrp_frame_velocities,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Cfloat},Csize_t),frame,data,size)
+function chfl_frame_velocities(frame::Ptr{CHFL_FRAME},data::Ptr{Cfloat},size::Csize_t)
+    ccall((:chfl_frame_velocities, libchemfiles),Cint,(Ptr{CHFL_FRAME},Ptr{Cfloat},Csize_t),frame,data,size)
 end
 
-function chrp_frame_set_velocities(frame::Ptr{CHRP_FRAME},data::Ptr{Cfloat},size::Csize_t)
-    ccall((:chrp_frame_set_velocities,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Cfloat},Csize_t),frame,data,size)
+function chfl_frame_set_velocities(frame::Ptr{CHFL_FRAME},data::Ptr{Cfloat},size::Csize_t)
+    ccall((:chfl_frame_set_velocities, libchemfiles),Cint,(Ptr{CHFL_FRAME},Ptr{Cfloat},Csize_t),frame,data,size)
 end
 
-function chrp_frame_has_velocities(frame::Ptr{CHRP_FRAME},has_vel::Ptr{Bool})
-    ccall((:chrp_frame_has_velocities,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Bool}),frame,has_vel)
+function chfl_frame_has_velocities(frame::Ptr{CHFL_FRAME},has_vel::Ptr{Bool})
+    ccall((:chfl_frame_has_velocities, libchemfiles),Cint,(Ptr{CHFL_FRAME},Ptr{Bool}),frame,has_vel)
 end
 
-function chrp_frame_set_cell(frame::Ptr{CHRP_FRAME},cell::Ptr{CHRP_CELL})
-    ccall((:chrp_frame_set_cell,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{CHRP_CELL}),frame,cell)
+function chfl_frame_set_cell(frame::Ptr{CHFL_FRAME},cell::Ptr{CHFL_CELL})
+    ccall((:chfl_frame_set_cell, libchemfiles),Cint,(Ptr{CHFL_FRAME},Ptr{CHFL_CELL}),frame,cell)
 end
 
-function chrp_frame_set_topology(frame::Ptr{CHRP_FRAME},topology::Ptr{CHRP_TOPOLOGY})
-    ccall((:chrp_frame_set_topology,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{CHRP_TOPOLOGY}),frame,topology)
+function chfl_frame_set_topology(frame::Ptr{CHFL_FRAME},topology::Ptr{CHFL_TOPOLOGY})
+    ccall((:chfl_frame_set_topology, libchemfiles),Cint,(Ptr{CHFL_FRAME},Ptr{CHFL_TOPOLOGY}),frame,topology)
 end
 
-function chrp_frame_step(frame::Ptr{CHRP_FRAME},step::Ptr{Csize_t})
-    ccall((:chrp_frame_step,libchemharp),Cint,(Ptr{CHRP_FRAME},Ptr{Csize_t}),frame,step)
+function chfl_frame_step(frame::Ptr{CHFL_FRAME},step::Ptr{Csize_t})
+    ccall((:chfl_frame_step, libchemfiles),Cint,(Ptr{CHFL_FRAME},Ptr{Csize_t}),frame,step)
 end
 
-function chrp_frame_set_step(frame::Ptr{CHRP_FRAME},step::Csize_t)
-    ccall((:chrp_frame_set_step,libchemharp),Cint,(Ptr{CHRP_FRAME},Csize_t),frame,step)
+function chfl_frame_set_step(frame::Ptr{CHFL_FRAME},step::Csize_t)
+    ccall((:chfl_frame_set_step, libchemfiles),Cint,(Ptr{CHFL_FRAME},Csize_t),frame,step)
 end
 
-function chrp_frame_guess_topology(frame::Ptr{CHRP_FRAME},bonds::Bool)
-    ccall((:chrp_frame_guess_topology,libchemharp),Cint,(Ptr{CHRP_FRAME},Bool),frame,bonds)
+function chfl_frame_guess_topology(frame::Ptr{CHFL_FRAME},bonds::Bool)
+    ccall((:chfl_frame_guess_topology, libchemfiles),Cint,(Ptr{CHFL_FRAME},Bool),frame,bonds)
 end
 
-function chrp_frame_free(frame::Ptr{CHRP_FRAME})
-    ccall((:chrp_frame_free,libchemharp),Cint,(Ptr{CHRP_FRAME},),frame)
+function chfl_frame_free(frame::Ptr{CHFL_FRAME})
+    ccall((:chfl_frame_free, libchemfiles),Cint,(Ptr{CHFL_FRAME},),frame)
 end
 
-function chrp_cell(a::Cdouble,b::Cdouble,c::Cdouble,alpha::Cdouble,beta::Cdouble,gamma::Cdouble)
-    ccall((:chrp_cell,libchemharp),Ptr{CHRP_CELL},(Cdouble,Cdouble,Cdouble,Cdouble,Cdouble,Cdouble),a,b,c,alpha,beta,gamma)
+function chfl_cell(a::Cdouble,b::Cdouble,c::Cdouble,alpha::Cdouble,beta::Cdouble,gamma::Cdouble)
+    ccall((:chfl_cell, libchemfiles),Ptr{CHFL_CELL},(Cdouble,Cdouble,Cdouble,Cdouble,Cdouble,Cdouble),a,b,c,alpha,beta,gamma)
 end
 
-function chrp_cell_from_frame(frame::Ptr{CHRP_FRAME})
-    ccall((:chrp_cell_from_frame,libchemharp),Ptr{CHRP_CELL},(Ptr{CHRP_FRAME},),frame)
+function chfl_cell_from_frame(frame::Ptr{CHFL_FRAME})
+    ccall((:chfl_cell_from_frame, libchemfiles),Ptr{CHFL_CELL},(Ptr{CHFL_FRAME},),frame)
 end
 
-function chrp_cell_volume(cell::Ptr{CHRP_CELL},V::Ptr{Cdouble})
-    ccall((:chrp_cell_volume,libchemharp),Cint,(Ptr{CHRP_CELL},Ptr{Cdouble}),cell,V)
+function chfl_cell_volume(cell::Ptr{CHFL_CELL},V::Ptr{Cdouble})
+    ccall((:chfl_cell_volume, libchemfiles),Cint,(Ptr{CHFL_CELL},Ptr{Cdouble}),cell,V)
 end
 
-function chrp_cell_lengths(cell::Ptr{CHRP_CELL},a::Ptr{Cdouble},b::Ptr{Cdouble},c::Ptr{Cdouble})
-    ccall((:chrp_cell_lengths,libchemharp),Cint,(Ptr{CHRP_CELL},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble}),cell,a,b,c)
+function chfl_cell_lengths(cell::Ptr{CHFL_CELL},a::Ptr{Cdouble},b::Ptr{Cdouble},c::Ptr{Cdouble})
+    ccall((:chfl_cell_lengths, libchemfiles),Cint,(Ptr{CHFL_CELL},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble}),cell,a,b,c)
 end
 
-function chrp_cell_set_lengths(cell::Ptr{CHRP_CELL},a::Cdouble,b::Cdouble,c::Cdouble)
-    ccall((:chrp_cell_set_lengths,libchemharp),Cint,(Ptr{CHRP_CELL},Cdouble,Cdouble,Cdouble),cell,a,b,c)
+function chfl_cell_set_lengths(cell::Ptr{CHFL_CELL},a::Cdouble,b::Cdouble,c::Cdouble)
+    ccall((:chfl_cell_set_lengths, libchemfiles),Cint,(Ptr{CHFL_CELL},Cdouble,Cdouble,Cdouble),cell,a,b,c)
 end
 
-function chrp_cell_angles(cell::Ptr{CHRP_CELL},alpha::Ptr{Cdouble},beta::Ptr{Cdouble},gamma::Ptr{Cdouble})
-    ccall((:chrp_cell_angles,libchemharp),Cint,(Ptr{CHRP_CELL},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble}),cell,alpha,beta,gamma)
+function chfl_cell_angles(cell::Ptr{CHFL_CELL},alpha::Ptr{Cdouble},beta::Ptr{Cdouble},gamma::Ptr{Cdouble})
+    ccall((:chfl_cell_angles, libchemfiles),Cint,(Ptr{CHFL_CELL},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble}),cell,alpha,beta,gamma)
 end
 
-function chrp_cell_set_angles(cell::Ptr{CHRP_CELL},alpha::Cdouble,beta::Cdouble,gamma::Cdouble)
-    ccall((:chrp_cell_set_angles,libchemharp),Cint,(Ptr{CHRP_CELL},Cdouble,Cdouble,Cdouble),cell,alpha,beta,gamma)
+function chfl_cell_set_angles(cell::Ptr{CHFL_CELL},alpha::Cdouble,beta::Cdouble,gamma::Cdouble)
+    ccall((:chfl_cell_set_angles, libchemfiles),Cint,(Ptr{CHFL_CELL},Cdouble,Cdouble,Cdouble),cell,alpha,beta,gamma)
 end
 
-function chrp_cell_matrix(cell::Ptr{CHRP_CELL},mat::Ptr{Cdouble})
-    ccall((:chrp_cell_matrix,libchemharp),Cint,(Ptr{CHRP_CELL},Ptr{Cdouble}),cell,mat)
+function chfl_cell_matrix(cell::Ptr{CHFL_CELL},mat::Ptr{Cdouble})
+    ccall((:chfl_cell_matrix, libchemfiles),Cint,(Ptr{CHFL_CELL},Ptr{Cdouble}),cell,mat)
 end
 
-function chrp_cell_type(cell::Ptr{CHRP_CELL},_type::Ptr{CellType})
-    ccall((:chrp_cell_type,libchemharp),Cint,(Ptr{CHRP_CELL},Ptr{CellType}),cell,_type)
+function chfl_cell_type(cell::Ptr{CHFL_CELL},_type::Ptr{CellType})
+    ccall((:chfl_cell_type, libchemfiles),Cint,(Ptr{CHFL_CELL},Ptr{CellType}),cell,_type)
 end
 
-function chrp_cell_set_type(cell::Ptr{CHRP_CELL},_type::CellType)
-    ccall((:chrp_cell_set_type,libchemharp),Cint,(Ptr{CHRP_CELL},CellType),cell,_type)
+function chfl_cell_set_type(cell::Ptr{CHFL_CELL},_type::CellType)
+    ccall((:chfl_cell_set_type, libchemfiles),Cint,(Ptr{CHFL_CELL},CellType),cell,_type)
 end
 
-function chrp_cell_periodicity(cell::Ptr{CHRP_CELL},x::Ptr{Bool},y::Ptr{Bool},z::Ptr{Bool})
-    ccall((:chrp_cell_periodicity,libchemharp),Cint,(Ptr{CHRP_CELL},Ptr{Bool},Ptr{Bool},Ptr{Bool}),cell,x,y,z)
+function chfl_cell_periodicity(cell::Ptr{CHFL_CELL},x::Ptr{Bool},y::Ptr{Bool},z::Ptr{Bool})
+    ccall((:chfl_cell_periodicity, libchemfiles),Cint,(Ptr{CHFL_CELL},Ptr{Bool},Ptr{Bool},Ptr{Bool}),cell,x,y,z)
 end
 
-function chrp_cell_set_periodicity(cell::Ptr{CHRP_CELL},x::Bool,y::Bool,z::Bool)
-    ccall((:chrp_cell_set_periodicity,libchemharp),Cint,(Ptr{CHRP_CELL},Bool,Bool,Bool),cell,x,y,z)
+function chfl_cell_set_periodicity(cell::Ptr{CHFL_CELL},x::Bool,y::Bool,z::Bool)
+    ccall((:chfl_cell_set_periodicity, libchemfiles),Cint,(Ptr{CHFL_CELL},Bool,Bool,Bool),cell,x,y,z)
 end
 
-function chrp_cell_free(cell::Ptr{CHRP_CELL})
-    ccall((:chrp_cell_free,libchemharp),Cint,(Ptr{CHRP_CELL},),cell)
+function chfl_cell_free(cell::Ptr{CHFL_CELL})
+    ccall((:chfl_cell_free, libchemfiles),Cint,(Ptr{CHFL_CELL},),cell)
 end
 
-function chrp_topology()
-    ccall((:chrp_topology,libchemharp),Ptr{CHRP_TOPOLOGY},())
+function chfl_topology()
+    ccall((:chfl_topology, libchemfiles),Ptr{CHFL_TOPOLOGY},())
 end
 
-function chrp_topology_from_frame(frame::Ptr{CHRP_FRAME})
-    ccall((:chrp_topology_from_frame,libchemharp),Ptr{CHRP_TOPOLOGY},(Ptr{CHRP_FRAME},),frame)
+function chfl_topology_from_frame(frame::Ptr{CHFL_FRAME})
+    ccall((:chfl_topology_from_frame, libchemfiles),Ptr{CHFL_TOPOLOGY},(Ptr{CHFL_FRAME},),frame)
 end
 
-function chrp_topology_atoms_count(topology::Ptr{CHRP_TOPOLOGY},natoms::Ptr{Csize_t})
-    ccall((:chrp_topology_atoms_count,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Csize_t}),topology,natoms)
+function chfl_topology_atoms_count(topology::Ptr{CHFL_TOPOLOGY},natoms::Ptr{Csize_t})
+    ccall((:chfl_topology_atoms_count, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Ptr{Csize_t}),topology,natoms)
 end
 
-function chrp_topology_append(topology::Ptr{CHRP_TOPOLOGY},atom::Ptr{CHRP_ATOM})
-    ccall((:chrp_topology_append,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{CHRP_ATOM}),topology,atom)
+function chfl_topology_append(topology::Ptr{CHFL_TOPOLOGY},atom::Ptr{CHFL_ATOM})
+    ccall((:chfl_topology_append, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Ptr{CHFL_ATOM}),topology,atom)
 end
 
-function chrp_topology_remove(topology::Ptr{CHRP_TOPOLOGY},i::Csize_t)
-    ccall((:chrp_topology_remove,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Csize_t),topology,i)
+function chfl_topology_remove(topology::Ptr{CHFL_TOPOLOGY},i::Csize_t)
+    ccall((:chfl_topology_remove, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Csize_t),topology,i)
 end
 
-function chrp_topology_isbond(topology::Ptr{CHRP_TOPOLOGY},i::Csize_t,j::Csize_t,result::Ptr{Bool})
-    ccall((:chrp_topology_isbond,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Csize_t,Csize_t,Ptr{Bool}),topology,i,j,result)
+function chfl_topology_isbond(topology::Ptr{CHFL_TOPOLOGY},i::Csize_t,j::Csize_t,result::Ptr{Bool})
+    ccall((:chfl_topology_isbond, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Csize_t,Csize_t,Ptr{Bool}),topology,i,j,result)
 end
 
-function chrp_topology_isangle(topology::Ptr{CHRP_TOPOLOGY},i::Csize_t,j::Csize_t,k::Csize_t,result::Ptr{Bool})
-    ccall((:chrp_topology_isangle,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Csize_t,Csize_t,Csize_t,Ptr{Bool}),topology,i,j,k,result)
+function chfl_topology_isangle(topology::Ptr{CHFL_TOPOLOGY},i::Csize_t,j::Csize_t,k::Csize_t,result::Ptr{Bool})
+    ccall((:chfl_topology_isangle, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Csize_t,Csize_t,Csize_t,Ptr{Bool}),topology,i,j,k,result)
 end
 
-function chrp_topology_isdihedral(topology::Ptr{CHRP_TOPOLOGY},i::Csize_t,j::Csize_t,k::Csize_t,m::Csize_t,result::Ptr{Bool})
-    ccall((:chrp_topology_isdihedral,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Csize_t,Csize_t,Csize_t,Csize_t,Ptr{Bool}),topology,i,j,k,m,result)
+function chfl_topology_isdihedral(topology::Ptr{CHFL_TOPOLOGY},i::Csize_t,j::Csize_t,k::Csize_t,m::Csize_t,result::Ptr{Bool})
+    ccall((:chfl_topology_isdihedral, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Csize_t,Csize_t,Csize_t,Csize_t,Ptr{Bool}),topology,i,j,k,m,result)
 end
 
-function chrp_topology_bonds_count(topology::Ptr{CHRP_TOPOLOGY},nbonds::Ptr{Csize_t})
-    ccall((:chrp_topology_bonds_count,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Csize_t}),topology,nbonds)
+function chfl_topology_bonds_count(topology::Ptr{CHFL_TOPOLOGY},nbonds::Ptr{Csize_t})
+    ccall((:chfl_topology_bonds_count, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Ptr{Csize_t}),topology,nbonds)
 end
 
-function chrp_topology_angles_count(topology::Ptr{CHRP_TOPOLOGY},nangles::Ptr{Csize_t})
-    ccall((:chrp_topology_angles_count,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Csize_t}),topology,nangles)
+function chfl_topology_angles_count(topology::Ptr{CHFL_TOPOLOGY},nangles::Ptr{Csize_t})
+    ccall((:chfl_topology_angles_count, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Ptr{Csize_t}),topology,nangles)
 end
 
-function chrp_topology_dihedrals_count(topology::Ptr{CHRP_TOPOLOGY},ndihedrals::Ptr{Csize_t})
-    ccall((:chrp_topology_dihedrals_count,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Csize_t}),topology,ndihedrals)
+function chfl_topology_dihedrals_count(topology::Ptr{CHFL_TOPOLOGY},ndihedrals::Ptr{Csize_t})
+    ccall((:chfl_topology_dihedrals_count, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Ptr{Csize_t}),topology,ndihedrals)
 end
 
-function chrp_topology_bonds(topology::Ptr{CHRP_TOPOLOGY},data::Ptr{Csize_t},nbonds::Csize_t)
-    ccall((:chrp_topology_bonds,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Csize_t},Csize_t),topology,data,nbonds)
+function chfl_topology_bonds(topology::Ptr{CHFL_TOPOLOGY},data::Ptr{Csize_t},nbonds::Csize_t)
+    ccall((:chfl_topology_bonds, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Ptr{Csize_t},Csize_t),topology,data,nbonds)
 end
 
-function chrp_topology_angles(topology::Ptr{CHRP_TOPOLOGY},data::Ptr{Csize_t},nangles::Csize_t)
-    ccall((:chrp_topology_angles,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Csize_t},Csize_t),topology,data,nangles)
+function chfl_topology_angles(topology::Ptr{CHFL_TOPOLOGY},data::Ptr{Csize_t},nangles::Csize_t)
+    ccall((:chfl_topology_angles, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Ptr{Csize_t},Csize_t),topology,data,nangles)
 end
 
-function chrp_topology_dihedrals(topology::Ptr{CHRP_TOPOLOGY},data::Ptr{Csize_t},ndihedrals::Csize_t)
-    ccall((:chrp_topology_dihedrals,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Ptr{Csize_t},Csize_t),topology,data,ndihedrals)
+function chfl_topology_dihedrals(topology::Ptr{CHFL_TOPOLOGY},data::Ptr{Csize_t},ndihedrals::Csize_t)
+    ccall((:chfl_topology_dihedrals, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Ptr{Csize_t},Csize_t),topology,data,ndihedrals)
 end
 
-function chrp_topology_add_bond(topology::Ptr{CHRP_TOPOLOGY},i::Csize_t,j::Csize_t)
-    ccall((:chrp_topology_add_bond,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Csize_t,Csize_t),topology,i,j)
+function chfl_topology_add_bond(topology::Ptr{CHFL_TOPOLOGY},i::Csize_t,j::Csize_t)
+    ccall((:chfl_topology_add_bond, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Csize_t,Csize_t),topology,i,j)
 end
 
-function chrp_topology_remove_bond(topology::Ptr{CHRP_TOPOLOGY},i::Csize_t,j::Csize_t)
-    ccall((:chrp_topology_remove_bond,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},Csize_t,Csize_t),topology,i,j)
+function chfl_topology_remove_bond(topology::Ptr{CHFL_TOPOLOGY},i::Csize_t,j::Csize_t)
+    ccall((:chfl_topology_remove_bond, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},Csize_t,Csize_t),topology,i,j)
 end
 
-function chrp_topology_free(topology::Ptr{CHRP_TOPOLOGY})
-    ccall((:chrp_topology_free,libchemharp),Cint,(Ptr{CHRP_TOPOLOGY},),topology)
+function chfl_topology_free(topology::Ptr{CHFL_TOPOLOGY})
+    ccall((:chfl_topology_free, libchemfiles),Cint,(Ptr{CHFL_TOPOLOGY},),topology)
 end
 
-function chrp_atom(name::Ptr{Uint8})
-    ccall((:chrp_atom,libchemharp),Ptr{CHRP_ATOM},(Ptr{Uint8},),name)
+function chfl_atom(name::Ptr{Uint8})
+    ccall((:chfl_atom, libchemfiles),Ptr{CHFL_ATOM},(Ptr{Uint8},),name)
 end
 
-function chrp_atom_from_frame(frame::Ptr{CHRP_FRAME},idx::Csize_t)
-    ccall((:chrp_atom_from_frame,libchemharp),Ptr{CHRP_ATOM},(Ptr{CHRP_FRAME},Csize_t),frame,idx)
+function chfl_atom_from_frame(frame::Ptr{CHFL_FRAME},idx::Csize_t)
+    ccall((:chfl_atom_from_frame, libchemfiles),Ptr{CHFL_ATOM},(Ptr{CHFL_FRAME},Csize_t),frame,idx)
 end
 
-function chrp_atom_from_topology(topology::Ptr{CHRP_TOPOLOGY},idx::Csize_t)
-    ccall((:chrp_atom_from_topology,libchemharp),Ptr{CHRP_ATOM},(Ptr{CHRP_TOPOLOGY},Csize_t),topology,idx)
+function chfl_atom_from_topology(topology::Ptr{CHFL_TOPOLOGY},idx::Csize_t)
+    ccall((:chfl_atom_from_topology, libchemfiles),Ptr{CHFL_ATOM},(Ptr{CHFL_TOPOLOGY},Csize_t),topology,idx)
 end
 
-function chrp_atom_mass(atom::Ptr{CHRP_ATOM},mass::Ptr{Cfloat})
-    ccall((:chrp_atom_mass,libchemharp),Cint,(Ptr{CHRP_ATOM},Ptr{Cfloat}),atom,mass)
+function chfl_atom_mass(atom::Ptr{CHFL_ATOM},mass::Ptr{Cfloat})
+    ccall((:chfl_atom_mass, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{Cfloat}),atom,mass)
 end
 
-function chrp_atom_set_mass(atom::Ptr{CHRP_ATOM},mass::Cfloat)
-    ccall((:chrp_atom_set_mass,libchemharp),Cint,(Ptr{CHRP_ATOM},Cfloat),atom,mass)
+function chfl_atom_set_mass(atom::Ptr{CHFL_ATOM},mass::Cfloat)
+    ccall((:chfl_atom_set_mass, libchemfiles),Cint,(Ptr{CHFL_ATOM},Cfloat),atom,mass)
 end
 
-function chrp_atom_charge(atom::Ptr{CHRP_ATOM},charge::Ptr{Cfloat})
-    ccall((:chrp_atom_charge,libchemharp),Cint,(Ptr{CHRP_ATOM},Ptr{Cfloat}),atom,charge)
+function chfl_atom_charge(atom::Ptr{CHFL_ATOM},charge::Ptr{Cfloat})
+    ccall((:chfl_atom_charge, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{Cfloat}),atom,charge)
 end
 
-function chrp_atom_set_charge(atom::Ptr{CHRP_ATOM},charge::Cfloat)
-    ccall((:chrp_atom_set_charge,libchemharp),Cint,(Ptr{CHRP_ATOM},Cfloat),atom,charge)
+function chfl_atom_set_charge(atom::Ptr{CHFL_ATOM},charge::Cfloat)
+    ccall((:chfl_atom_set_charge, libchemfiles),Cint,(Ptr{CHFL_ATOM},Cfloat),atom,charge)
 end
 
-function chrp_atom_name(atom::Ptr{CHRP_ATOM},name::Ptr{Uint8},buffsize::Csize_t)
-    ccall((:chrp_atom_name,libchemharp),Cint,(Ptr{CHRP_ATOM},Ptr{Uint8},Csize_t),atom,name,buffsize)
+function chfl_atom_name(atom::Ptr{CHFL_ATOM},name::Ptr{Uint8},buffsize::Csize_t)
+    ccall((:chfl_atom_name, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{Uint8},Csize_t),atom,name,buffsize)
 end
 
-function chrp_atom_set_name(atom::Ptr{CHRP_ATOM},name::Ptr{Uint8})
-    ccall((:chrp_atom_set_name,libchemharp),Cint,(Ptr{CHRP_ATOM},Ptr{Uint8}),atom,name)
+function chfl_atom_set_name(atom::Ptr{CHFL_ATOM},name::Ptr{Uint8})
+    ccall((:chfl_atom_set_name, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{Uint8}),atom,name)
 end
 
-function chrp_atom_full_name(atom::Ptr{CHRP_ATOM},name::Ptr{Uint8},buffsize::Csize_t)
-    ccall((:chrp_atom_full_name,libchemharp),Cint,(Ptr{CHRP_ATOM},Ptr{Uint8},Csize_t),atom,name,buffsize)
+function chfl_atom_full_name(atom::Ptr{CHFL_ATOM},name::Ptr{Uint8},buffsize::Csize_t)
+    ccall((:chfl_atom_full_name, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{Uint8},Csize_t),atom,name,buffsize)
 end
 
-function chrp_atom_vdw_radius(atom::Ptr{CHRP_ATOM},radius::Ptr{Cdouble})
-    ccall((:chrp_atom_vdw_radius,libchemharp),Cint,(Ptr{CHRP_ATOM},Ptr{Cdouble}),atom,radius)
+function chfl_atom_vdw_radius(atom::Ptr{CHFL_ATOM},radius::Ptr{Cdouble})
+    ccall((:chfl_atom_vdw_radius, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{Cdouble}),atom,radius)
 end
 
-function chrp_atom_covalent_radius(atom::Ptr{CHRP_ATOM},radius::Ptr{Cdouble})
-    ccall((:chrp_atom_covalent_radius,libchemharp),Cint,(Ptr{CHRP_ATOM},Ptr{Cdouble}),atom,radius)
+function chfl_atom_covalent_radius(atom::Ptr{CHFL_ATOM},radius::Ptr{Cdouble})
+    ccall((:chfl_atom_covalent_radius, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{Cdouble}),atom,radius)
 end
 
-function chrp_atom_atomic_number(atom::Ptr{CHRP_ATOM},number::Ptr{Cint})
-    ccall((:chrp_atom_atomic_number,libchemharp),Cint,(Ptr{CHRP_ATOM},Ptr{Cint}),atom,number)
+function chfl_atom_atomic_number(atom::Ptr{CHFL_ATOM},number::Ptr{Cint})
+    ccall((:chfl_atom_atomic_number, libchemfiles),Cint,(Ptr{CHFL_ATOM},Ptr{Cint}),atom,number)
 end
 
-function chrp_atom_free(atom::Ptr{CHRP_ATOM})
-    ccall((:chrp_atom_free,libchemharp),Cint,(Ptr{CHRP_ATOM},),atom)
+function chfl_atom_free(atom::Ptr{CHFL_ATOM})
+    ccall((:chfl_atom_free, libchemfiles),Cint,(Ptr{CHFL_ATOM},),atom)
 end

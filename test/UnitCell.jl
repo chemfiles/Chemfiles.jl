@@ -18,10 +18,10 @@ facts("UnitCell type") do
                           0, 0, 30], (3, 3))
     @fact cell_matrix(cell) --> roughly(mat, 1e-10)
 
-    @fact cell_type(cell) --> Chemharp.ORTHOROMBIC
+    @fact cell_type(cell) --> Chemfiles.ORTHOROMBIC
 
-    set_cell_type!(cell, Chemharp.TRICLINIC)
-    @fact cell_type(cell) --> Chemharp.TRICLINIC
+    set_cell_type!(cell, Chemfiles.TRICLINIC)
+    @fact cell_type(cell) --> Chemfiles.TRICLINIC
 
     set_angles!(cell, 80, 89, 100)
     @fact angles(cell) --> (80.0, 89.0, 100.0)

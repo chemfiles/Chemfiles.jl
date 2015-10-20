@@ -1,22 +1,22 @@
-# Chemharp
+# Chemfiles.jl
 
-[![Build Status -- Linux](https://travis-ci.org/Luthaf/Chemharp.jl.svg?branch=master)](https://travis-ci.org/Luthaf/Chemharp.jl)
-[![Build status -- Windows](https://ci.appveyor.com/api/projects/status/vyn7bbg7xi8q8093/branch/master?svg=true)](https://ci.appveyor.com/project/Luthaf/chemharp-jl/branch/master)
-[![Coverage Status](https://coveralls.io/repos/Luthaf/Chemharp.jl/badge.svg?branch=master)](https://coveralls.io/r/Luthaf/Chemharp.jl?branch=master)
+[![Build Status -- Linux](https://travis-ci.org/chemfiles/Chemfiles.jl.svg?branch=master)](https://travis-ci.org/chemfiles/Chemfiles.jl)
+[![Build status -- Windows](https://ci.appveyor.com/api/projects/status/vyn7bbg7xi8q8093/branch/master?svg=true)](https://ci.appveyor.com/project/Luthaf/chemfiles-jl/branch/master)
 
-This package is aJulia binding for the [Chemharp](https://github.com/Luthaf/Chemharp)
-chemistry IO library. It allow you, as a programmer, to read and write chemistry
-trajectory files easily, with the same simple interface for all the supported formats.
-For more information, please read the [introduction to Chemharp](http://chemharp.readthedocs.org/en/latest/overview.html).
+This package contains the Julia binding for the
+[chemfiles](https://github.com/chemfiles/chemfiles) chemistry IO library. It allow you, as
+a programmer, to read and write chemistry trajectory files easily, with the same simple
+interface for all the supported formats. For more information, please read the
+[introduction to chemfiles](http://chemfiles.readthedocs.org/en/latest/overview.html).
 
 For a list of supported formats, please see the
-[documentation](http://chemharp.readthedocs.org/en/latest/formats.html).
+[documentation](http://chemfiles.readthedocs.org/en/latest/formats.html).
 
 ## Documentation
 
 Please see the
-[Julia interface](chemharp.readthedocs.org/en/latest/bindings/julia-api.html) section of
-the documentation of Chemharp.
+[Julia interface](chemfiles.readthedocs.org/projects/chemfiles-julia) section of
+the documentation of chemfiles.
 
 
 ## Installation
@@ -26,25 +26,25 @@ necessitate some work.
 
 To install, run the following commands:
 ```julia
-julia> Pkg.clone("http://github.com/Luthaf/Chemharp.jl")
+julia> Pkg.clone("http://github.com/chemfiles/Chemfiles.jl")
 
-julia> Pkg.build("Chemharp")
+julia> Pkg.build("Chemfiles")
 ```
 
 You can also test the Julia interface with:
 ```julia
-julia> Pkg.test("Chemharp")
+julia> Pkg.test("Chemfiles")
 ```
 
-All the tests should pass. If they don't, please open [an issue!](https://github.com/Luthaf/Chemharp.jl/issues/new)
+All the tests should pass. If they don't, please open [an issue!](https://github.com/chemfiles/Chemfiles.jl/issues/new)
 
 ## Usage example
 
-Here is a simple usage example for Chemharp.jl. Please see the `examples` folder for more
-examples.
+Here is a simple usage example for `Chemfiles.jl`. Please see the `examples` folder for
+more examples.
 
 ```julia
-using Chemharp
+using Chemfiles
 
 trajectory = Trajectory("filename.xyz")
 frame = read(trajectory)
@@ -57,4 +57,4 @@ positions = positions(frame)
 
 ## Bug reports, feature requests
 
-Please report any bug you find and any feature you may want as a [github issue](https://github.com/Luthaf/Chemharp.jl/issues/new).
+Please report any bug you find and any feature you may want as a [github issue](https://github.com/chemfiles/Chemfiles.jl/issues/new).

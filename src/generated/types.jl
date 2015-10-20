@@ -2,33 +2,33 @@
 
 using Compat
 
-type CHRP_TRAJECTORY
+type CHFL_TRAJECTORY
 end
 
-type CHRP_FRAME
+type CHFL_FRAME
 end
 
-type CHRP_ATOM
+type CHFL_ATOM
 end
 
-type CHRP_CELL
+type CHFL_CELL
 end
 
-type CHRP_TOPOLOGY
+type CHFL_TOPOLOGY
 end
 
-# begin enum chrp_log_level_t
+# begin enum chfl_log_level_t
 typealias LogLevel Uint32
 const NONE = (UInt32)(0)
 const ERROR = (UInt32)(1)
 const WARNING = (UInt32)(2)
 const INFO = (UInt32)(3)
 const DEBUG = (UInt32)(4)
-# end enum chrp_log_level_t
+# end enum chfl_log_level_t
 
-# begin enum chrp_cell_type_t
+# begin enum chfl_cell_type_t
 typealias CellType Uint32
 const ORTHOROMBIC = (UInt32)(0)
 const TRICLINIC = (UInt32)(1)
 const INFINITE = (UInt32)(2)
-# end enum chrp_cell_type_t
+# end enum chfl_cell_type_t

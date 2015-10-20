@@ -6,14 +6,14 @@
 
 @unix_only VERSION >= v"0.4.0-dev+6521" && __precompile__()
 
-module Chemharp
+module Chemfiles
     module lib
         module deps
             using BinDeps
             @BinDeps.load_dependencies
         end
         # Extract the library path
-        const libchemharp = deps.libchemharp[1][2]
+        const libchemfiles = deps.libchemfiles[1][2]
 
         include("generated/types.jl")
         include("generated/cdef.jl")
@@ -26,8 +26,8 @@ module Chemharp
     export Trajectory, Topology, Atom, UnitCell, Frame
 
     type Trajectory
-        handle :: Ptr{lib.CHRP_TRAJECTORY}
-        function Trajectory(ptr::Ptr{lib.CHRP_TRAJECTORY})
+        handle :: Ptr{lib.CHFL_TRAJECTORY}
+        function Trajectory(ptr::Ptr{lib.CHFL_TRAJECTORY})
             check(ptr)
             this = new(ptr)
             finalizer(this, free)
@@ -36,8 +36,8 @@ module Chemharp
     end
 
     type Topology
-        handle :: Ptr{lib.CHRP_TOPOLOGY}
-        function Topology(ptr::Ptr{lib.CHRP_TOPOLOGY})
+        handle :: Ptr{lib.CHFL_TOPOLOGY}
+        function Topology(ptr::Ptr{lib.CHFL_TOPOLOGY})
             check(ptr)
             this = new(ptr)
             finalizer(this, free)
@@ -46,8 +46,8 @@ module Chemharp
     end
 
     type Atom
-        handle :: Ptr{lib.CHRP_ATOM}
-        function Atom(ptr::Ptr{lib.CHRP_ATOM})
+        handle :: Ptr{lib.CHFL_ATOM}
+        function Atom(ptr::Ptr{lib.CHFL_ATOM})
             check(ptr)
             this = new(ptr)
             finalizer(this, free)
@@ -56,8 +56,8 @@ module Chemharp
     end
 
     type UnitCell
-        handle :: Ptr{lib.CHRP_CELL}
-        function UnitCell(ptr::Ptr{lib.CHRP_CELL})
+        handle :: Ptr{lib.CHFL_CELL}
+        function UnitCell(ptr::Ptr{lib.CHFL_CELL})
             check(ptr)
             this = new(ptr)
             finalizer(this, free)
@@ -66,8 +66,8 @@ module Chemharp
     end
 
     type Frame
-        handle :: Ptr{lib.CHRP_FRAME}
-        function Frame(ptr::Ptr{lib.CHRP_FRAME})
+        handle :: Ptr{lib.CHFL_FRAME}
+        function Frame(ptr::Ptr{lib.CHFL_FRAME})
             check(ptr)
             this = new(ptr)
             finalizer(this, free)

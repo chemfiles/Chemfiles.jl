@@ -1,19 +1,19 @@
 using BinDeps
 @BinDeps.setup
 
-libchemharp = library_dependency("libchemharp")
-version = "0.3.1"
+libchemfiles = library_dependency("libchemfiles")
+version = "0.4.0"
 
 @unix_only begin
     if Pkg.installed("Conda") === nothing
         error("Conda package not installed, please run Pkg.add(\"Conda\")")
     end
     using Conda
-    push!(Conda.CHANNELS, "https://conda.binstar.org/luthaf")
-    provides(Conda.Manager, "chemharp", libchemharp, os = :Unix, onload =
+    push!(Conda.CHANNELS, "https://conda.anaconda.org/luthaf")
+    provides(Conda.Manager, "chemfiles-lib", libchemfiles, os = :Unix, onload =
     """
     function __init__()
-        ENV["CHRP_MOLFILES"] = joinpath("$(Conda.PREFIX)","lib")
+        ENV["MOLFILES_DIRECTORY"] = joinpath("$(Conda.PREFIX)","lib")
     end
     """ )
 end
@@ -22,10 +22,10 @@ end
     using WinRPM
     push!(WinRPM.sources, "http://download.opensuse.org/repositories/home:Luthaf/openSUSE_13.2/")
     WinRPM.update()
-    provides(WinRPM.RPM, "chemharp", [libchemharp], os = :Windows, onload =
+    provides(WinRPM.RPM, "chemfiles", [libchemfiles], os = :Windows, onload =
     """
     function __init__()
-        ENV["CHRP_MOLFILES"] = joinpath(
+        ENV["MOLFILES_DIRECTORY"] = joinpath(
             $(WinRPM.installdir), "usr", "$(Sys.ARCH)-w64-mingw32",
             "sys-root", "mingw", "bin", "molfiles"
         )
@@ -33,30 +33,30 @@ end
 end
 
 provides(Sources,
-         URI("https://github.com/Luthaf/Chemharp/archive/$version.tar.gz"),
-         libchemharp,
-         unpacked_dir="Chemharp-$version")
+         URI("https://github.com/chemfiles/chemfiles/archive/$version.tar.gz"),
+         libchemfiles,
+         unpacked_dir="chemfiles-$version")
 
-prefix = joinpath(BinDeps.depsdir(libchemharp), "usr")
-srcdir = joinpath(BinDeps.depsdir(libchemharp), "src", "Chemharp-$version")
-builddir = joinpath(BinDeps.depsdir(libchemharp), "builds", "Chemharp-$version")
+prefix = joinpath(BinDeps.depsdir(libchemfiles), "usr")
+srcdir = joinpath(BinDeps.depsdir(libchemfiles), "src", "chemfiles-$version")
+builddir = joinpath(BinDeps.depsdir(libchemfiles), "builds", "chemfiles-$version")
 
 DL_EXT = VERSION >= v"0.4.0-dev" ? Libdl.dlext : Base.Sys.shlib_ext
 
 provides(BuildProcess,
     (@build_steps begin
-        GetSources(libchemharp)
+        GetSources(libchemfiles)
         CreateDirectory(builddir)
         @build_steps begin
             ChangeDirectory(builddir)
-            FileRule(joinpath(prefix, "lib", "libchemharp.$(DL_EXT)"),
+            FileRule(joinpath(prefix, "lib", "libchemfiles.$(DL_EXT)"),
                 @build_steps begin
-                    `cmake -DCMAKE_INSTALL_PREFIX="$prefix" $srcdir`
+                    `cmake -DCMAKE_INSTALL_PREFIX="$prefix" -DBUILD_SHARED_LIBS=ON $srcdir`
                     `make`
                     `make install`
                 end
             )
         end
-    end), libchemharp)
+    end), libchemfiles)
 
 @BinDeps.install

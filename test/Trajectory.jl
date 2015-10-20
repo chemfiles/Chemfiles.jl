@@ -59,13 +59,13 @@ facts("Trajectory type") do
 
     context("Write frames") do
         expected_content = """4
-                              Written by Chemharp
+                              Written by the chemfiles library
                               X 1 2 3
                               X 1 2 3
                               X 1 2 3
                               X 1 2 3
                               6
-                              Written by Chemharp
+                              Written by the chemfiles library
                               X 4 5 6
                               X 4 5 6
                               X 4 5 6

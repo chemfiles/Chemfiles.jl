@@ -1,9 +1,9 @@
-# File rmsd.jl, example for the Chemharp library
+# File rmsd.jl, example for the chemfiles library
 # Any copyright is dedicated to the Public Domain.
 # http://creativecommons.org/publicdomain/zero/1.0/
 
 #!/usr/bin/env julia
-using Chemharp
+using Chemfiles
 
 traj = Trajectory("filename.nc")
 
