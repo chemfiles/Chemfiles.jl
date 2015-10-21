@@ -3,6 +3,7 @@
 [![Build Status -- Linux](https://travis-ci.org/chemfiles/Chemfiles.jl.svg?branch=master)](https://travis-ci.org/chemfiles/Chemfiles.jl)
 [![Build status -- Windows](https://ci.appveyor.com/api/projects/status/2v1ert2bktpwpiqo?svg=true)](https://ci.appveyor.com/project/Luthaf/chemfiles-jl)
 [![codecov.io](https://codecov.io/github/chemfiles/Chemfiles.jl/coverage.svg?branch=master)](https://codecov.io/github/chemfiles/Chemfiles.jl?branch=master)
+[![Documentation Status](https://readthedocs.org/projects/chemfiles-julia/badge/?version=latest)](http://chemfiles.readthedocs.org/projects/chemfiles-julia/en/latest/)
 
 This package contains the Julia binding for the
 [chemfiles](https://github.com/chemfiles/chemfiles) chemistry IO library. It allow you, as
