@@ -108,9 +108,9 @@ facts("Trajectory type") do
             @fact readall(fd) --> expected_content
         end
 
-        rm("test-tmp.xyz")
-
         close(file)
         @fact isopen(file) --> false
+
+        rm("test-tmp.xyz")
     end
 end
