@@ -1,5 +1,7 @@
 environment:
   matrix:
+  - JULIAVERSION: "julialang/bin/winnt/x86/0.4/julia-0.4.0-win32.exe"
+  - JULIAVERSION: "julialang/bin/winnt/x64/0.4/julia-0.4.0-win64.exe"
   - JULIAVERSION: "julianightlies/bin/winnt/x86/julia-latest-win32.exe"
   - JULIAVERSION: "julianightlies/bin/winnt/x64/julia-latest-win64.exe"
 
@@ -12,9 +14,9 @@ notifications:
 install:
   - ps: (new-object net.webclient).DownloadFile(
               $("http://s3.amazonaws.com/"+$env:JULIAVERSION),
-              "C:\projects\julia-binary.exe"
+              "C:\projects\julia-installer.exe"
         )
-  - C:\projects\julia-binary.exe /S /D=C:\projects\julia
+  - C:\projects\julia-installer.exe /S /D=C:\projects\julia
 
 build_script:
   - IF EXIST .git\shallow (git fetch --unshallow)
