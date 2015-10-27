@@ -113,4 +113,10 @@ facts("Trajectory type") do
 
         rm("test-tmp.xyz")
     end
+
+    context("Molfiles plugins") do
+        file = Trajectory(joinpath(DATAPATH, "water.trr"))
+
+        @fact nsteps(file) --> 100
+    end
 end

@@ -13,7 +13,7 @@ version = "0.4.0"
     provides(Conda.Manager, "chemfiles-lib", libchemfiles, os = :Unix, onload =
     """
     function __init__()
-        ENV["MOLFILES_DIRECTORY"] = joinpath("$(Conda.PREFIX)","lib")
+        ENV["CHEMFILES_PLUGINS"] = joinpath("$(Conda.PREFIX)","lib")
     end
     """ )
 end
@@ -25,7 +25,7 @@ end
     provides(WinRPM.RPM, "chemfiles", [libchemfiles], os = :Windows, onload =
     """
     function __init__()
-        ENV["MOLFILES_DIRECTORY"] = joinpath(
+        ENV["CHEMFILES_PLUGINS"] = joinpath(
             $(WinRPM.installdir), "usr", "$(Sys.ARCH)-w64-mingw32",
             "sys-root", "mingw", "bin", "molfiles"
         )
