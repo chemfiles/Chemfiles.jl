@@ -13,7 +13,7 @@ version = "0.4.0"
     provides(Conda.Manager, "chemfiles-lib", libchemfiles, os = :Unix, onload =
     """
     function __init__()
-        ENV["CHEMFILES_PLUGINS"] = joinpath("$(Conda.PREFIX)","lib")
+        ENV["CHEMFILES_PLUGINS"] = joinpath("$(Conda.PREFIX)", "lib", "molfiles")
     end
     """ )
 end
@@ -59,4 +59,4 @@ provides(BuildProcess,
         end
     end), libchemfiles)
 
-@BinDeps.install
+@BinDeps.install Dict(:libchemfiles => :libchemfiles)

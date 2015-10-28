@@ -8,13 +8,13 @@
 
 module Chemfiles
     module lib
-        module deps
-            using BinDeps
-            @BinDeps.load_dependencies
+        const ROOT = dirname(@__FILE__)
+        const depsfile = normpath(joinpath(ROOT, "..", "deps", "deps.jl"))
+        if isfile(depsfile)
+            include(depsfile)
+        else
+            error("Chemfiles is not installed (the '$depsfile' file is missing).\nPlease run Pkg.build(\"Chemfiles\")")
         end
-        # Extract the library path
-        const libchemfiles = deps.libchemfiles[1][2]
-
         include("generated/types.jl")
         include("generated/cdef.jl")
     end
