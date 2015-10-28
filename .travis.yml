@@ -11,6 +11,7 @@ install:
   - julia -e 'Pkg.build("Chemfiles")'
 script:
   - julia --check-bounds=yes --inline=no -e 'Pkg.test("Chemfiles"; coverage=true)'
+  - cat $HOME/.julia/*/Chemfiles/test/chemfiles.log
 after_success:
   - |
     if test "$TRAVIS_JULIA_VERSION" == "release"; then

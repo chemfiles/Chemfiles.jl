@@ -13,7 +13,8 @@ facts("Error functions") do
     # Functions called in the runtests.jl file
     # Chemfiles.logfile("chemfiles.log")
     # Chemfiles.log_to_stderr()
-    @fact isfile("chemfiles.log") --> true
+    root = dirname(@__FILE__)
+    @fact isfile(joinpath(root, "chemfiles.log")) --> true
 
     @fact Chemfiles.loglevel() --> Chemfiles.WARNING
     Chemfiles.set_loglevel(Chemfiles.ERROR)
