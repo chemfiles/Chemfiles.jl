@@ -21,13 +21,9 @@ function check(result::Integer, message = "Unknown error")
     return nothing
 end
 
-function check(result::Ptr, message = "Unknown error")
+function check(result::Ptr)
     if Int(result) == 0
-        str = message
-        try
-            str = bytestring(lib.chfl_strerror(result))
-        end
-        throw(ChemfilesError(str))
+        throw(ChemfilesError("Got null pointer from C++ code"))
     end
     return nothing
 end
