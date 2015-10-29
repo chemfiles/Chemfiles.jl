@@ -26,9 +26,10 @@ end
     """
     function __init__()
         ENV["CHEMFILES_PLUGINS"] = joinpath(
-            $(WinRPM.installdir), "usr", "$(Sys.ARCH)-w64-mingw32",
+            "$(escape_string(WinRPM.installdir))", "usr", "$(Sys.ARCH)-w64-mingw32",
             "sys-root", "mingw", "bin", "molfiles"
         )
+    end
     """ )
 end
 
