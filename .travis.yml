@@ -18,3 +18,6 @@ after_success:
     if test "$TRAVIS_JULIA_VERSION" == "release"; then
         julia -e 'cd(Pkg.dir("Chemfiles")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
     fi
+matrix:
+  allow_failures:
+    - julia: nightly
