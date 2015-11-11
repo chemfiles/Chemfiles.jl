@@ -15,11 +15,9 @@ prompt:
 
 .. code-block:: julia
 
-    julia> Pkg.clone("http://github.com/chemfiles/Chemfiles.jl")
+    julia> Pkg.add("Chemfiles")
 
-    julia> Pkg.build("Chemfiles")
-
-    julia> #You can also test the Julia interface with:
+    julia> #You may also want to run the test suite of the Julia interface with:
 
     julia> Pkg.test("Chemfiles")
 
