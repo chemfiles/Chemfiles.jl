@@ -8,6 +8,7 @@ julia:
 install:
   - git fetch --unshallow
   - julia -e 'Pkg.clone(pwd())'
+  - julia -e 'Pkg.build("Chemfiles")' # This one fails during precompilation
   - julia -e 'Pkg.build("Chemfiles")'
   - cat $HOME/.julia/*/Chemfiles/deps/deps.jl
 script:
