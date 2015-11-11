@@ -12,25 +12,22 @@ interface for all the supported formats. For more information, please read the
 [introduction to chemfiles](http://chemfiles.readthedocs.org/en/latest/overview.html).
 
 For a list of supported formats, please see the
-[documentation](http://chemfiles.readthedocs.org/en/latest/formats.html).
+[documentation](http://chemfiles.readthedocs.org/en/latest/formats.html). The VMD molfiles
+based formats are not supported on Windows (see
+[this issue](https://github.com/chemfiles/Chemfiles.jl/issues/3))
 
 ## Documentation
 
-Please see the
-[Julia interface](chemfiles.readthedocs.org/projects/chemfiles-julia) section of
-the documentation of chemfiles.
-
+Please see the [Julia interface](chemfiles.readthedocs.org/projects/julia/en/latest)
+section of the documentation of chemfiles.
 
 ## Installation
 
-Only the version 0.4 of julia is supported. The 0.3 version could be supported, but would
-necessitate some work.
+Julia 0.4 and 0.5-dev are supported. The 0.3 version is not.
 
 To install, run the following commands:
 ```julia
-julia> Pkg.clone("http://github.com/chemfiles/Chemfiles.jl")
-
-julia> Pkg.build("Chemfiles")
+julia> Pkg.add("Chemfiles")
 ```
 
 You can also test the Julia interface with:
