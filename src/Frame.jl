@@ -4,8 +4,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export positions, positions!, set_positions!, velocities, velocities!, set_velocities!,
-       has_velocities, set_cell!, set_topology!, set_step!, guess_topology!, natoms
+export positions, velocities, add_velocities!, has_velocities, set_cell!,
+set_topology!, set_step!, guess_topology!, natoms
 
 function Frame(natoms::Integer = 0)
     handle = lib.chfl_frame(Csize_t(natoms))
@@ -17,61 +17,52 @@ function free(frame::Frame)
 end
 
 function natoms(frame::Frame)
-    n = Csize_t[0]
+    n = Ref{Csize_t}(0)
     check(
-        lib.chfl_frame_atoms_count(frame.handle, pointer(n))
+        lib.chfl_frame_atoms_count(frame.handle, n)
     )
-    return n[1]
+    return n[]
 end
 
 Base.size(frame::Frame) = natoms(frame)
 
+function Base.resize!(frame::Frame, size::Integer)
+    check(
+        lib.chfl_frame_resize(frame.handle, Csize_t(size))
+    )
+end
+
 function positions(frame::Frame)
-    natoms = size(frame)
-    data = Array(Cfloat, 3, natoms)
-    return positions!(frame, data)
-end
-
-function positions!(frame::Frame, data::Array{Float32, 2})
+    ptr = Ref{Ptr{Cfloat}}()
+    natoms = Ref{Csize_t}(0)
     check(
-        lib.chfl_frame_positions(frame.handle, pointer(data), Csize_t(size(data, 2)))
+        lib.chfl_frame_positions(frame.handle, ptr, natoms)
     )
-    return data
-end
-
-function set_positions!(frame::Frame, data::Array{Float32, 2})
-    check(
-        lib.chfl_frame_set_positions(frame.handle, pointer(data), Csize_t(size(data, 2)))
-    )
-    return nothing
+    return pointer_to_array(ptr[], (3, natoms[]), false)
 end
 
 function velocities(frame::Frame)
-    natoms = size(frame)
-    data = Array(Cfloat, 3, natoms)
-    return velocities!(frame, data)
-end
-
-function velocities!(frame::Frame, data::Array{Float32, 2})
+    ptr = Ref{Ptr{Cfloat}}()
+    natoms = Ref{Csize_t}(0)
     check(
-        lib.chfl_frame_velocities(frame.handle, pointer(data), Csize_t(size(data, 2)))
+        lib.chfl_frame_velocities(frame.handle, ptr, natoms)
     )
-    return data
+    return pointer_to_array(ptr[], (3, natoms[]), false)
 end
 
-function set_velocities!(frame::Frame, data::Array{Float32, 2})
+function add_velocities!(frame::Frame)
     check(
-        lib.chfl_frame_set_velocities(frame.handle, pointer(data), Csize_t(size(data, 2)))
+        lib.chfl_frame_add_velocities(frame.handle)
     )
     return nothing
 end
 
 function has_velocities(frame::Frame)
-    res = Bool[false]
+    res = Ref{UInt8}(0)
     check(
-        lib.chfl_frame_has_velocities(frame.handle, pointer(res))
+        lib.chfl_frame_has_velocities(frame.handle, res)
     )
-    return res[1]
+    return convert(Bool, res[])
 end
 
 function set_cell!(frame::Frame, cell::UnitCell)
@@ -89,11 +80,11 @@ function set_topology!(frame::Frame, topology::Topology)
 end
 
 function Base.step(frame::Frame)
-    res = Csize_t[0]
+    res = Ref{Csize_t}(0)
     check(
-        lib.chfl_frame_step(frame.handle, pointer(res))
+        lib.chfl_frame_step(frame.handle, res)
     )
-    return res[1]
+    return res[]
 end
 
 function set_step!(frame::Frame, step::Integer)
@@ -105,7 +96,16 @@ end
 
 function guess_topology!(frame::Frame, bonds::Bool=true)
     check(
-        lib.chfl_frame_guess_topology(frame.handle, bonds)
+        lib.chfl_frame_guess_topology(frame.handle, convert(UInt8, bonds))
     )
     return nothing
+end
+
+function Base.select(frame::Frame, selection::AbstractString)
+    natoms = size(frame)
+    data = Array(UInt8, natoms)
+    check(
+        lib.chfl_frame_selection(frame.handle, pointer(selection), pointer(data), Csize_t(natoms))
+    )
+    return convert(Vector{Bool}, data)
 end

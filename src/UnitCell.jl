@@ -4,12 +4,33 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export lengths, set_lengths!, angles, set_angles!, cell_matrix, cell_matrix!,
-       cell_type, set_cell_type!, periodicity, set_periodicity!, volume
+export lengths, set_lengths!, angles, set_angles!, cell_matrix, cell_matrix!, cell_type,
+set_cell_type!, volume, CellType
 
-function UnitCell(a::Number, b::Number, c::Number,
-                  alpha::Number=90, beta::Number=90, gamma::Number=90)
-    handle = lib.chfl_cell(Cdouble(a), Cdouble(b), Cdouble(c), Cdouble(alpha), Cdouble(beta), Cdouble(gamma))
+immutable CellType
+    value::lib.CHFL_CELL_TYPES
+
+    function CellType(value)
+        value = lib.CHFL_CELL_TYPES(value)
+        if value in [lib.CHFL_CELL_INFINITE, lib.CHFL_CELL_ORTHOROMBIC, lib.CHFL_CELL_TRICLINIC]
+            return new(value)
+        else
+            throw(ChemfilesError("Invalid value for conversion to CellType: $value"))
+        end
+    end
+end
+
+const ORTHOROMBIC = CellType(lib.CHFL_CELL_ORTHOROMBIC)
+const TRICLINIC = CellType(lib.CHFL_CELL_TRICLINIC)
+const INFINITE = CellType(lib.CHFL_CELL_INFINITE)
+
+function UnitCell(a::Number, b::Number, c::Number)
+    handle = lib.chfl_cell(Cdouble(a), Cdouble(b), Cdouble(c))
+    return UnitCell(handle)
+end
+
+function UnitCell(a::Number, b::Number, c::Number, α::Number, β::Number, γ::Number)
+    handle = lib.chfl_cell_triclinic(Cdouble(a), Cdouble(b), Cdouble(c), Cdouble(α), Cdouble(β), Cdouble(γ))
     return UnitCell(handle)
 end
 
@@ -26,21 +47,21 @@ function free(cell::UnitCell)
 end
 
 function volume(cell::UnitCell)
-    V = Cdouble[0]
+    V = Ref{Cdouble}(0)
     check(
-        lib.chfl_cell_volume(cell.handle, pointer(V))
+        lib.chfl_cell_volume(cell.handle, V)
     )
-    return V[1]
+    return V[]
 end
 
 function lengths(cell::UnitCell)
-    a = Cdouble[0]
-    b = Cdouble[0]
-    c = Cdouble[0]
+    a = Ref{Cdouble}(0)
+    b = Ref{Cdouble}(0)
+    c = Ref{Cdouble}(0)
     check(
-        lib.chfl_cell_lengths(cell.handle, pointer(a), pointer(b), pointer(c))
+        lib.chfl_cell_lengths(cell.handle, a, b, c)
     )
-    return (a[1], b[1], c[1])
+    return (a[], b[], c[])
 end
 
 function set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
@@ -51,13 +72,13 @@ function set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
 end
 
 function angles(cell::UnitCell)
-    alpha = Cdouble[0]
-    beta = Cdouble[0]
-    gamma = Cdouble[0]
+    alpha = Ref{Cdouble}(0)
+    beta = Ref{Cdouble}(0)
+    gamma = Ref{Cdouble}(0)
     check(
-        lib.chfl_cell_angles(cell.handle, pointer(alpha), pointer(beta), pointer(gamma))
+        lib.chfl_cell_angles(cell.handle, alpha, beta, gamma)
     )
-    return (alpha[1], beta[1], gamma[1])
+    return (alpha[], beta[], gamma[])
 end
 
 function set_angles!(cell::UnitCell, alpha::Real, beta::Real, gamma::Real)
@@ -80,31 +101,16 @@ function cell_matrix(cell::UnitCell)
 end
 
 function cell_type(cell::UnitCell)
-    res = CellType[0]
+    res = Ref{lib.CHFL_CELL_TYPES}(0)
     check(
-        lib.chfl_cell_type(cell.handle, pointer(res))
+        lib.chfl_cell_type(cell.handle, res)
     )
-    return res[1]
+    return CellType(res[])
 end
 
-function set_cell_type!(cell::UnitCell, cell_type::CellType)
+function set_cell_type!(cell::UnitCell, ctype::CellType)
     check(
-        lib.chfl_cell_set_type(cell.handle, cell_type)
-    )
-    return nothing
-end
-
-function periodicity(cell::UnitCell)
-    res = Bool[false, false, false]
-    check(
-        lib.chfl_cell_periodicity(cell.handle, pointer(res), pointer(res)+1, pointer(res)+2)
-    )
-    return res
-end
-
-function set_periodicity!(cell::UnitCell, x::Bool, y::Bool, z::Bool)
-    check(
-        lib.chfl_cell_set_periodicity(cell.handle, x, y, z)
+        lib.chfl_cell_set_type(cell.handle, ctype.value)
     )
     return nothing
 end

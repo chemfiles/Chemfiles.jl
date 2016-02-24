@@ -28,45 +28,10 @@ function check(result::Ptr)
     return nothing
 end
 
-"""
-These functions are not exported, and should be called by there fully qualified name:
-    Chemfiles.last_error()
-    Chemfiles.loglevel(Chemfiles.ERROR)
-"""
-
 function last_error()
     bytestring(lib.chfl_last_error())
 end
 
 function strerror(status::Integer)
     bytestring(lib.chfl_strerror(Cint(status)))
-end
-
-function set_loglevel(level::LogLevel)
-    check(
-        lib.chfl_set_loglevel(level)
-    )
-    return nothing
-end
-
-function loglevel()
-    level = LogLevel[0]
-    check(
-        lib.chfl_loglevel(pointer(level))
-    )
-    return level[1]
-end
-
-function logfile(file::AbstractString)
-    check(
-        lib.chfl_logfile(pointer(file))
-    )
-    return nothing
-end
-
-function log_to_stderr()
-    check(
-        lib.chfl_log_stderr()
-    )
-    return nothing
 end

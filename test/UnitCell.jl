@@ -11,7 +11,9 @@ facts("UnitCell type") do
     @fact lengths(cell) --> (10.0, 20.0, 30.0)
 
     # Can not set angles for ORTHOROMBIC cell
+    Chemfiles.log_silent()
     @fact_throws set_angles!(cell, 80, 89, 100)
+    Chemfiles.log_to_stderr()
 
     mat = reshape(Float64[10, 0, 0,
                           0, 20, 0,
@@ -25,8 +27,4 @@ facts("UnitCell type") do
 
     set_angles!(cell, 80, 89, 100)
     @fact angles(cell) --> (80.0, 89.0, 100.0)
-
-    @fact periodicity(cell) --> [true, true, true]
-    set_periodicity!(cell, false, true, false)
-    @fact periodicity(cell) --> [false, true, false]
 end

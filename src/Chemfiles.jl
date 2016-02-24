@@ -18,12 +18,15 @@ module Chemfiles
         include("generated/types.jl")
         include("generated/cdef.jl")
     end
-    import .lib: NONE, ERROR, WARNING, INFO, DEBUG, LogLevel
-    import .lib: ORTHOROMBIC, TRICLINIC, INFINITE, CellType
 
     include("errors.jl")
+    include("logging.jl")
 
     export Trajectory, Topology, Atom, UnitCell, Frame
+
+    function version()
+        bytestring(lib.chfl_version())
+    end
 
     type Trajectory
         handle :: Ptr{lib.CHFL_TRAJECTORY}

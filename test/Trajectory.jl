@@ -3,8 +3,10 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
 
 facts("Trajectory type") do
     context("Errors handling") do
+        Chemfiles.log_silent()
         @fact_throws Trajectory(joinpath(DATAPATH, "not-here.xyz"))
         @fact_throws Trajectory(joinpath(DATAPATH, "empty.unknown"))
+        Chemfiles.log_to_stderr()
     end
 
     context("Read frames") do
@@ -74,7 +76,8 @@ facts("Trajectory type") do
                               X 4 5 6
                               """
 
-        pos = Array(Float32, 3, 4)
+        frame = Frame(4)
+        pos = positions(frame)
         for i=1:4
             pos[:, i] = Float32[1, 2, 3]
         end
@@ -83,14 +86,13 @@ facts("Trajectory type") do
         for i=1:4
             push!(top, Atom("X"))
         end
-        frame = Frame()
-        set_positions!(frame, pos)
         set_topology!(frame, top)
 
         file = Trajectory("test-tmp.xyz", "w");
         write(file, frame)
 
-        pos = Array(Float32, 3, 6)
+        resize!(frame, 6)
+        pos = positions(frame)
         for i=1:6
             pos[:, i] = Float32[4, 5, 6]
         end
@@ -98,7 +100,6 @@ facts("Trajectory type") do
         for i=1:6
             push!(top, Atom("X"))
         end
-        set_positions!(frame, pos)
         set_topology!(frame, top)
 
         write(file, frame)

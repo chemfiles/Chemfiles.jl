@@ -7,6 +7,25 @@
 export mass, setmass!, charge, setcharge!, name, setname!,
        fullname, vdw_radius, covalent_radius, atomic_number
 
+
+immutable AtomType
+    value::lib.CHFL_ATOM_TYPES
+
+    function AtomType(value)
+        value = lib.CHFL_ATOM_TYPES(value)
+        if value in [lib.CHFL_ATOM_ELEMENT, lib.CHFL_ATOM_COARSE_GRAINED, lib.CHFL_ATOM_DUMMY, lib.CHFL_ATOM_UNDEFINED]
+            return new(value)
+        else
+            throw(ChemfilesError("Invalid value for conversion to AtomType: $value"))
+        end
+    end
+end
+
+const ELEMENT = AtomType(lib.CHFL_ATOM_ELEMENT)
+const COARSE_GRAINED = AtomType(lib.CHFL_ATOM_COARSE_GRAINED)
+const DUMMY_ATOM = AtomType(lib.CHFL_ATOM_DUMMY)
+const UNDEFINED_ATOM = AtomType(lib.CHFL_ATOM_UNDEFINED)
+
 function Atom(name::ASCIIString)
     return Atom(lib.chfl_atom(pointer(name)))
 end
@@ -26,11 +45,11 @@ function free(atom::Atom)
 end
 
 function mass(atom::Atom)
-    m = Cfloat[0]
+    m = Ref{Cfloat}(0)
     check(
-        lib.chfl_atom_mass(atom.handle, pointer(m))
+        lib.chfl_atom_mass(atom.handle, m)
     )
-    return m[1]
+    return m[]
 end
 
 function setmass!(atom::Atom, m)
@@ -41,11 +60,11 @@ function setmass!(atom::Atom, m)
 end
 
 function charge(atom::Atom)
-    c = Cfloat[0]
+    c = Ref{Cfloat}(0)
     check(
-        lib.chfl_atom_charge(atom.handle, pointer(c))
+        lib.chfl_atom_charge(atom.handle, c)
     )
-    return c[1]
+    return c[]
 end
 
 function setcharge!(atom::Atom, c)
@@ -82,25 +101,40 @@ function Base.fullname(atom::Atom)
 end
 
 function vdw_radius(atom::Atom)
-    radius = Cdouble[0]
+    radius = Ref{Cdouble}(0)
     check(
-        lib.chfl_atom_vdw_radius(atom.handle, pointer(radius))
+        lib.chfl_atom_vdw_radius(atom.handle, radius)
     )
-    return radius[1]
+    return radius[]
 end
 
 function covalent_radius(atom::Atom)
-    radius = Cdouble[0]
+    radius = Ref{Cdouble}(0)
     check(
-        lib.chfl_atom_covalent_radius(atom.handle, pointer(radius))
+        lib.chfl_atom_covalent_radius(atom.handle, radius)
     )
-    return radius[1]
+    return radius[]
 end
 
 function atomic_number(atom::Atom)
-    number = Cint[0]
+    number = Ref{Cint}(0)
     check(
-        lib.chfl_atom_atomic_number(atom.handle, pointer(number))
+        lib.chfl_atom_atomic_number(atom.handle, number)
     )
-    return number[1]
+    return number[]
+end
+
+function atom_type(atom::Atom)
+    res = Ref{AtomType}(0)
+    check(
+        lib.chfl_atom_type(cell.handle, res.value)
+    )
+    return res[]
+end
+
+function set_atom_type!(atom::Atom, atom_type::AtomType)
+    check(
+        lib.chfl_atom_set_type(atom.handle, atom_type.value)
+    )
+    return nothing
 end

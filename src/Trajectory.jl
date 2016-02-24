@@ -66,11 +66,11 @@ function set_cell!(file::Trajectory, cell::UnitCell)
 end
 
 function nsteps(file::Trajectory)
-    res = Csize_t[0]
+    res = Ref{Csize_t}(0)
     check(
-        lib.chfl_trajectory_nsteps(file.handle, pointer(res))
+        lib.chfl_trajectory_nsteps(file.handle, res)
     )
-    return res[1]
+    return res[]
 end
 
 function sync(file::Trajectory)

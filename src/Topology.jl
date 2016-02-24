@@ -20,11 +20,11 @@ function free(topology::Topology)
 end
 
 function natoms(topology::Topology)
-    n = Csize_t[0]
+    n = Ref{Csize_t}(0)
     check(
-        lib.chfl_topology_atoms_count(topology.handle, pointer(n))
+        lib.chfl_topology_atoms_count(topology.handle, n)
     )
-    return n[1]
+    return n[]
 end
 
 Base.size(topology::Topology) = natoms(topology)
@@ -44,51 +44,51 @@ function remove!(topology::Topology, i::Integer)
 end
 
 function isbond(topology::Topology, i::Integer, j::Integer)
-    res = Bool[false]
+    res = Ref{UInt8}(0)
     check(
-        lib.chfl_topology_isbond(topology.handle, Csize_t(i), Csize_t(j), pointer(res))
+        lib.chfl_topology_isbond(topology.handle, Csize_t(i), Csize_t(j), res)
     )
-    return res[1]
+    return convert(Bool, res[])
 end
 
 function isangle(topology::Topology, i::Integer, j::Integer, k::Integer)
-    res = Bool[false]
+    res = Ref{UInt8}(0)
     check(
-        lib.chfl_topology_isangle(topology.handle, Csize_t(i), Csize_t(j), Csize_t(k), pointer(res))
+        lib.chfl_topology_isangle(topology.handle, Csize_t(i), Csize_t(j), Csize_t(k), res)
     )
-    return res[1]
+    return convert(Bool, res[])
 end
 
 function isdihedral(topology::Topology, i::Integer, j::Integer, k::Integer, m::Integer)
-    res = Bool[false]
+    res = Ref{UInt8}(0)
     check(
-        lib.chfl_topology_isdihedral(topology.handle, Csize_t(i), Csize_t(j), Csize_t(k), Csize_t(m), pointer(res))
+        lib.chfl_topology_isdihedral(topology.handle, Csize_t(i), Csize_t(j), Csize_t(k), Csize_t(m), res)
     )
-    return res[1]
+    return convert(Bool, res[])
 end
 
 function nbonds(topology::Topology)
-    n = Csize_t[0]
+    n = Ref{Csize_t}(0)
     check(
-        lib.chfl_topology_bonds_count(topology.handle, pointer(n))
+        lib.chfl_topology_bonds_count(topology.handle, n)
     )
-    return n[1]
+    return n[]
 end
 
 function nangles(topology::Topology)
-    n = Csize_t[0]
+    n = Ref{Csize_t}(0)
     check(
-        lib.chfl_topology_angles_count(topology.handle, pointer(n))
+        lib.chfl_topology_angles_count(topology.handle, n)
     )
-    return n[1]
+    return n[]
 end
 
 function ndihedrals(topology::Topology)
-    n = Csize_t[0]
+    n = Ref{Csize_t}(0)
     check(
-        lib.chfl_topology_dihedrals_count(topology.handle, pointer(n))
+        lib.chfl_topology_dihedrals_count(topology.handle, n)
     )
-    return n[1]
+    return n[]
 end
 
 function bonds(topology::Topology)
