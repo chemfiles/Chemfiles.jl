@@ -3,7 +3,7 @@ facts("Logging functions") do
     path = joinpath(dirname(@__FILE__), "chemfiles.log")
     Chemfiles.logfile(path)
     @fact isfile(path) --> true
-    Chemfiles.log_to_stderr()
+    Chemfiles.log_to_stdout()
 
     rm(path)
 
@@ -25,4 +25,6 @@ facts("Logging functions") do
 
     @fact message --> "Can not find a format associated with the \"\" extension."
     @fact level --> Chemfiles.ERROR
+
+    Chemfiles.log_to_stderr()
 end

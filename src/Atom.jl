@@ -4,8 +4,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export mass, setmass!, charge, setcharge!, name, setname!,
-       fullname, vdw_radius, covalent_radius, atomic_number
+export mass, setmass!, charge, setcharge!, name, setname!, fullname, vdw_radius,
+covalent_radius, atomic_number, atom_type, set_atom_type!
 
 
 immutable AtomType
@@ -125,11 +125,11 @@ function atomic_number(atom::Atom)
 end
 
 function atom_type(atom::Atom)
-    res = Ref{AtomType}(0)
+    res = Ref{lib.CHFL_ATOM_TYPES}(0)
     check(
-        lib.chfl_atom_type(cell.handle, res.value)
+        lib.chfl_atom_type(atom.handle, res)
     )
-    return res[]
+    return AtomType(res[])
 end
 
 function set_atom_type!(atom::Atom, atom_type::AtomType)

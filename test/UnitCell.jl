@@ -1,5 +1,10 @@
 
 facts("UnitCell type") do
+    cell = UnitCell(5, 3, 1, 110, 120, 80)
+
+    @fact lengths(cell) --> (5.0, 3.0, 1.0)
+    @fact angles(cell) --> (110.0, 120.0, 80.0)
+
     cell = UnitCell(2, 3, 4)
 
     @fact lengths(cell) --> (2.0, 3.0, 4.0)
