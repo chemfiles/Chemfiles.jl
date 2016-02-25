@@ -29,10 +29,6 @@ install:
 build_script:
   - IF EXIST .git\shallow (git fetch --unshallow)
   - C:\projects\julia\bin\julia -e "versioninfo(); Pkg.clone(pwd(), \"Chemfiles\"); Pkg.build(\"Chemfiles\")"
-  - cd C:\Users\appveyor\.julia\%JULIA_VERSION%\Chemfiles\
-  - type deps\deps.jl
 
 test_script:
   - C:\projects\julia\bin\julia --check-bounds=yes -e "Pkg.test(\"Chemfiles\")"
-  - cd C:\Users\appveyor\.julia\%JULIA_VERSION%\Chemfiles\
-  - type test\chemfiles.log
