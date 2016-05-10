@@ -4,8 +4,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export mass, setmass!, charge, setcharge!, name, setname!, fullname, vdw_radius,
-covalent_radius, atomic_number, atom_type, set_atom_type!
+export mass, set_mass!, charge, set_charge!, name, set_name!, fullname, vdw_radius,
+covalent_radius, atomic_number, atom_type, set_atom_type!, AtomType
 
 
 immutable AtomType
@@ -52,7 +52,7 @@ function mass(atom::Atom)
     return m[]
 end
 
-function setmass!(atom::Atom, m)
+function set_mass!(atom::Atom, m)
     check(
         lib.chfl_atom_set_mass(atom.handle, Cfloat(m))
     )
@@ -67,7 +67,7 @@ function charge(atom::Atom)
     return c[]
 end
 
-function setcharge!(atom::Atom, c)
+function set_charge!(atom::Atom, c)
     check(
         lib.chfl_atom_set_charge(atom.handle, Cfloat(c))
     )
@@ -83,7 +83,7 @@ function name(atom::Atom)
     return strip(str)[1:end-1]
 end
 
-function setname!(atom::Atom, name::ASCIIString)
+function set_name!(atom::Atom, name::ASCIIString)
     check(
         lib.chfl_atom_set_name(atom.handle, pointer(name))
     )
