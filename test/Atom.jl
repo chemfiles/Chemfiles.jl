@@ -7,11 +7,11 @@ facts("Atom type") do
     @fact name(a) --> "He"
     @fact atom_type(a) --> Chemfiles.ELEMENT
 
-    setmass!(a, 678)
+    set_mass!(a, 678)
     @fact mass(a) --> 678
-    setcharge!(a, -1.5)
+    set_charge!(a, -1.5)
     @fact charge(a) --> -1.5
-    setname!(a, "Zn")
+    set_name!(a, "Zn")
     @fact name(a) --> "Zn"
 
     set_atom_type!(a, Chemfiles.DUMMY_ATOM)
