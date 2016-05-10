@@ -3,11 +3,11 @@
 Julia interface reference
 =========================
 
-The `Julia`_ interface to chemfiles wrap around the C interface providing a Julian API.
-All the functionalities are in the ``Chemfiles`` module, which can be imported by the
-``using Chemfiles`` expression. The ``Chemfiles`` module is built around the 5 main
-types of chemfiles: ``Trajectory``, ``Frame``, ``UnitCell``, ``Topology``, and
-``Atom``. For more information about these types, please see the `overview`_.
+The `Julia`_ interface to chemfiles wrap around the C interface providing a Julian
+API. All the functionalities are in the ``Chemfiles`` module, which can be imported
+by the ``using Chemfiles`` expression. The ``Chemfiles`` module is built around the 5
+main types of chemfiles: `Trajectory`_, `Frame`_, `UnitCell`_, `Topology`_, and
+`Atom`_. For more information about these types, please see the `overview`_.
 
 .. _Julia: http://julialang.org/
 .. _overview: http://chemfiles.readthedocs.io/en/latest/overview.html
@@ -79,10 +79,12 @@ These functions are not exported, and should be called by there fully qualified 
             return nothing
         end
 
+.. _Trajectory:
+
 ``Trajectory`` type and associated functions
 --------------------------------------------
 
-A trajectory is a file containing informations about the positions of particles
+A `Trajectory`_ is a file containing informations about the positions of particles
 during a simulation, and sometimes other quantities.
 
 
@@ -95,45 +97,45 @@ during a simulation, and sometimes other quantities.
 
 .. jl:function:: read(trajectory::Trajectory) -> Frame
 
-    Read the next step of the trajectory, and return the corresponding Frame.
+    Read the next step of the `Trajectory`_, and return the corresponding `Frame`_.
 
 .. jl:function:: read!(trajectory::Trajectory, frame::Frame)
 
-    Read the next step of the trajectory into a pre-existing frame.
+    Read the next step of the `Trajectory`_ into an existing `Frame`_.
 
 .. jl:function:: read_step(trajectory::Trajectory, step) -> Frame
 
-    Read at the specific step ``step`` of the trajectory, and return the
-    corresponding Frame.
+    Read the given ``step`` of the `Trajectory`_, and return the corresponding
+    `Frame`_.
 
 .. jl:function:: read_step(trajectory::Trajectory, step, frame::Frame)
 
-    Read at the specific step ``step`` of the trajectory into a pre-existing frame.
+    Read the given ``step`` of the `Trajectory`_ into an existing `Frame`_.
 
 .. jl:function:: write(trajectory::Trajectory, frame::Frame)
 
-    Write a frame to the trajectory.
+    Write a frame to the `Trajectory`_.
 
 .. jl:function:: set_topology!(trajectory::Trajectory, topology::Topology)
 
-    Set the topology associated with a trajectory. This topology will be
+    Set the `Topology`_ associated with a `Trajectory`_. This topology will be
     used when reading and writing the files, replacing any topology in the
     frames or files.
 
-.. jl:function:: set_topology!(trajectory::Trajectory, filename)
+.. jl:function:: set_topology!(trajectory::Trajectory, filename:AbstractString)
 
-    Set the topology associated with a trajectory by reading the first
+    Set the `Topology`_ associated with a `Trajectory`_ by reading the first
     frame of ``filename``; and extracting the topology of this frame.
 
 .. jl:function:: set_cell!(trajectory::Trajectory, cell::UnitCell)
 
-    Set the unit cell associated with a trajectory. This cell will be
+    Set the `UnitCell`_ associated with a `Trajectory`_. This cell will be
     used when reading and writing the files, replacing any unit cell in the
     frames or files.
 
 .. jl:function:: nsteps(trajectory::Trajectory) -> Integer
 
-    Get the number of steps (the number of frames) in a trajectory.
+    Get the number of steps (the number of frames) in a `Trajectory`_.
 
 .. jl:function:: sync(trajectory::Trajectory)
 
@@ -141,45 +143,47 @@ during a simulation, and sometimes other quantities.
 
 .. jl:function:: close(trajectory::Trajectory)
 
-    Close a trajectory file, flush any buffer content to the hard drive, and
-    free the associated memory.
+    Close a `Trajectory`_, flushing any buffer content to the hard drive, and
+    freeing the associated memory.
 
+
+.. _Frame:
 
 ``Frame`` type and associated functions
 ---------------------------------------
 
-The Frame class hold all data from a simulation, and can be constructed either from a
-Trajectory while reading a file, or directly.
+The `Frame`_ type hold all data from a simulation, and can be constructed either
+from a Trajectory while reading a file, or directly.
 
 .. jl:function:: Frame(natoms = 0)
 
-    Create an empty frame with initial capacity of ``natoms``. It will be
+    Create an empty `Frame`_ with initial capacity of ``natoms``. It will be
     automatically resized if needed.
 
 .. jl:function:: natoms(frame::Frame) -> Integer
 
-    Get the frame size, i.e. the current number of atoms
+    Get the `Frame`_ size, i.e. the current number of atoms
 
 .. jl:function:: size(frame::Frame) -> Integer
 
-    Get the frame size, i.e. the current number of atoms
+    Get the `Frame`_ size, i.e. the current number of atoms
 
 .. jl:function:: resize!(frame::Frame, natoms::Integer)
 
-    Resize the positions and the velocities in frame, to make space for `natoms`
+    Resize the positions and the velocities in `Frame`_, to make space for `natoms`
     atoms. This function may invalidate any pointer to the positions or the
     velocities if the new size is bigger than the old one. In all the cases, previous
     data is conserved. This function conserve the presence or absence of velocities.
 
 .. jl:function:: positions(frame::Frame) -> Array{Float32, 2}
 
-    Get a pointer to the positions in a frame. The positions are readable and
+    Get a pointer to the positions in a `Frame`_. The positions are readable and
     writable from this array. If the frame is resized (by writing to it, or calling
     ``resize``), the array is invalidated.
 
 .. jl:function:: velocities(frame::Frame)
 
-    Get a pointer to the velocities in a frame. The velocities are readable and
+    Get a pointer to the velocities in a `Frame`_. The velocities are readable and
     writable from this array. If the frame is resized (by writing to it, or calling
     ``resize``), the array is invalidated.
 
@@ -188,29 +192,29 @@ Trajectory while reading a file, or directly.
 
 .. jl:function:: add_velocities!(frame::Frame)
 
-    Add velocities to this frame. The storage is initialized with the result of
+    Add velocities to this `Frame`_. The storage is initialized with the result of
     ``size(frame)`` as number of atoms. If the frame already have velocities, this
     does nothing.
 
 .. jl:function:: has_velocities(frame::Frame) -> Bool
 
-    Ask wether this frame contains velocity data or not.
+    Ask wether this `Frame`_ contains velocity data or not.
 
 .. jl:function:: set_cell!(frame::Frame, cell::UnitCell)
 
-    Set the UnitCell of a Frame.
+    Set the `UnitCell`_ of a `Frame`_.
 
 .. jl:function:: set_topology!(frame::Frame, topology::Topology)
 
-    Set the Topology of a Frame.
+    Set the `Topology`_ of a `Frame`_.
 
 .. jl:function:: step(frame::Frame) -> Integer
 
-    Get the Frame step, i.e. the frame number in the trajectory.
+    Get the `Frame`_ step, i.e. the frame number in the trajectory.
 
 .. jl:function:: set_step!(frame::Frame, step)
 
-    Set the Frame step to ``step``.
+    Set the `Frame`_ step to ``step``.
 
 .. jl:function:: guess_topology!(frame::Frame,  bonds::Bool=true)
 
@@ -220,7 +224,7 @@ Trajectory while reading a file, or directly.
 
 .. jl:function:: select(frame::Frame,  seletion::AbstractString) -> Vector{Bool}
 
-    This function select atoms in a frame matching a selection string. For example,
+    This function select atoms in a `Frame`_ matching a selection string. For example,
     ``"name H and x > 4"`` will select all the atoms with name ``"H"`` and x
     coordinate less than 4. See the documentation for the full `selection language`_.
 
@@ -228,6 +232,9 @@ Trajectory while reading a file, or directly.
     at position ``i`` matches the selection string, and ``false`` otherwise.
 
 .. _selection language: http://chemfiles.readthedocs.io/en/latest/selections.html
+
+
+.. _UnitCell:
 
 ``UnitCell`` type and associated function
 -----------------------------------------
@@ -238,32 +245,32 @@ base vectors of lengthes ``a``, ``b`` and ``c``; and the angles between these ve
 
 .. jl:function:: UnitCell(a, b, c, alpha=90, beta=90, gamma=90)
 
-    Create an UnitCell from the three lenghts and the three angles.
+    Create an `UnitCell`_ from the three lenghts and the three angles.
 
 .. jl:function:: UnitCell(frame::Frame)
 
-    Get a copy of the UnitCell of a frame.
+    Get a copy of the `UnitCell`_ of a frame.
 
 .. jl:function:: lengths(cell::UnitCell) -> (Float64, Float64, Float64)
 
-    Get the three cell lenghts (a, b and c) in angstroms.
+    Get the three `UnitCell`_ lenghts (a, b and c) in angstroms.
 
 .. jl:function:: set_lengths!(cell::UnitCell, a, b, c)
 
-    Set the unit cell lenghts to ``a``, ``b`` and ``c`` in angstroms.
+    Set the `UnitCell`_ lenghts to ``a``, ``b`` and ``c`` in angstroms.
 
 .. jl:function:: angles(cell::UnitCell) -> (Float64, Float64, Float64)
 
-    Get the three cell angles (alpha, beta and gamma) in degrees.
+    Get the three `UnitCell`_ angles (alpha, beta and gamma) in degrees.
 
 .. jl:function:: set_angles!(cell::UnitCell, alpha, beta, gamma)
 
-    Set the cell angles to ``alpha``, ``beta`` and ``gamma`` in degrees.
+    Set the `UnitCell`_ angles to ``alpha``, ``beta`` and ``gamma`` in degrees.
 
 .. jl:function:: cell_matrix(cell::UnitCell) -> Array{Float64, 2}
 
-    Get the unit cell matricial representation, i.e. the representation of the three
-    base vectors as::
+    Get the `UnitCell`_ matricial representation, i.e. the representation of the
+    three base vectors as::
 
         | a_x   b_x   c_x |
         |  0    b_y   c_y |
@@ -271,11 +278,11 @@ base vectors of lengthes ``a``, ``b`` and ``c``; and the angles between these ve
 
 .. jl:function:: type(cell::UnitCell) -> CellType
 
-    Get the cell type.
+    Get the `UnitCell`_ type.
 
 .. jl:function:: set_type!(cell::UnitCell, celltype::CellType)
 
-    Set the cell type to ``celltype``.
+    Set the `UnitCell`_ type to ``celltype``.
 
 The following cell types are defined:
 
@@ -287,6 +294,7 @@ The following cell types are defined:
 
     Get the unit cell volume
 
+.. _Topology:
 
 ``Topology`` type and associated function
 -----------------------------------------
@@ -297,27 +305,27 @@ the associated Frame.
 
 .. jl:function:: Topology()
 
-    Create an empty Topology.
+    Create an empty `Topology`_.
 
 .. jl:function:: Topology(frame::Frame)
 
-    Extract the topology from a frame.
+    Extract the `Topology`_ from a frame.
 
 .. jl:function:: size(topology::Topology)
 
-    Get the topology size, i.e. the current number of atoms.
+    Get the `Topology`_ size, i.e. the current number of atoms.
 
 .. jl:function:: natoms(topology::Topology)
 
-    Get the topology size, i.e. the current number of atoms.
+    Get the `Topology`_ size, i.e. the current number of atoms.
 
 .. jl:function:: push!(topology::Topology, atom::Atom)
 
-    Add an atom at the end of a topology.
+    Add an `Atom`_ at the end of a `Topology`_.
 
 .. jl:function:: remove!(topology::Topology, i)
 
-    Remove an atom from a topology by index.
+    Remove an atom from a `Topology`_ by index.
 
 .. jl:function:: isbond(topology::Topology, i, j) -> Bool
 
@@ -363,71 +371,73 @@ the associated Frame.
 
     Remove any existing bond between the atoms ``i`` and ``j`` in the system.
 
+.. _Atom:
+
 ``Atom`` type and associated function
 -------------------------------------
 
 .. jl:function:: Atom(name)
 
-    Create an atom from an atomic name.
+    Create an `Atom`_ from an atomic name.
 
 .. jl:function:: Atom(frame::Frame, idx::Integer)
 
-    Get the atom at index ``idx`` from the frame.
+    Get the `Atom`_ at index ``idx`` from the frame.
 
 .. jl:function:: Atom(topology::Topology, idx::Integer)
 
-    Get the atom at index ``idx`` from the topology.
+    Get the `Atom`_ at index ``idx`` from the topology.
 
 .. jl:function:: mass(atom::Atom) -> Float64
 
-    Get the mass of an atom, in atomic mass units.
+    Get the mass of an `Atom`_, in atomic mass units.
 
 .. jl:function:: set_mass!(atom::Atom, mass::Number)
 
-    Set the mass of an atom to ``mass``, in atomic mass units.
+    Set the mass of an `Atom`_ to ``mass``, in atomic mass units.
 
 .. jl:function:: charge(atom::Atom) -> Float64
 
-    Get the charge of an atom, in number of the electron charge e.
+    Get the charge of an `Atom`_, in number of the electron charge e.
 
 .. jl:function:: set_charge!(atom::Atom, charge::Number)
 
-    Set the charge of an atom to ``charge``, in number of the electron charge e.
+    Set the charge of an `Atom`_ to ``charge``, in number of the electron charge e.
 
 .. jl:function:: name(atom::Atom) -> ASCIIString
 
-    Get the name of an atom.
+    Get the name of an `Atom`_.
 
 .. jl:function:: set_name!(atom::Atom, name::ASCIIString)
 
-    Set the name of an atom to ``name``.
+    Set the name of an `Atom`_ to ``name``.
 
 .. jl:function:: full_name(atom::Atom) -> ASCIIString
 
-    Try to get the full name of an atom (``"Helium"``) from the short name (``"He"``).
+    Try to get the full name of an `Atom`_ (``"Helium"``) from the short name (``"He"``).
 
 .. jl:function:: vdw_radius(atom::Atom) -> Float32
 
-    Try to get the Van der Waals radius of an atom from the short name. Returns -1 if
+    Try to get the Van der Waals radius of an `Atom`_ from the short name. Returns -1 if
     no value could be found.
 
 .. jl:function:: covalent_radius(atom::Atom) -> Float32
 
-    Try to get the covalent radius of an atom from the short name. Returns -1 if no
+    Try to get the covalent radius of an `Atom`_ from the short name. Returns -1 if no
     value could be found.
 
 .. jl:function:: atomic_number(atom::Atom) -> Integer
 
-    Try to get the atomic number of an atom from the short name. Returns -1 if no
+    Try to get the atomic number of an `Atom`_ from the short name. Returns -1 if no
     value could be found.
 
 .. jl:function:: atom_type(atom::Atom) -> AtomType
 
-    Get the atom type
+    Get the `Atom`_ type
 
 .. jl:function:: set_atom_type!(atom::Atom, type::AtomType)
 
-    Set the atom type
+    Set the `Atom`_ type
 
  The following atom types are available:
 
