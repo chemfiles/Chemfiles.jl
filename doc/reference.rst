@@ -7,7 +7,7 @@ The `Julia`_ interface to chemfiles wrap around the C interface providing a Juli
 API. All the functionalities are in the ``Chemfiles`` module, which can be imported
 by the ``using Chemfiles`` expression. The ``Chemfiles`` module is built around the 5
 main types of chemfiles: `Trajectory`_, `Frame`_, `UnitCell`_, `Topology`_, and
-`Atom`_. For more information about these types, please see the `overview`_.
+`Atom`_.
 
 .. _Julia: http://julialang.org/
 .. _overview: http://chemfiles.readthedocs.io/en/latest/overview.html
@@ -84,9 +84,9 @@ These functions are not exported, and should be called by there fully qualified 
 ``Trajectory`` type and associated functions
 --------------------------------------------
 
-A `Trajectory`_ is a file containing informations about the positions of particles
-during a simulation, and sometimes other quantities.
-
+A `Trajectory`_ uses a file and a format together to read simulation data from the
+file. It can read or write one or many `Frame`_ to this file. The file type and the
+format are automatically determined from the extention.
 
 .. jl:function:: Trajectory(filename, mode)
 
@@ -152,8 +152,14 @@ during a simulation, and sometimes other quantities.
 ``Frame`` type and associated functions
 ---------------------------------------
 
-The `Frame`_ type hold all data from a simulation, and can be constructed either
-from a Trajectory while reading a file, or directly.
+A `Frame`_ holds data for one step of a simulation. As not all formats provides all
+the types of informations, some fields may be initialized to a default value. A
+`Frame`_ may contains the following data:
+
+- Positions for all the atoms in the system;
+- Velocities for all the atoms in the system;
+- The `Topology`_ of the system;
+- The `UnitCell`_ of the system.
 
 .. jl:function:: Frame(natoms = 0)
 
@@ -239,8 +245,8 @@ from a Trajectory while reading a file, or directly.
 ``UnitCell`` type and associated function
 -----------------------------------------
 
-An UnitCell represent the bounding box of the simulation. It is represented by three
-base vectors of lengthes ``a``, ``b`` and ``c``; and the angles between these vectors
+An `UnitCell`_ describe the bounding box of a system. It is represented by three base
+vectors of lengthes ``a``, ``b`` and ``c``; and the angles between these vectors are
 ``alpha``, ``beta`` and ``gamma``.
 
 .. jl:function:: UnitCell(a, b, c, alpha=90, beta=90, gamma=90)
@@ -299,9 +305,9 @@ The following cell types are defined:
 ``Topology`` type and associated function
 -----------------------------------------
 
-The Topology class hold data about which atoms are linked together to form bonds,
-angles, *etc.* in a Frame. The atoms in a topology are represented by they index in
-the associated Frame.
+A `Topology`_ describes the organisation of the particles in the system. What are
+there names, how are they bonded together, *etc.* A `Topology`_ is a list of `Atom`_
+in the system, together with the list of bonds these atoms forms.
 
 .. jl:function:: Topology()
 
@@ -375,6 +381,9 @@ the associated Frame.
 
 ``Atom`` type and associated function
 -------------------------------------
+
+An `Atom`_ contains basic information about a single atom in the system: the name (if
+it is disponible), mass, type of atom and so on.
 
 .. jl:function:: Atom(name)
 
