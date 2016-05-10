@@ -7,18 +7,10 @@ The `Julia`_ interface to chemfiles wrap around the C interface providing a Juli
 All the functionalities are in the ``Chemfiles`` module, which can be imported by the
 ``using Chemfiles`` expression. The ``Chemfiles`` module is built around the 5 main
 types of chemfiles: ``Trajectory``, ``Frame``, ``UnitCell``, ``Topology``, and
-``Atom``. For more information about these types, please see the :ref:`overview`.
-
-The julia interface only support Julia 0.4, but few work would be needed to also
-support the 0.3 version. You can install this interface by running
-
-.. code-block:: julia
-
-    julia> Pkg.clone("https://github.com/chemfiles/Chemfiles.jl")
-
-    julia> Pkg.build("Chemfiles")
+``Atom``. For more information about these types, please see the `overview`_.
 
 .. _Julia: http://julialang.org/
+.. _overview: http://chemfiles.readthedocs.io/en/latest/overview.html
 
 .. warning::
    All indexing in chemfiles is 0-based! That means that the first atom in a frame
@@ -31,7 +23,7 @@ support the 0.3 version. You can install this interface by running
 Error and logging functions
 ---------------------------
 
-These jl:functions are not exported, and should be called by there fully qualified name:
+These functions are not exported, and should be called by there fully qualified name:
 
 .. code-block:: julia
 
@@ -42,30 +34,57 @@ These jl:functions are not exported, and should be called by there fully qualifi
 
     Get the last error message.
 
-.. jl:function:: Chemfiles.loglevel(level)
+.. jl:function:: Chemfiles.loglevel()
 
-    Set the current log level to ``level``. The following loggin level are available:
+    Get the current log level.
 
-    - ``Chemfiles.NONE`` : Do not log anything;
-    - ``Chemfiles.ERROR`` : Only log errors;
-    - ``Chemfiles.WARNING`` : Log warnings and erors. This is the default;
-    - ``Chemfiles.INFO`` : Log infos, warnings and errors;
-    - ``Chemfiles.DEBUG`` : Log everything.
+.. jl:function:: Chemfiles.set_loglevel(level)
+
+    Set the current log level to ``level``.
+
+ The following logging levels are available:
+
+- ``Chemfiles.ERROR``: Only log errors;
+- ``Chemfiles.WARNING``: Log warnings and erors. This is the default;
+- ``Chemfiles.INFO``: Log infos, warnings and errors;
+- ``Chemfiles.DEBUG``: Log everything.
 
 .. jl:function:: Chemfiles.logfile(file)
 
     Redirect the logs to ``file``, overwriting the file if it exists.
 
+.. jl:function:: Chemfiles.log_to_stdout()
+
+    Redirect the logs to the standard output.
+
 .. jl:function:: Chemfiles.log_to_stderr()
 
     Redirect the logs to the standard error output. This is enabled by default.
 
+.. jl:function:: Chemfiles.log_silent()
+
+    Remove all logging output
+
+.. jl:function:: Chemfiles.log_callback(callback)
+
+    Use a callback for logging, instead of the built-in logging system. The callback
+    function will be called at each log event, with the event level and message.
+
+    The ``callback`` function must have the following signature:
+
+    .. code-block:: julia
+
+        function callback(level::Chemfiles.LogLevel, message::AbstractString)
+            # Do work as needed
+            return nothing
+        end
 
 ``Trajectory`` type and associated functions
 --------------------------------------------
 
 A trajectory is a file containing informations about the positions of particles
 during a simulation, and sometimes other quantities.
+
 
 .. jl:function:: Trajectory(filename, mode)
 
@@ -116,7 +135,11 @@ during a simulation, and sometimes other quantities.
 
     Get the number of steps (the number of frames) in a trajectory.
 
-.. jl:function:: close(status)
+.. jl:function:: sync(trajectory::Trajectory)
+
+    Synchronize any buffered content to the hard drive.
+
+.. jl:function:: close(trajectory::Trajectory)
 
     Close a trajectory file, flush any buffer content to the hard drive, and
     free the associated memory.
@@ -130,48 +153,48 @@ Trajectory while reading a file, or directly.
 
 .. jl:function:: Frame(natoms = 0)
 
-    Create an empty frame with initial capacity of ``natoms``. It will be resized by
-    the library as needed.
+    Create an empty frame with initial capacity of ``natoms``. It will be
+    automatically resized if needed.
 
-.. jl:function:: size(frame::Frame)
-
-    Get the frame size, i.e. the current number of atoms
-
-.. jl:function:: natoms(frame::Frame)
+.. jl:function:: natoms(frame::Frame) -> Integer
 
     Get the frame size, i.e. the current number of atoms
 
-.. jl:function:: positions!(frame::Frame, data::Array{Float32, 2})
+.. jl:function:: size(frame::Frame) -> Integer
 
-    Get the positions from a frame. Data is a pre-allocated array of size 3xN float
-    array to be filled with the positions.
+    Get the frame size, i.e. the current number of atoms
+
+.. jl:function:: resize!(frame::Frame, natoms::Integer)
+
+    Resize the positions and the velocities in frame, to make space for `natoms`
+    atoms. This function may invalidate any pointer to the positions or the
+    velocities if the new size is bigger than the old one. In all the cases, previous
+    data is conserved. This function conserve the presence or absence of velocities.
 
 .. jl:function:: positions(frame::Frame) -> Array{Float32, 2}
 
-    Get the positions from a frame. The result will be allocated on the fly.
+    Get a pointer to the positions in a frame. The positions are readable and
+    writable from this array. If the frame is resized (by writing to it, or calling
+    ``resize``), the array is invalidated.
 
-.. jl:function:: set_positions!(frame::Frame, data::Array{Float32, 2})
+.. jl:function:: velocities(frame::Frame)
 
-    Set the positions of a frame to ``data``. ``data`` should be a 3xN float array
-    containing the positions in column-major order.
+    Get a pointer to the velocities in a frame. The velocities are readable and
+    writable from this array. If the frame is resized (by writing to it, or calling
+    ``resize``), the array is invalidated.
 
-.. jl:function:: velocities!(frame::Frame, data::Array{Float32, 2})
+    If the frame do not have velocity, this will return an error. Use
+    ``add_velocities!`` to add velocities to a frame before calling this function.
 
-    Get the velocities from a frame, if they exists. Data is a pre-allocated array of
-    size 3xN float array to be filled with the velocities.
+.. jl:function:: add_velocities!(frame::Frame)
 
-.. jl:function:: velocities(frame::Frame) -> Array{Float32, 2}
-
-    Get the velocities from a frame. The result will be allocated on the fly.
-
-.. jl:function:: set_velocities!(frame::Frame, data::Array{Float32, 2})
-
-    Set the velocities of a frame.  to ``data``. ``data`` should be a 3xN float array
-    containing the positions in column-major order.
+    Add velocities to this frame. The storage is initialized with the result of
+    ``size(frame)`` as number of atoms. If the frame already have velocities, this
+    does nothing.
 
 .. jl:function:: has_velocities(frame::Frame) -> Bool
 
-    Check if a frame has velocity information.
+    Ask wether this frame contains velocity data or not.
 
 .. jl:function:: set_cell!(frame::Frame, cell::UnitCell)
 
@@ -195,6 +218,17 @@ Trajectory while reading a file, or directly.
     is ``true``, guess everything; else only guess the angles and dihedrals from
     the bond list.
 
+.. jl:function:: select(frame::Frame,  seletion::AbstractString) -> Vector{Bool}
+
+    This function select atoms in a frame matching a selection string. For example,
+    ``"name H and x > 4"`` will select all the atoms with name ``"H"`` and x
+    coordinate less than 4. See the documentation for the full `selection language`_.
+
+    The result of this function will contain ``true`` at position ``i`` if the atom
+    at position ``i`` matches the selection string, and ``false`` otherwise.
+
+.. _selection language: http://chemfiles.readthedocs.io/en/latest/selections.html
+
 ``UnitCell`` type and associated function
 -----------------------------------------
 
@@ -210,52 +244,48 @@ base vectors of lengthes ``a``, ``b`` and ``c``; and the angles between these ve
 
     Get a copy of the UnitCell of a frame.
 
-.. jl:function:: lengths(cell::UnitCell) -> (a, b, c)
+.. jl:function:: lengths(cell::UnitCell) -> (Float64, Float64, Float64)
 
-    Get the three cell lenghts ``a``, ``b`` and ``c``; in angstroms.
+    Get the three cell lenghts (a, b and c) in angstroms.
 
 .. jl:function:: set_lengths!(cell::UnitCell, a, b, c)
 
-    Set the unit cell lenghts to ``a``, ``b`` and ``c``; in angstroms.
+    Set the unit cell lenghts to ``a``, ``b`` and ``c`` in angstroms.
 
-.. jl:function:: angles(cell::UnitCell) -> (alpha, beta, gamma)
+.. jl:function:: angles(cell::UnitCell) -> (Float64, Float64, Float64)
 
-    Get the cell angles, in degrees.
+    Get the three cell angles (alpha, beta and gamma) in degrees.
 
 .. jl:function:: set_angles!(cell::UnitCell, alpha, beta, gamma)
 
-    Set the cell angles to ``alpha``, ``beta`` and ``gamma``, in degrees.
+    Set the cell angles to ``alpha``, ``beta`` and ``gamma`` in degrees.
 
-.. jl:function:: matrix(cell::UnitCell)
+.. jl:function:: cell_matrix(cell::UnitCell) -> Array{Float64, 2}
 
     Get the unit cell matricial representation, i.e. the representation of the three
-    base vectors arranged as:
+    base vectors as::
 
-    .. code-block:: sh
+        | a_x   b_x   c_x |
+        |  0    b_y   c_y |
+        |  0     0    c_z |
 
-        | a_x b_x c_x |
-        |  0  b_y c_y |
-        |  0   0  c_z |
+.. jl:function:: type(cell::UnitCell) -> CellType
 
-.. jl:function:: type(cell::UnitCell)
+    Get the cell type.
 
-    Get the cell type. The following cell types are defined:
-
-    - ``Chemfiles.ORTHOROMBIC`` : The three angles are 90°
-    - ``Chemfiles.TRICLINIC`` : The three angles may not be 90°
-    - ``Chemfiles.INFINITE`` : Cell type when there is no periodic boundary conditions
-
-.. jl:function:: set_type!(cell::UnitCell, celltype)
+.. jl:function:: set_type!(cell::UnitCell, celltype::CellType)
 
     Set the cell type to ``celltype``.
 
-.. jl:function:: periodicity(cell::UnitCell) -> (x, y, z)
+The following cell types are defined:
 
-    Get the cell periodic boundary conditions along the three axis.
+- ``Chemfiles.ORTHOROMBIC`` : The three angles are 90°
+- ``Chemfiles.TRICLINIC`` : The three angles may not be 90°
+- ``Chemfiles.INFINITE`` : Cell type when there is no periodic boundary conditions
 
-.. jl:function:: set_periodicity!(cell::UnitCell, x, y, z)
+.. jl:function:: volume(cell::UnitCell) -> Float64
 
-    Set the cell periodic boundary conditions along the three axis.
+    Get the unit cell volume
 
 
 ``Topology`` type and associated function
@@ -340,11 +370,11 @@ the associated Frame.
 
     Create an atom from an atomic name.
 
-.. jl:function:: Atom(frame::Frame, idx)
+.. jl:function:: Atom(frame::Frame, idx::Integer)
 
     Get the atom at index ``idx`` from the frame.
 
-.. jl:function:: Atom(topology::Topology, idx)
+.. jl:function:: Atom(topology::Topology, idx::Integer)
 
     Get the atom at index ``idx`` from the topology.
 
@@ -352,7 +382,7 @@ the associated Frame.
 
     Get the mass of an atom, in atomic mass units.
 
-.. jl:function:: set_mass!(atom::Atom, mass)
+.. jl:function:: set_mass!(atom::Atom, mass::Number)
 
     Set the mass of an atom to ``mass``, in atomic mass units.
 
@@ -360,7 +390,7 @@ the associated Frame.
 
     Get the charge of an atom, in number of the electron charge e.
 
-.. jl:function:: set_charge!(atom::Atom, charge)
+.. jl:function:: set_charge!(atom::Atom, charge::Number)
 
     Set the charge of an atom to ``charge``, in number of the electron charge e.
 
@@ -368,18 +398,18 @@ the associated Frame.
 
     Get the name of an atom.
 
-.. jl:function:: set_name!(atom::Atom, name)
+.. jl:function:: set_name!(atom::Atom, name::ASCIIString)
 
     Set the name of an atom to ``name``.
 
 .. jl:function:: full_name(atom::Atom) -> ASCIIString
 
-    Try to get the full name of an atom from the short name.
+    Try to get the full name of an atom (``"Helium"``) from the short name (``"He"``).
 
 .. jl:function:: vdw_radius(atom::Atom) -> Float32
 
-    Try to get the Van der Waals radius of an atom from the short name. Returns -1 if no
-    value could be found.
+    Try to get the Van der Waals radius of an atom from the short name. Returns -1 if
+    no value could be found.
 
 .. jl:function:: covalent_radius(atom::Atom) -> Float32
 
@@ -390,3 +420,19 @@ the associated Frame.
 
     Try to get the atomic number of an atom from the short name. Returns -1 if no
     value could be found.
+
+.. jl:function:: atom_type(atom::Atom) -> AtomType
+
+    Get the atom type
+
+.. jl:function:: set_atom_type!(atom::Atom, type::AtomType)
+
+    Set the atom type
+
+ The following atom types are available:
+
+- ``Chemfiles.ELEMENT``: Element from the periodic table of elements
+- ``Chemfiles.COARSE_GRAINED``: Coarse-grained atom are composed of more than one
+  element: CH3 groups, amino-acids are coarse-grained atoms.
+- ``Chemfiles.DUMMY_ATOM``: Dummy site, with no physical reality
+- ``Chemfiles.UNDEFINED_ATOM``: Undefined atom type
