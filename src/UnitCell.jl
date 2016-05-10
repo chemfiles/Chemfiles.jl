@@ -4,8 +4,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export lengths, set_lengths!, angles, set_angles!, cell_matrix, cell_matrix!, cell_type,
-set_cell_type!, volume, CellType
+export lengths, set_lengths!, angles, set_angles!, cell_matrix, cell_type, set_cell_type!,
+volume, CellType
 
 immutable CellType
     value::lib.CHFL_CELL_TYPES
@@ -88,16 +88,12 @@ function set_angles!(cell::UnitCell, alpha::Real, beta::Real, gamma::Real)
     return nothing
 end
 
-function cell_matrix!(cell::UnitCell, mat::Array{Cdouble, 2})
-    check(
-        lib.chfl_cell_matrix(cell.handle, pointer(mat))
-    )
-    return mat
-end
-
 function cell_matrix(cell::UnitCell)
-    mat = Array(Cdouble, 3, 3)
-    return cell_matrix!(cell, mat)
+    matrix = Array(Cdouble, 3, 3)
+    check(
+        lib.chfl_cell_matrix(cell.handle, pointer(matrix))
+    )
+    return Array{Float64,2}(matrix)
 end
 
 function cell_type(cell::UnitCell)
