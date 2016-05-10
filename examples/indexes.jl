@@ -7,12 +7,12 @@ using Chemfiles
 
 traj = Trajectory("filename.xyz")
 frame = read(traj)
-positions = positions(frame)
+pos = positions(frame)
 
 indexes = Int[]
 
 for i=1:natoms(frame)
-    if positions[1, i] < 5
+    if pos[1, i] < 5
         push!(indexes, i)
     end
 end
