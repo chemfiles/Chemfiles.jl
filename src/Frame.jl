@@ -94,10 +94,8 @@ function set_step!(frame::Frame, step::Integer)
     return nothing
 end
 
-function guess_topology!(frame::Frame, bonds::Bool=true)
-    check(
-        lib.chfl_frame_guess_topology(frame.handle, convert(UInt8, bonds))
-    )
+function guess_topology!(frame::Frame)
+    check(lib.chfl_frame_guess_topology(frame.handle))
     return nothing
 end
 

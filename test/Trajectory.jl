@@ -88,7 +88,7 @@ facts("Trajectory type") do
         end
         set_topology!(frame, top)
 
-        file = Trajectory("test-tmp.xyz", "w");
+        file = Trajectory("test-tmp.xyz", 'w');
         write(file, frame)
 
         resize!(frame, 6)

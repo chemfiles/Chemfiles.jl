@@ -12,6 +12,15 @@
 # =========================================================================== #
 typealias CBool Cuchar
 
+# Manually translated from the header
+immutable chfl_match_t
+    size    ::Cuchar
+    atoms_1 ::Csize_t
+    atoms_2 ::Csize_t
+    atoms_3 ::Csize_t
+    atoms_4 ::Csize_t
+end
+
 immutable CHFL_TRAJECTORY end
 
 immutable CHFL_CELL end
@@ -22,6 +31,8 @@ immutable CHFL_FRAME end
 
 immutable CHFL_TOPOLOGY end
 
+immutable CHFL_SELECTION end
+
 # enum CHFL_LOG_LEVEL
 typealias CHFL_LOG_LEVEL UInt32
 const CHFL_LOG_ERROR = CHFL_LOG_LEVEL(0)
@@ -31,7 +42,7 @@ const CHFL_LOG_DEBUG = CHFL_LOG_LEVEL(3)
 
 # enum CHFL_CELL_TYPES
 typealias CHFL_CELL_TYPES UInt32
-const CHFL_CELL_ORTHOROMBIC = CHFL_CELL_TYPES(0)
+const CHFL_CELL_ORTHORHOMBIC = CHFL_CELL_TYPES(0)
 const CHFL_CELL_TRICLINIC = CHFL_CELL_TYPES(1)
 const CHFL_CELL_INFINITE = CHFL_CELL_TYPES(2)
 

@@ -39,8 +39,6 @@ facts("Frame type") do
     @fact name(Atom(new_top, 0)) --> "H"
     @fact name(Atom(new_top, 2)) --> "Zn"
 
-    @fact select(frame, "name H") --> [true, false, false, true]
-
     @fact step(frame) --> 0
     set_step!(frame, 42)
     @fact step(frame) --> 42

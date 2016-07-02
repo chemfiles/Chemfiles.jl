@@ -8,7 +8,7 @@ TESTS = [
 
 function main()
     facts("Generics") do
-        @fact Chemfiles.version() --> "0.5.0"
+        @fact Chemfiles.version() --> "0.6.0"
     end
     root = dirname(@__FILE__)
     for test in TESTS

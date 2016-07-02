@@ -12,7 +12,7 @@ immutable CellType
 
     function CellType(value)
         value = lib.CHFL_CELL_TYPES(value)
-        if value in [lib.CHFL_CELL_INFINITE, lib.CHFL_CELL_ORTHOROMBIC, lib.CHFL_CELL_TRICLINIC]
+        if value in [lib.CHFL_CELL_INFINITE, lib.CHFL_CELL_ORTHORHOMBIC, lib.CHFL_CELL_TRICLINIC]
             return new(value)
         else
             throw(ChemfilesError("Invalid value for conversion to CellType: $value"))
@@ -20,7 +20,7 @@ immutable CellType
     end
 end
 
-const ORTHOROMBIC = CellType(lib.CHFL_CELL_ORTHOROMBIC)
+const ORTHORHOMBIC = CellType(lib.CHFL_CELL_ORTHORHOMBIC)
 const TRICLINIC = CellType(lib.CHFL_CELL_TRICLINIC)
 const INFINITE = CellType(lib.CHFL_CELL_INFINITE)
 

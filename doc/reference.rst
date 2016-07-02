@@ -292,7 +292,7 @@ vectors of lengthes ``a``, ``b`` and ``c``; and the angles between these vectors
 
 The following cell types are defined:
 
-- ``Chemfiles.ORTHOROMBIC`` : The three angles are 90°
+- ``Chemfiles.ORTHORHOMBIC`` : The three angles are 90°
 - ``Chemfiles.TRICLINIC`` : The three angles may not be 90°
 - ``Chemfiles.INFINITE`` : Cell type when there is no periodic boundary conditions
 

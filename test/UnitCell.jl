@@ -15,7 +15,7 @@ facts("UnitCell type") do
     set_lengths!(cell, 10, 20, 30)
     @fact lengths(cell) --> (10.0, 20.0, 30.0)
 
-    # Can not set angles for ORTHOROMBIC cell
+    # Can not set angles for ORTHORHOMBIC cell
     Chemfiles.log_silent()
     @fact_throws set_angles!(cell, 80, 89, 100)
     Chemfiles.log_to_stderr()
@@ -25,7 +25,7 @@ facts("UnitCell type") do
                           0, 0, 30], (3, 3))
     @fact cell_matrix(cell) --> roughly(mat, 1e-10)
 
-    @fact cell_type(cell) --> Chemfiles.ORTHOROMBIC
+    @fact cell_type(cell) --> Chemfiles.ORTHORHOMBIC
 
     set_cell_type!(cell, Chemfiles.TRICLINIC)
     @fact cell_type(cell) --> Chemfiles.TRICLINIC
