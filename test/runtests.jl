@@ -3,7 +3,7 @@ using FactCheck
 
 TESTS = [
     "errors.jl", "logging.jl", "Atom.jl", "Topology.jl", "UnitCell.jl",
-    "Frame.jl", "Trajectory.jl"
+    "Frame.jl", "Trajectory.jl", "Selection.jl"
 ]
 
 function main()

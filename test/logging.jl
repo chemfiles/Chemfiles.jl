@@ -26,5 +26,9 @@ facts("Logging functions") do
     @fact message --> "Can not find a format associated with the \"\" extension."
     @fact level --> Chemfiles.ERROR
 
+    @fact Chemfiles.last_error() --> "Can not find a format associated with the \"\" extension."
+    Chemfiles.clear_errors()
+    @fact Chemfiles.last_error() --> ""
+
     Chemfiles.log_to_stderr()
 end

@@ -115,12 +115,9 @@ facts("Trajectory type") do
         rm("test-tmp.xyz")
     end
 
-    # This fails on Windows for some reason, even with the right CHEMFILES_PLUGINS path.
-    @unix_only begin
-        context("Molfiles plugins") do
-            file = Trajectory(joinpath(DATAPATH, "water.trr"))
 
-            @fact nsteps(file) --> 100
-        end
+    context("Molfiles plugins") do
+        file = Trajectory(joinpath(DATAPATH, "water.trr"))
+        @fact nsteps(file) --> 100
     end
 end

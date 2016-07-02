@@ -32,6 +32,10 @@ function last_error()
     bytestring(lib.chfl_last_error())
 end
 
+function clear_errors()
+    check(lib.chfl_clear_errors())
+end
+
 function strerror(status::Integer)
     bytestring(lib.chfl_strerror(Cint(status)))
 end

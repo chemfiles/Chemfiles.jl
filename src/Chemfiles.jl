@@ -22,7 +22,7 @@ module Chemfiles
     include("errors.jl")
     include("logging.jl")
 
-    export Trajectory, Topology, Atom, UnitCell, Frame
+    export Trajectory, Topology, Atom, UnitCell, Frame, Selection
 
     function version()
         bytestring(lib.chfl_version())
@@ -78,9 +78,20 @@ module Chemfiles
         end
     end
 
+    type Selection
+        handle :: Ptr{lib.CHFL_SELECTION}
+        function Selection(ptr::Ptr{lib.CHFL_SELECTION})
+            check(ptr)
+            this = new(ptr)
+            finalizer(this, free)
+            return this
+        end
+    end
+
     include("Atom.jl")
     include("Frame.jl")
     include("Topology.jl")
     include("Trajectory.jl")
     include("UnitCell.jl")
+    include("Selection.jl")
 end
