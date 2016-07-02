@@ -34,6 +34,10 @@ These functions are not exported, and should be called by there fully qualified 
 
     Get the last error message.
 
+.. jl:function:: Chemfiles.clear_errors()
+
+    Clear the last error message.
+
 .. jl:function:: Chemfiles.loglevel()
 
     Get the current log level.
@@ -88,12 +92,13 @@ A `Trajectory`_ uses a file and a format together to read simulation data from t
 file. It can read or write one or many `Frame`_ to this file. The file type and the
 format are automatically determined from the extention.
 
-.. jl:function:: Trajectory(filename, mode)
+.. jl:function:: Trajectory(filename::String, mode::Char)
 
     Open a trajectory file.
 
-    :parameter string filename: The path to the trajectory file
-    :parameter string mode: The opening mode: "r" for read, "w" for write and  "a" for append.
+    :parameter filename: The path to the trajectory file
+    :parameter mode: The opening mode: 'r' for read, 'w' for write and
+                            'a' for append.
 
 .. jl:function:: read(trajectory::Trajectory) -> Frame
 
@@ -222,23 +227,9 @@ the types of informations, some fields may be initialized to a default value. A
 
     Set the `Frame`_ step to ``step``.
 
-.. jl:function:: guess_topology!(frame::Frame,  bonds::Bool=true)
+.. jl:function:: guess_topology!(frame::Frame)
 
-    Try to guess the bonds, angles and dihedrals in the system. If ``bonds``
-    is ``true``, guess everything; else only guess the angles and dihedrals from
-    the bond list.
-
-.. jl:function:: select(frame::Frame,  seletion::AbstractString) -> Vector{Bool}
-
-    This function select atoms in a `Frame`_ matching a selection string. For example,
-    ``"name H and x > 4"`` will select all the atoms with name ``"H"`` and x
-    coordinate less than 4. See the documentation for the full `selection language`_.
-
-    The result of this function will contain ``true`` at position ``i`` if the atom
-    at position ``i`` matches the selection string, and ``false`` otherwise.
-
-.. _selection language: http://chemfiles.readthedocs.io/en/latest/selections.html
-
+    Guess the bonds, angles and dihedrals in the system using a distance criteria.
 
 .. _UnitCell:
 
@@ -448,10 +439,30 @@ it is disponible), mass, type of atom and so on.
 
     Set the `Atom`_ type
 
- The following atom types are available:
+The following atom types are available:
 
 - ``Chemfiles.ELEMENT``: Element from the periodic table of elements
 - ``Chemfiles.COARSE_GRAINED``: Coarse-grained atom are composed of more than one
   element: CH3 groups, amino-acids are coarse-grained atoms.
 - ``Chemfiles.DUMMY_ATOM``: Dummy site, with no physical reality
 - ``Chemfiles.UNDEFINED_ATOM``: Undefined atom type
+
+.. _Selection:
+
+``Selection`` type and associated function
+------------------------------------------
+
+A `Selection`_ allow to select a group of atoms. Examples of selections are
+"name H" and "(x < 45 and name O) or name C". See the `full documentation
+<http://chemfiles.readthedocs.io/en/latest/selections.html>`_ for more
+information about the selection language.
+
+.. jl:function:: size(selection::Selection) -> Integer
+
+    Get the size of the `Selection`_, *i.e.* the number of atoms we are
+    selecting together.
+
+.. jl:function:: evaluate(selection::Selection, frame::Frame) -> Array(Match, 1)
+
+    Evaluate a `Selection`_ on a given `Frame`_. This function return a list of
+    indexes or tuples of indexes of atoms in the frame matching the selection.
