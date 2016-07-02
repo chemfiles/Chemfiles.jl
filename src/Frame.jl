@@ -38,7 +38,7 @@ function positions(frame::Frame)
     check(
         lib.chfl_frame_positions(frame.handle, ptr, natoms)
     )
-    return pointer_to_array(ptr[], (3, natoms[]), false)
+    return pointer_to_array(ptr[], (3, Int64(natoms[])), false)
 end
 
 function velocities(frame::Frame)
@@ -47,7 +47,7 @@ function velocities(frame::Frame)
     check(
         lib.chfl_frame_velocities(frame.handle, ptr, natoms)
     )
-    return pointer_to_array(ptr[], (3, natoms[]), false)
+    return pointer_to_array(ptr[], (3, Int64(natoms[])), false)
 end
 
 function add_velocities!(frame::Frame)
