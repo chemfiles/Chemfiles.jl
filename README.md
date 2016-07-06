@@ -2,24 +2,17 @@
 
 [![Build Status -- Linux](https://travis-ci.org/chemfiles/Chemfiles.jl.svg?branch=master)](https://travis-ci.org/chemfiles/Chemfiles.jl)
 [![Build status -- Windows](https://ci.appveyor.com/api/projects/status/2v1ert2bktpwpiqo?svg=true)](https://ci.appveyor.com/project/Luthaf/chemfiles-jl)
-[![codecov.io](https://codecov.io/github/chemfiles/Chemfiles.jl/coverage.svg?branch=master)](https://codecov.io/github/chemfiles/Chemfiles.jl?branch=master)
-[![Documentation Status](https://readthedocs.org/projects/chemfiles-julia/badge/?version=latest)](http://chemfiles.readthedocs.org/projects/chemfiles-julia/en/latest/)
+[![Code coverage](https://codecov.io/github/chemfiles/Chemfiles.jl/coverage.svg?branch=master)](https://codecov.io/github/chemfiles/Chemfiles.jl?branch=master)
+[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](http://chemfiles.github.io/Chemfiles.jl/)
 
 This package contains the Julia binding for the
-[chemfiles](https://github.com/chemfiles/chemfiles) chemistry IO library. It allow you, as
-a programmer, to read and write chemistry trajectory files easily, with the same simple
-interface for all the supported formats. For more information, please read the
-[introduction to chemfiles](http://chemfiles.readthedocs.org/en/latest/overview.html).
+[chemfiles](https://github.com/chemfiles/chemfiles) chemistry IO library. It
+allow you, as a programmer, to read and write chemistry trajectory files easily,
+with the same simple interface for all the supported formats. For more
+information, please read the [introduction to
+chemfiles](http://chemfiles.github.io/chemfiles/latest/overview.html).
 
-For a list of supported formats, please see the
-[documentation](http://chemfiles.readthedocs.org/en/latest/formats.html). The VMD molfiles
-based formats are not supported on Windows (see
-[this issue](https://github.com/chemfiles/Chemfiles.jl/issues/3))
-
-## Documentation
-
-Please see the [Julia interface](chemfiles.readthedocs.org/projects/julia/en/latest)
-section of the documentation of chemfiles.
+## [Documentation](http://chemfiles.github.io/Chemfiles.jl/)
 
 ## Installation
 
@@ -56,4 +49,5 @@ positions = positions(frame)
 
 ## Bug reports, feature requests
 
-Please report any bug you find and any feature you may want as a [github issue](https://github.com/chemfiles/Chemfiles.jl/issues/new).
+Please report any bug you find and any feature you may want as a [github
+issue](https://github.com/chemfiles/Chemfiles.jl/issues/new).
