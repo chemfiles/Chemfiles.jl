@@ -5,18 +5,32 @@ os:
 julia:
   - release
   - nightly
+matrix:
+  allow_failures:
+    - julia: nightly
+
+env:
+  global:
+    secure: "WG3JFtY/nk2xufTz77s+Eyp8vh7h6g8GQI902kHiaXyvTZCmKF923I7qw2mK5uOTi1A4VoHV9Z2i93HlednAXHlL4S8TYH0qRG2cLAyAJO4nyl++z38Ot0u/95eyNUW2y3ut4rLxdulY1s4FSk3O21baSGDmxHMK0Ckti2JGCcpW2SqAwt7c3lPsHzZ0jRBwtJWN2LbQf8hMWCZKgjSMyIanrfdgogc9sa2QvIwtQntGxNW5o6A82tyUzyugXgSs3o9C4g8O4wm7hLpEFeZSQmgwngjx4SmqlmIgUvUoYKV7uELvAvvr26PatsQJIt4kFB+//K93oxMNPUi7SGR5l1s7KHTd3LNYNXMPqyu/4Ffl2UqKPJiYFgVy31IYiJOGVuRjgXL/8xVsL9JxPzGcYs6z/2ZzYsDIUXTFmypXLY762W4wkLaNyks+OSZmAgKsEpsriMjPmJuv1VikLoyXbDaWkYawm/fkqlTQ/DX2xYjyMXiU+R1GzKCa9RlRX+gtLVLfuQtgL3UXeJb4nMe2JNXGF0RyPbg9ba2Fr29ZABWFiGaDxUhElvvD2lUntN5wmZS1wLd/FAgJtqRATJUWD0VpZyKg/fktbV8PB8mgCjOnqOWpqbfAFp6QLkrzkewxx23O96scdDFRCg81QcHNh2jzMEQjUHJUyoGA4HO+JRM="
+
+before_install:
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" && "${TRAVIS_JULIA_VERSION}" == "release" ]]; then
+        export EXTRA_WORK=true
+    else
+        export EXTRA_WORK=false
+    fi
 install:
   - git fetch --unshallow
   - julia -e 'Pkg.clone(pwd())'
   - julia -e 'Pkg.build("Chemfiles")'
-  - cat $HOME/.julia/*/Chemfiles/deps/deps.jl
 script:
   - julia --check-bounds=yes --inline=no -e 'Pkg.test("Chemfiles"; coverage=true)'
-after_success:
+after_script:
   - |
-    if test "$TRAVIS_JULIA_VERSION" == "release"; then
+    if ${EXTRA_WORK}; then
         julia -e 'cd(Pkg.dir("Chemfiles")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
+        cd ${TRAVIS_BUILD_DIR}
+        git clone https://${GH_TOKEN}@github.com/chemfiles/Chemfiles.jl gh-pages
+        ./deploy-docs.sh
     fi
-matrix:
-  allow_failures:
-    - julia: nightly
