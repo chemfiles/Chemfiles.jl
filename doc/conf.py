@@ -25,8 +25,8 @@ master_doc = 'index'
 project = u'Julia interface to chemfiles'
 copyright = u'2015, Guillaume Fraux — MPLv2 licence'
 
-version = "0.4"
-release = "0.4.0-dev"
+version = "0.6"
+release = "0.6.0"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
