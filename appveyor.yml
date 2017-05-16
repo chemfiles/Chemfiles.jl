@@ -2,16 +2,16 @@ environment:
   matrix:
       - JULIA_VERSION: "v0.4"
         ARCH: x86
-        JULIA_URL: "julialang/bin/winnt/x86/0.4/julia-0.4.1-win32.exe"
+        JULIA_URL: "https://julialang-s3.julialang.org/bin/winnt/x86/0.4/julia-0.4.1-win32.exe"
       - JULIA_VERSION: "v0.4"
         ARCH: x64
-        JULIA_URL: "julialang/bin/winnt/x64/0.4/julia-0.4.1-win64.exe"
+        JULIA_URL: "https://julialang-s3.julialang.org/bin/winnt/x64/0.4/julia-0.4.1-win64.exe"
       - JULIA_VERSION: "v0.5"
         ARCH: x86
-        JULIA_URL: "julianightlies/bin/winnt/x86/julia-latest-win32.exe"
+        JULIA_URL: "https://julialangnightlies-s3.julialang.org/bin/winnt/x86/julia-latest-win32.exe"
       - JULIA_VERSION: "v0.5"
         ARCH: x64
-        JULIA_URL: "julianightlies/bin/winnt/x64/julia-latest-win64.exe"
+        JULIA_URL: "https://julialangnightlies-s3.julialang.org/bin/winnt/x64/julia-latest-win64.exe"
 
 notifications:
   - provider: Email
@@ -20,8 +20,9 @@ notifications:
     on_build_status_changed: true
 
 install:
+  - ps: "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12"
   - ps: (new-object net.webclient).DownloadFile(
-              $("http://s3.amazonaws.com/"+$env:JULIA_URL),
+              $env:JULIA_URL,
               "C:\projects\julia-installer.exe"
         )
   - C:\projects\julia-installer.exe /S /D=C:\projects\julia
