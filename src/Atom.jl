@@ -26,7 +26,7 @@ const COARSE_GRAINED = AtomType(lib.CHFL_ATOM_COARSE_GRAINED)
 const DUMMY_ATOM = AtomType(lib.CHFL_ATOM_DUMMY)
 const UNDEFINED_ATOM = AtomType(lib.CHFL_ATOM_UNDEFINED)
 
-function Atom(name::ASCIIString)
+function Atom(name::String)
     return Atom(lib.chfl_atom(pointer(name)))
 end
 
@@ -83,11 +83,10 @@ function name(atom::Atom)
     return strip(str)[1:end-1]
 end
 
-function set_name!(atom::Atom, name::ASCIIString)
+function set_name!(atom::Atom, name::String)
     check(
         lib.chfl_atom_set_name(atom.handle, pointer(name))
     )
-    # Remove spaces and null char
     return nothing
 end
 
