@@ -186,7 +186,7 @@ the types of informations, some fields may be initialized to a default value. A
     velocities if the new size is bigger than the old one. In all the cases, previous
     data is conserved. This function conserve the presence or absence of velocities.
 
-.. jl:function:: positions(frame::Frame) -> Array{Float32, 2}
+.. jl:function:: positions(frame::Frame) -> Array{Float64, 2}
 
     Get a pointer to the positions in a `Frame`_. The positions are readable and
     writable from this array. If the frame is resized (by writing to it, or calling
@@ -416,12 +416,12 @@ it is disponible), mass, type of atom and so on.
 
     Try to get the full name of an `Atom`_ (``"Helium"``) from the short name (``"He"``).
 
-.. jl:function:: vdw_radius(atom::Atom) -> Float32
+.. jl:function:: vdw_radius(atom::Atom) -> Float64
 
     Try to get the Van der Waals radius of an `Atom`_ from the short name. Returns -1 if
     no value could be found.
 
-.. jl:function:: covalent_radius(atom::Atom) -> Float32
+.. jl:function:: covalent_radius(atom::Atom) -> Float64
 
     Try to get the covalent radius of an `Atom`_ from the short name. Returns -1 if no
     value could be found.

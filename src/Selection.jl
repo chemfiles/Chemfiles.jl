@@ -11,7 +11,7 @@ function Selection(selection::AbstractString)
 end
 
 function Base.size(selection::Selection)
-    res = Ref{Csize_t}(0)
+    res = Ref{UInt64}(0)
     check(
         lib.chfl_selection_size(selection.handle, res)
     )
@@ -19,9 +19,9 @@ function Base.size(selection::Selection)
 end
 
 function evaluate(selection::Selection, frame::Frame)
-    matching = Ref{Csize_t}(0)
+    matching = Ref{UInt64}(0)
     check(
-        lib.chfl_selection_evalutate(selection.handle, frame.handle, matching)
+        lib.chfl_selection_evaluate(selection.handle, frame.handle, matching)
     )
     matching = matching[]
     matches = Array(lib.chfl_match_t, matching)

@@ -27,7 +27,7 @@ end
 
 function read_step!(file::Trajectory, step::Integer, frame::Frame)
     check(
-        lib.chfl_trajectory_read_step(file.handle, Csize_t(step), frame.handle)
+        lib.chfl_trajectory_read_step(file.handle, UInt64(step), frame.handle)
     )
     return frame
 end
@@ -51,9 +51,9 @@ function set_topology!(file::Trajectory, topology::Topology)
     return nothing
 end
 
-function set_topology!(file::Trajectory, filename::AbstractString)
+function set_topology!(file::Trajectory, filename::AbstractString, format::AbstractString = "")
     check(
-        lib.chfl_trajectory_set_topology_file(file.handle, pointer(filename))
+        lib.chfl_trajectory_topology_file(file.handle, pointer(filename), pointer(format))
     )
     return nothing
 end
@@ -66,7 +66,7 @@ function set_cell!(file::Trajectory, cell::UnitCell)
 end
 
 function nsteps(file::Trajectory)
-    res = Ref{Csize_t}(0)
+    res = Ref{UInt64}(0)
     check(
         lib.chfl_trajectory_nsteps(file.handle, res)
     )

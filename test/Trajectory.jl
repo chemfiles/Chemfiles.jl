@@ -3,10 +3,8 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
 
 facts("Trajectory type") do
     context("Errors handling") do
-        Chemfiles.log_silent()
         @fact_throws Trajectory(joinpath(DATAPATH, "not-here.xyz"))
         @fact_throws Trajectory(joinpath(DATAPATH, "empty.unknown"))
-        Chemfiles.log_to_stderr()
     end
 
     context("Read frames") do
@@ -18,8 +16,8 @@ facts("Trajectory type") do
 
         @fact natoms(frame) --> 297
         pos = positions(frame)
-        @fact pos[:, 1] --> Float32[0.417219, 8.303366, 11.737172]
-        @fact pos[:, 125] --> Float32[5.099554, -0.045104, 14.153846]
+        @fact pos[:, 1] --> Float64[0.417219, 8.303366, 11.737172]
+        @fact pos[:, 125] --> Float64[5.099554, -0.045104, 14.153846]
 
         topology = Topology(frame)
         @fact natoms(topology) --> 297
@@ -29,17 +27,17 @@ facts("Trajectory type") do
         set_cell!(file, UnitCell(30, 30, 30))
         frame = read_step(file, 41)
 
-        @fact lengths(UnitCell(frame)) --> (30.0, 30.0, 30.0)
+        @fact lengths(UnitCell(frame)) --> [30.0, 30.0, 30.0]
 
         pos = positions(frame)
-        @fact pos[:, 1] --> Float32[0.761277, 8.106125, 10.622949]
-        @fact pos[:, 125] --> Float32[5.13242, 0.079862, 14.194161]
+        @fact pos[:, 1] --> Float64[0.761277, 8.106125, 10.622949]
+        @fact pos[:, 125] --> Float64[5.13242, 0.079862, 14.194161]
 
         topology = Topology(frame)
         @fact natoms(topology) --> 297
         @fact nbonds(topology) --> 0
 
-        guess_topology!(frame)
+        guess_bonds!(frame)
         topology = Topology(frame)
         @fact nbonds(topology) --> 181
         @fact nangles(topology) --> 87
@@ -76,10 +74,11 @@ facts("Trajectory type") do
                               X 4 5 6
                               """
 
-        frame = Frame(4)
+        frame = Frame()
+        resize!(frame, 4)
         pos = positions(frame)
         for i=1:4
-            pos[:, i] = Float32[1, 2, 3]
+            pos[:, i] = Float64[1, 2, 3]
         end
 
         top = Topology()
@@ -94,7 +93,7 @@ facts("Trajectory type") do
         resize!(frame, 6)
         pos = positions(frame)
         for i=1:6
-            pos[:, i] = Float32[4, 5, 6]
+            pos[:, i] = Float64[4, 5, 6]
         end
         top = Topology()
         for i=1:6
@@ -103,21 +102,13 @@ facts("Trajectory type") do
         set_topology!(frame, top)
 
         write(file, frame)
-        sync(file)
-
-        open("test-tmp.xyz") do fd
-            @fact readall(fd) --> expected_content
-        end
-
         close(file)
         @fact isopen(file) --> false
 
+        open("test-tmp.xyz") do fd
+            @fact readstring(fd) --> expected_content
+        end
+
         rm("test-tmp.xyz")
-    end
-
-
-    context("Molfiles plugins") do
-        file = Trajectory(joinpath(DATAPATH, "water.trr"))
-        @fact nsteps(file) --> 100
     end
 end

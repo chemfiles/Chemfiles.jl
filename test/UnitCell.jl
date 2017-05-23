@@ -2,34 +2,32 @@
 facts("UnitCell type") do
     cell = UnitCell(5, 3, 1, 110, 120, 80)
 
-    @fact lengths(cell) --> (5.0, 3.0, 1.0)
-    @fact angles(cell) --> (110.0, 120.0, 80.0)
+    @fact lengths(cell) --> [5.0, 3.0, 1.0]
+    @fact angles(cell) --> [110.0, 120.0, 80.0]
 
     cell = UnitCell(2, 3, 4)
 
-    @fact lengths(cell) --> (2.0, 3.0, 4.0)
-    @fact angles(cell) --> (90.0, 90.0, 90.0)
+    @fact lengths(cell) --> [2.0, 3.0, 4.0]
+    @fact angles(cell) --> [90.0, 90.0, 90.0]
 
-    @fact volume(cell) --> 2.0*3.0*4.0
+    @fact volume(cell) --> 2.0 * 3.0 * 4.0
 
     set_lengths!(cell, 10, 20, 30)
-    @fact lengths(cell) --> (10.0, 20.0, 30.0)
+    @fact lengths(cell) --> [10.0, 20.0, 30.0]
 
     # Can not set angles for ORTHORHOMBIC cell
-    Chemfiles.log_silent()
     @fact_throws set_angles!(cell, 80, 89, 100)
-    Chemfiles.log_to_stderr()
 
-    mat = reshape(Float64[10, 0, 0,
-                          0, 20, 0,
-                          0, 0, 30], (3, 3))
-    @fact cell_matrix(cell) --> roughly(mat, 1e-10)
+    expected = reshape(Float64[10, 0, 0,
+                               0, 20, 0,
+                               0, 0, 30], (3, 3))
+    @fact cell_matrix(cell) --> roughly(expected, 1e-10)
 
-    @fact cell_type(cell) --> Chemfiles.ORTHORHOMBIC
+    @fact shape(cell) --> Chemfiles.ORTHORHOMBIC
 
-    set_cell_type!(cell, Chemfiles.TRICLINIC)
-    @fact cell_type(cell) --> Chemfiles.TRICLINIC
+    set_shape!(cell, Chemfiles.TRICLINIC)
+    @fact shape(cell) --> Chemfiles.TRICLINIC
 
     set_angles!(cell, 80, 89, 100)
-    @fact angles(cell) --> (80.0, 89.0, 100.0)
+    @fact angles(cell) --> [80.0, 89.0, 100.0]
 end

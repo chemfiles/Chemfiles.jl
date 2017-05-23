@@ -10,16 +10,19 @@
 # the generation code (https://github.com/chemfiles/bindgen).
 # This file contains Julia interface to the C API
 # =========================================================================== #
-typealias CBool Cuchar
 
-# Manually translated from the header
+# === Manually translated from the header
 immutable chfl_match_t
-    size    ::Cuchar
-    atoms_1 ::Csize_t
-    atoms_2 ::Csize_t
-    atoms_3 ::Csize_t
-    atoms_4 ::Csize_t
+    size    ::UInt64
+    atoms_1 ::UInt64
+    atoms_2 ::UInt64
+    atoms_3 ::UInt64
+    atoms_4 ::UInt64
 end
+
+typealias Cbool Cuchar
+typealias chfl_vector_t Array{Cdouble, 1}
+# === End of manual translation
 
 immutable CHFL_TRAJECTORY end
 
@@ -33,22 +36,20 @@ immutable CHFL_TOPOLOGY end
 
 immutable CHFL_SELECTION end
 
-# enum CHFL_LOG_LEVEL
-typealias CHFL_LOG_LEVEL UInt32
-const CHFL_LOG_ERROR = CHFL_LOG_LEVEL(0)
-const CHFL_LOG_WARNING = CHFL_LOG_LEVEL(1)
-const CHFL_LOG_INFO = CHFL_LOG_LEVEL(2)
-const CHFL_LOG_DEBUG = CHFL_LOG_LEVEL(3)
+immutable CHFL_RESIDUE end
 
-# enum CHFL_CELL_TYPES
-typealias CHFL_CELL_TYPES UInt32
-const CHFL_CELL_ORTHORHOMBIC = CHFL_CELL_TYPES(0)
-const CHFL_CELL_TRICLINIC = CHFL_CELL_TYPES(1)
-const CHFL_CELL_INFINITE = CHFL_CELL_TYPES(2)
+# enum chfl_status
+typealias chfl_status UInt32
+const CHFL_SUCCESS = chfl_status(0)
+const CHFL_MEMORY_ERROR = chfl_status(1)
+const CHFL_FILE_ERROR = chfl_status(2)
+const CHFL_FORMAT_ERROR = chfl_status(3)
+const CHFL_SELECTION_ERROR = chfl_status(4)
+const CHFL_GENERIC_ERROR = chfl_status(5)
+const CHFL_CXX_ERROR = chfl_status(6)
 
-# enum CHFL_ATOM_TYPES
-typealias CHFL_ATOM_TYPES UInt32
-const CHFL_ATOM_ELEMENT = CHFL_ATOM_TYPES(0)
-const CHFL_ATOM_COARSE_GRAINED = CHFL_ATOM_TYPES(1)
-const CHFL_ATOM_DUMMY = CHFL_ATOM_TYPES(2)
-const CHFL_ATOM_UNDEFINED = CHFL_ATOM_TYPES(3)
+# enum chfl_cell_shape_t
+typealias chfl_cell_shape_t UInt32
+const CHFL_CELL_ORTHORHOMBIC = chfl_cell_shape_t(0)
+const CHFL_CELL_TRICLINIC = chfl_cell_shape_t(1)
+const CHFL_CELL_INFINITE = chfl_cell_shape_t(2)

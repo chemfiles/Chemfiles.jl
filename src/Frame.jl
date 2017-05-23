@@ -5,10 +5,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 export positions, velocities, add_velocities!, has_velocities, set_cell!,
-set_topology!, set_step!, guess_topology!, natoms
+set_topology!, set_step!, guess_bonds!, natoms
 
-function Frame(natoms::Integer = 0)
-    handle = lib.chfl_frame(Csize_t(natoms))
+function Frame()
+    handle = lib.chfl_frame()
     return Frame(handle)
 end
 
@@ -17,7 +17,7 @@ function free(frame::Frame)
 end
 
 function natoms(frame::Frame)
-    n = Ref{Csize_t}(0)
+    n = Ref{UInt64}(0)
     check(
         lib.chfl_frame_atoms_count(frame.handle, n)
     )
@@ -28,26 +28,26 @@ Base.size(frame::Frame) = natoms(frame)
 
 function Base.resize!(frame::Frame, size::Integer)
     check(
-        lib.chfl_frame_resize(frame.handle, Csize_t(size))
+        lib.chfl_frame_resize(frame.handle, UInt64(size))
     )
 end
 
 function positions(frame::Frame)
-    ptr = Ref{Ptr{Cfloat}}()
-    natoms = Ref{Csize_t}(0)
+    ptr = Ref{Ptr{Float64}}()
+    natoms = Ref{UInt64}(0)
     check(
         lib.chfl_frame_positions(frame.handle, ptr, natoms)
     )
-    return pointer_to_array(ptr[], (3, Int64(natoms[])), false)
+    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int64(natoms[])), false)
 end
 
 function velocities(frame::Frame)
-    ptr = Ref{Ptr{Cfloat}}()
-    natoms = Ref{Csize_t}(0)
+    ptr = Ref{Ptr{Float64}}()
+    natoms = Ref{UInt64}(0)
     check(
         lib.chfl_frame_velocities(frame.handle, ptr, natoms)
     )
-    return pointer_to_array(ptr[], (3, Int64(natoms[])), false)
+    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int64(natoms[])), false)
 end
 
 function add_velocities!(frame::Frame)
@@ -80,7 +80,7 @@ function set_topology!(frame::Frame, topology::Topology)
 end
 
 function Base.step(frame::Frame)
-    res = Ref{Csize_t}(0)
+    res = Ref{UInt64}(0)
     check(
         lib.chfl_frame_step(frame.handle, res)
     )
@@ -89,21 +89,12 @@ end
 
 function set_step!(frame::Frame, step::Integer)
     check(
-        lib.chfl_frame_set_step(frame.handle, Csize_t(step))
+        lib.chfl_frame_set_step(frame.handle, UInt64(step))
     )
     return nothing
 end
 
-function guess_topology!(frame::Frame)
+function guess_bonds!(frame::Frame)
     check(lib.chfl_frame_guess_topology(frame.handle))
     return nothing
-end
-
-function Base.select(frame::Frame, selection::AbstractString)
-    natoms = size(frame)
-    data = Array(UInt8, natoms)
-    check(
-        lib.chfl_frame_selection(frame.handle, pointer(selection), pointer(data), Csize_t(natoms))
-    )
-    return convert(Vector{Bool}, data)
 end

@@ -31,11 +31,11 @@ facts("Topology type") do
     @fact isdihedral(top, 0, 1, 2, 3) --> true
     @fact isdihedral(top, 0, 1, 3, 2) --> false
 
-    top_bonds = reshape(Csize_t[2, 3,   1, 2,   0, 1], (2, 3))
+    top_bonds = reshape(UInt64[0, 1,   1, 2,   2, 3], (2, 3))
 
     @fact bonds(top) --> top_bonds
-    @fact angles(top) --> reshape(Csize_t[0, 1, 2,   1, 2, 3,], (3, 2))
-    @fact dihedrals(top) --> reshape(Csize_t[0, 1, 2, 3], (4,1))
+    @fact angles(top) --> reshape(UInt64[0, 1, 2,   1, 2, 3,], (3, 2))
+    @fact dihedrals(top) --> reshape(UInt64[0, 1, 2, 3], (4,1))
 
     remove_bond!(top, 2, 3)
     @fact nbonds(top) --> 2

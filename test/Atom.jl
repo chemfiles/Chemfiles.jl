@@ -5,7 +5,7 @@ facts("Atom type") do
     @fact mass(a) --> roughly(4.002602, 1e-6)
     @fact charge(a) --> 0
     @fact name(a) --> "He"
-    @fact atom_type(a) --> Chemfiles.ELEMENT
+    @fact atom_type(a) --> "He"
 
     set_mass!(a, 678)
     @fact mass(a) --> 678
@@ -14,10 +14,11 @@ facts("Atom type") do
     set_name!(a, "Zn")
     @fact name(a) --> "Zn"
 
-    set_atom_type!(a, Chemfiles.DUMMY_ATOM)
-    @fact atom_type(a) --> Chemfiles.DUMMY_ATOM
-
+    @fact fullname(a) --> "Helium"
+    set_atom_type!(a, "Zn")
+    @fact atom_type(a) --> "Zn"
     @fact fullname(a) --> "Zinc"
+
     @fact vdw_radius(a) --> roughly(2.1, 1e-1)
     @fact covalent_radius(a) --> roughly(1.31, 1e-2)
     @fact atomic_number(a) --> 30

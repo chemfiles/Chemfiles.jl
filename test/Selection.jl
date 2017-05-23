@@ -1,5 +1,6 @@
 function testing_frame()
-    frame = Frame(4)
+    frame = Frame()
+    resize!(frame, 4)
 
     top = Topology()
     push!(top, Atom("H"))
