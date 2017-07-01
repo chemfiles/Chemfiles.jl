@@ -23,7 +23,7 @@ end
 
 function check(result::Ptr)
     if Int(result) == 0
-        throw(ChemfilesError("Got null pointer from C++ code"))
+        throw(ChemfilesError(last_error()))
     end
     return nothing
 end
