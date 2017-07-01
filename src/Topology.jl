@@ -93,7 +93,7 @@ end
 
 function bonds(topology::Topology)
     count = nbonds(topology)
-    res = Array(UInt64, 2, count)
+    res = Array{UInt64}(2, count)
     check(
         lib.chfl_topology_bonds(topology.handle, pointer(res), count)
     )
@@ -102,7 +102,7 @@ end
 
 function angles(topology::Topology)
     count = nangles(topology)
-    res = Array(UInt64, 3, count)
+    res = Array{UInt64}(3, count)
     check(
         lib.chfl_topology_angles(topology.handle, pointer(res), count)
     )
@@ -111,7 +111,7 @@ end
 
 function dihedrals(topology::Topology)
     count = ndihedrals(topology)
-    res = Array(UInt64, 4, count)
+    res = Array{UInt64}(4, count)
     check(
         lib.chfl_topology_dihedrals(topology.handle, pointer(res), count)
     )

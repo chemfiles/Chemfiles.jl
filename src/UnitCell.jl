@@ -85,7 +85,7 @@ function set_angles!(cell::UnitCell, α::Real, β::Real, γ::Real)
 end
 
 function cell_matrix(cell::UnitCell)
-    matrix = Array(Float64, 3, 3)
+    matrix = Array{Float64}(3, 3)
     check(
         lib.chfl_cell_matrix(cell.handle, pointer(matrix))
     )

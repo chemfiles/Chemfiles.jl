@@ -24,7 +24,7 @@ function evaluate(selection::Selection, frame::Frame)
         lib.chfl_selection_evaluate(selection.handle, frame.handle, matching)
     )
     matching = matching[]
-    matches = Array(lib.chfl_match_t, matching)
+    matches = Array{lib.chfl_match_t}(matching)
     check(
         lib.chfl_selection_matches(selection.handle, pointer(matches), matching)
     )
