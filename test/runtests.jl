@@ -1,5 +1,6 @@
 using Chemfiles
 using FactCheck
+using Base.Test
 
 TESTS = [
     "errors.jl", "Atom.jl", "Topology.jl", "UnitCell.jl", "Frame.jl",

@@ -1,33 +1,32 @@
-
-facts("UnitCell type") do
+@testset "UnitCell type" begin
     cell = UnitCell(5, 3, 1, 110, 120, 80)
 
-    @fact lengths(cell) --> [5.0, 3.0, 1.0]
-    @fact angles(cell) --> [110.0, 120.0, 80.0]
+    @test lengths(cell) == [5.0, 3.0, 1.0]
+    @test angles(cell) == [110.0, 120.0, 80.0]
 
     cell = UnitCell(2, 3, 4)
 
-    @fact lengths(cell) --> [2.0, 3.0, 4.0]
-    @fact angles(cell) --> [90.0, 90.0, 90.0]
+    @test lengths(cell) == [2.0, 3.0, 4.0]
+    @test angles(cell) == [90.0, 90.0, 90.0]
 
-    @fact volume(cell) --> 2.0 * 3.0 * 4.0
+    @test volume(cell) == 2.0 * 3.0 * 4.0
 
     set_lengths!(cell, 10, 20, 30)
-    @fact lengths(cell) --> [10.0, 20.0, 30.0]
+    @test lengths(cell) == [10.0, 20.0, 30.0]
 
     # Can not set angles for ORTHORHOMBIC cell
-    @fact_throws set_angles!(cell, 80, 89, 100)
+    @test_throws ChemfilesError set_angles!(cell, 80, 89, 100)
 
     expected = reshape(Float64[10, 0, 0,
                                0, 20, 0,
                                0, 0, 30], (3, 3))
-    @fact cell_matrix(cell) --> roughly(expected, 1e-10)
+    @test cell_matrix(cell) ≈ expected
 
-    @fact shape(cell) --> Chemfiles.ORTHORHOMBIC
+    @test shape(cell) == Chemfiles.ORTHORHOMBIC
 
     set_shape!(cell, Chemfiles.TRICLINIC)
-    @fact shape(cell) --> Chemfiles.TRICLINIC
+    @test shape(cell) == Chemfiles.TRICLINIC
 
     set_angles!(cell, 80, 89, 100)
-    @fact angles(cell) --> [80.0, 89.0, 100.0]
+    @test angles(cell) == [80.0, 89.0, 100.0]
 end

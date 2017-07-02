@@ -1,9 +1,8 @@
-
-facts("Error functions") do
+@testset "Error Functions" begin
     err = ChemfilesError("oops")
     iobuf = IOBuffer(19 + length(err.message))
     show(iobuf, err)
-    @fact String(iobuf.data) --> "\"Chemfiles error: oops\""
+    @test String(iobuf.data) == "\"Chemfiles error: oops\""
 
-    @fact Chemfiles.last_error() --> ""
+    @test Chemfiles.last_error() == ""
 end
