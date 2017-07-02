@@ -16,38 +16,37 @@ function testing_frame()
     return frame
 end
 
-
-facts("Selection type") do
+@testset "Selection type" begin
     frame = testing_frame()
     selection = Selection("name O")
-    @fact size(selection) --> 1
+    @test size(selection) == 1
 
     matches = evaluate(selection, frame)
-    @fact size(matches, 1) --> 2
-    @fact matches[1] --> 1
-    @fact matches[2] --> 2
+    @test size(matches, 1) == 2
+    @test matches[1] == 1
+    @test matches[2] == 2
 
     selection = Selection("bonds: all")
-    @fact size(selection) --> 2
+    @test size(selection) == 2
 
     matches = evaluate(selection, frame)
-    @fact size(matches, 1) --> 3
-    @fact (0, 1) in matches --> true
-    @fact (1, 2) in matches --> true
-    @fact (2, 3) in matches --> true
+    @test size(matches, 1) == 3
+    @test ((0, 1) in matches) == true
+    @test ((1, 2) in matches) == true
+    @test ((2, 3) in matches) == true
 
     selection = Selection("angles: all")
-    @fact size(selection) --> 3
+    @test size(selection) == 3
 
     matches = evaluate(selection, frame)
-    @fact size(matches, 1) --> 2
-    @fact (0, 1, 2) in matches --> true
-    @fact (1, 2, 3) in matches --> true
+    @test size(matches, 1) == 2
+    @test ((0, 1, 2) in matches) == true
+    @test ((1, 2, 3) in matches) == true
 
     selection = Selection("dihedrals: all")
-    @fact size(selection) --> 4
+    @test size(selection) == 4
 
     matches = evaluate(selection, frame)
-    @fact size(matches, 1) --> 1
-    @fact (0, 1, 2, 3) in matches --> true
+    @test size(matches, 1) == 1
+    @test ((0, 1, 2, 3) in matches) == true
 end

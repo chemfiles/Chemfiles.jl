@@ -1,5 +1,4 @@
 using Chemfiles
-using FactCheck
 using Base.Test
 
 TESTS = [
@@ -8,14 +7,13 @@ TESTS = [
 ]
 
 function main()
-    facts("Generics") do
-        @fact Chemfiles.version() --> "0.7.4"
+    @testset "Generics" begin
+        @test Chemfiles.version() == "0.7.4"
     end
     root = dirname(@__FILE__)
     for test in TESTS
         include(test)
     end
-    FactCheck.exitstatus()
 end
 
 main()
