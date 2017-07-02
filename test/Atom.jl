@@ -1,7 +1,7 @@
 @testset "Atom Type" begin
     a = Atom("He")
 
-    @test mass(a) ≈ 4.002602
+    @test mass(a) ≈ 4.002602 atol=1e-6
     @test charge(a) == 0
     @test name(a) == "He"
     @test atom_type(a) == "He"
@@ -18,7 +18,7 @@
     @test atom_type(a) == "Zn"
     @test fullname(a) == "Zinc"
 
-    @test vdw_radius(a) ≈ 2.1
-    @test covalent_radius(a) ≈ 1.31
+    @test vdw_radius(a) ≈ 2.1 atol=1e-1
+    @test covalent_radius(a) ≈ 1.31 atol=1e-2
     @test atomic_number(a) == 30
 end

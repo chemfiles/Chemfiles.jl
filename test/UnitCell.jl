@@ -20,7 +20,7 @@
     expected = reshape(Float64[10, 0, 0,
                                0, 20, 0,
                                0, 0, 30], (3, 3))
-    @test cell_matrix(cell) ≈ expected
+    @test cell_matrix(cell) ≈ expected atol=1e-10
 
     @test shape(cell) == Chemfiles.ORTHORHOMBIC
 
