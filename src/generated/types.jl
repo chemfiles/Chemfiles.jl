@@ -20,8 +20,8 @@ immutable chfl_match_t
     atoms_4 ::UInt64
 end
 
-typealias Cbool Cuchar
-typealias chfl_vector_t Array{Cdouble, 1}
+const Cbool = Cuchar
+const chfl_vector_t = Array{Cdouble, 1}
 # === End of manual translation
 
 immutable CHFL_TRAJECTORY end
@@ -39,7 +39,7 @@ immutable CHFL_SELECTION end
 immutable CHFL_RESIDUE end
 
 # enum chfl_status
-typealias chfl_status UInt32
+const chfl_status = UInt32
 const CHFL_SUCCESS = chfl_status(0)
 const CHFL_MEMORY_ERROR = chfl_status(1)
 const CHFL_FILE_ERROR = chfl_status(2)
@@ -49,7 +49,7 @@ const CHFL_GENERIC_ERROR = chfl_status(5)
 const CHFL_CXX_ERROR = chfl_status(6)
 
 # enum chfl_cell_shape_t
-typealias chfl_cell_shape_t UInt32
+const chfl_cell_shape_t = UInt32
 const CHFL_CELL_ORTHORHOMBIC = chfl_cell_shape_t(0)
 const CHFL_CELL_TRICLINIC = chfl_cell_shape_t(1)
 const CHFL_CELL_INFINITE = chfl_cell_shape_t(2)
