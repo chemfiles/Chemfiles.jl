@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 export natoms, remove!, isbond, isangle, isdihedral, nbonds, nangles, ndihedrals,
-       bonds, angles, dihedrals, add_bond!, remove_bond!
+       bonds, angles, dihedrals, add_bond!, remove_bond!, add_residue!, residues, are_linked
 
 function Topology()
     return Topology(lib.chfl_topology())
@@ -130,4 +130,27 @@ function remove_bond!(topology::Topology, i::Integer, j::Integer)
         lib.chfl_topology_remove_bond(topology.handle, UInt64(i), UInt64(j))
     )
     return nothing
+end
+
+function add_residue!(topology::Topology, residue::Residue)
+    check(
+        lib.chfl_topology_add_residue(topology.handle, residue.handle)
+    )
+    return nothing
+end
+
+function residues(topology::Topology)
+    nresidues = Ref{UInt64}(0)
+    check(
+        lib.chfl_topology_residues_count(topology.handle, nresidues)
+    )
+    return nresidues[]
+end
+
+function are_linked(topology::Topology, first::Residue, second::Residue)
+    res = Ref{UInt8}(0)
+    check(
+        lib.chfl_topology_residues_linked(topology.handle, first.handle, second.handle, res)
+    )
+    return convert(Bool, res[])
 end

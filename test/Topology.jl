@@ -43,4 +43,29 @@
 
     remove!(top, 3)
     @test natoms(top) == 3
+
+    @testset "Residues" begin
+        topo = Topology()
+        [push!(topo, Atom("X")) for i=0:10]
+
+        for atoms in [[2,3,6], [0,1,9], [4,5,8]]
+            res = Residue("X")
+            [add_atom!(res, i) for i in atoms]
+            add_residue!(topo, res)
+        end
+
+        @test residues(topo) == 3
+
+        first = Residue(topo, 2, atom=true)
+        second = Residue(topo, 0, atom=true)
+
+        @test first != nothing
+        @test second != nothing
+        @test_throws ChemfilesError Residue(topo, 4)
+
+        @test are_linked(topo, first, second) == false
+
+        @show add_bond!(topo, 6, 9)
+        @test are_linked(topo, first, second) == true
+    end
 end
