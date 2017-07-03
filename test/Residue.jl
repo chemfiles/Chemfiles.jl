@@ -18,11 +18,10 @@
 
     @test contains(residue, 56) == true
 
-    # TODO: Test chfl_from_topology
-    # top = Topology()
-    # push!(top, Atom("H"))
-    # push!(top, Atom("O"))
-    # push!(top, Atom("Zn"))
-    # push!(top, Atom("H"))
-    # residue = Residue(top, 3)
+    top = Topology()
+    @test count_residues(top) == 0
+    @test_throws ChemfilesError Residue(top, 3)
+    add_residue!(top, residue)
+    res = Residue(top, 0)
+    @test natoms(res) == 3
 end
