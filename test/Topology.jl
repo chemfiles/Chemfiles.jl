@@ -57,10 +57,10 @@
             add_residue!(topo, res)
         end
 
-        @test residues(topo) == 3
+        @test count_residues(topo) == 3
 
-        first = Residue(topo, 2, atom=true)
-        second = Residue(topo, 0, atom=true)
+        first = residue_for_atom(topo, 2)
+        second = residue_for_atom(topo, 0)
 
         @test first != nothing
         @test second != nothing
@@ -68,7 +68,7 @@
 
         @test are_linked(topo, first, second) == false
 
-        @show add_bond!(topo, 6, 9)
+        add_bond!(topo, 6, 9)
         @test are_linked(topo, first, second) == true
     end
 end
