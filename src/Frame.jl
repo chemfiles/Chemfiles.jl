@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export positions, velocities, add_velocities!, has_velocities, set_cell!,
+export positions, velocities, add_atom!, remove_atom!, add_velocities!, has_velocities, set_cell!,
 set_topology!, set_step!, guess_bonds!, natoms
 
 function Frame()
@@ -96,5 +96,19 @@ end
 
 function guess_bonds!(frame::Frame)
     check(lib.chfl_frame_guess_topology(frame.handle))
+    return nothing
+end
+
+function add_atom!(frame::Frame, atom::Atom, position::Array{Float64}, velocity::Array{Float64})
+    check(
+        lib.chfl_frame_add_atom(frame.handle, atom.handle, position, velocity)
+    )
+    return nothing
+end
+
+function remove_atom!(frame::Frame, index::Integer)
+    check(
+        lib.chfl_frame_remove(frame.handle, UInt64(index))
+    )
     return nothing
 end

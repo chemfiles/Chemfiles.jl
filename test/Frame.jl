@@ -41,4 +41,14 @@
     @test step(frame) == 0
     set_step!(frame, 42)
     @test step(frame) == 42
+
+    @test natoms(frame) == 4
+
+    position = Float64[0.2, 0.8, 0]
+    velocity = Float64[1, 2, 1]
+    add_atom!(frame, Atom("H"), position, velocity)
+    @test natoms(frame) == 5
+
+    remove_atom!(frame, 4)
+    @test natoms(frame) == 4
 end
