@@ -154,3 +154,9 @@ function are_linked(topology::Topology, first::Residue, second::Residue)
     )
     return convert(Bool, res[])
 end
+
+function Base.resize!(topology::Topology, natoms::Integer)
+    check(
+        lib.chfl_topology_resize(topology.handle, UInt64(natoms))
+    )
+end

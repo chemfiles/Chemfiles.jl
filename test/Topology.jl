@@ -44,6 +44,9 @@
     remove!(top, 3)
     @test natoms(top) == 3
 
+    resize!(top, 42)
+    @test size(top) == 42
+
     @testset "Residues" begin
         topo = Topology()
         [push!(topo, Atom("X")) for i=0:10]
