@@ -16,9 +16,14 @@ function Residue(name::String)
     return Residue(handle)
 end
 
-function Residue(topology::Topology, index::Integer)
-    handle = lib.chfl_residue_from_topology(topology.handle, UInt64(index))
-    return Residue(handle)
+function Residue(topology::Topology, index::Integer; atom=false)
+    if atom
+        handle = lib.chfl_residue_for_atom(topology.handle, UInt64(index))
+        return Residue(handle)
+    else
+        handle = lib.chfl_residue_from_topology(topology.handle, UInt64(index))
+        return Residue(handle)
+    end
 end
 
 function free(residue::Residue)
@@ -65,5 +70,3 @@ function Base.contains(residue::Residue, i::Integer)
     )
     return convert(Bool, res[])
 end
-
-
