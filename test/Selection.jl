@@ -49,4 +49,6 @@ end
     matches = evaluate(selection, frame)
     @test size(matches, 1) == 1
     @test ((0, 1, 2, 3) in matches) == true
+
+    @test selection_string(selection) == "dihedrals: all"
 end
