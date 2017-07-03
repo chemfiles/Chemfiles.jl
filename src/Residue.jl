@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export name, id, natoms, add_atom!
+export name, id, natoms, add_atom!, residue_for_atom
 
 function Residue(name::String, resid::Integer)
     handle = lib.chfl_residue(pointer(name), UInt64(resid))
@@ -16,15 +16,16 @@ function Residue(name::String)
     return Residue(handle)
 end
 
-function Residue(topology::Topology, index::Integer; atom=false)
-    if atom
-        handle = lib.chfl_residue_for_atom(topology.handle, UInt64(index))
-        return Residue(handle)
-    else
-        handle = lib.chfl_residue_from_topology(topology.handle, UInt64(index))
-        return Residue(handle)
-    end
+function Residue(topology::Topology, index::Integer)
+    handle = lib.chfl_residue_from_topology(topology.handle, UInt64(index))
+    return Residue(handle)
 end
+
+function residue_for_atom(topology::Topology, index::Integer)
+    handle = lib.chfl_residue_for_atom(topology.handle, UInt64(index))
+    return Residue(handle)
+end
+
 
 function free(residue::Residue)
     lib.chfl_residue_free(residue.handle)
