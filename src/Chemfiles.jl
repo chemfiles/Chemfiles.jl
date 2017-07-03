@@ -19,7 +19,7 @@ module Chemfiles
 
     include("errors.jl")
 
-    export Trajectory, Topology, Atom, UnitCell, Frame, Selection
+    export Trajectory, Topology, Atom, UnitCell, Frame, Selection, Residue
 
     function version()
         unsafe_string(lib.chfl_version())
@@ -94,10 +94,21 @@ module Chemfiles
         end
     end
 
+    type Residue
+        handle :: Ptr{lib.CHFL_RESIDUE}
+        function Residue(ptr::Ptr{lib.CHFL_RESIDUE})
+            check(ptr)
+            this = new(ptr)
+            finalizer(this, free)
+            return this
+        end
+    end
+
     include("Atom.jl")
     include("Frame.jl")
     include("Topology.jl")
     include("Trajectory.jl")
     include("UnitCell.jl")
     include("Selection.jl")
+    include("Residue.jl")
 end

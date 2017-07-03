@@ -3,7 +3,7 @@ using Base.Test
 
 TESTS = [
     "errors.jl", "Atom.jl", "Topology.jl", "UnitCell.jl", "Frame.jl",
-    "Trajectory.jl", "Selection.jl"
+    "Trajectory.jl", "Selection.jl", "Residue.jl"
 ]
 
 function main()
