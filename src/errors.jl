@@ -7,8 +7,10 @@
 type ChemfilesError <: Exception
     message::AbstractString
 end
+
 Base.show(io::IO, e::ChemfilesError) = show(io, "Chemfiles error: $(e.message)")
-export ChemfilesError
+
+export ChemfilesError, ChemfilesWarning, set_warning_callback
 
 function check(result::Integer, message = "Unknown error")
     if result != 0
@@ -35,3 +37,14 @@ end
 function clear_errors()
     check(lib.chfl_clear_errors())
 end
+
+function warning_callback(message::Ptr{UInt8})
+    warn(unsafe_string(message))
+end
+
+function set_warning_callback(cb::Function)
+    callback = cfunction(cb, Void, (Ptr{UInt8},))
+    check(lib.chfl_set_warning_callback(callback))
+end
+
+set_warning_callback(warning_callback)
