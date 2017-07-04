@@ -38,12 +38,13 @@ function clear_errors()
     check(lib.chfl_clear_errors())
 end
 
-function warning_callback(message::Ptr{UInt8})
-    warn(unsafe_string(message))
+function warning_callback(message::String)
+    warn("[chemfiles] ", message)
 end
 
 function set_warning_callback(cb::Function)
-    callback = cfunction(cb, Void, (Ptr{UInt8},))
+    cb_adaptor = (x) -> cb(unsafe_string(x))
+    callback = cfunction(cb_adaptor, Void, (Ptr{UInt8},))
     check(lib.chfl_set_warning_callback(callback))
 end
 

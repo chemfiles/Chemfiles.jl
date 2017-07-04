@@ -1,5 +1,5 @@
-function warning_callback(message::Ptr{UInt8})
-    warn("Warn Test")
+function warning_callback(message::String)
+    warn("[TEST][chemfiles] ", message)
 end
 
 @testset "Error Functions" begin
@@ -10,7 +10,7 @@ end
 
     @test Chemfiles.last_error() == ""
 
-    # TODO: Tests warning_callback
-    # set_warning_callback(warning_callback)
-    # @test_warn "Warn Test" Residue(Topology(), 3)
+    @test_warn "[chemfiles]" @test_throws ChemfilesError Residue(Topology(), 3)
+    set_warning_callback(warning_callback)
+    @test_warn "[TEST][chemfiles]" @test_throws ChemfilesError Residue(Topology(), 3)
 end
