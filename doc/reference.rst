@@ -42,10 +42,6 @@ These functions are not exported, and should be called by there fully qualified 
 
     Get the current log level.
 
-.. jl:function:: Chemfiles.set_loglevel(level)
-
-    Set the current log level to ``level``.
-
 .. jl:function:: Chemfiles.set_warning_callback(callback)
 
     Set the global warning `callback` to be used for each warning event.
@@ -174,10 +170,6 @@ the types of informations, some fields may be initialized to a default value. A
 
     Create an empty `Frame`_ with initial capacity of ``natoms``. It will be
     automatically resized if needed.
-
-.. jl:function:: natoms(frame::Frame) -> Integer
-
-    Get the `Frame`_ size, i.e. the current number of atoms
 
 .. jl:function:: size(frame::Frame) -> Integer
 
@@ -324,10 +316,6 @@ in the system, together with the list of bonds these atoms forms.
     Extract the `Topology`_ from a frame.
 
 .. jl:function:: size(topology::Topology)
-
-    Get the `Topology`_ size, i.e. the current number of atoms.
-
-.. jl:function:: natoms(topology::Topology)
 
     Get the `Topology`_ size, i.e. the current number of atoms.
 
@@ -522,7 +510,7 @@ The following atom types are available:
 
     Get the identifier of a `residue` in the initial topology.
 
-.. jl:function:: natoms(residue::Residue)
+.. jl:function:: size(residue::Residue)
 
     Get the number of atoms in a `residue`.
 
