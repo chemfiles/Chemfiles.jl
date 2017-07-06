@@ -14,13 +14,13 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
 
         frame = read(file)
 
-        @test natoms(frame) == 297
+        @test size(frame) == 297
         pos = positions(frame)
         @test pos[:, 1] == Float64[0.417219, 8.303366, 11.737172]
         @test pos[:, 125] == Float64[5.099554, -0.045104, 14.153846]
 
         topology = Topology(frame)
-        @test natoms(topology) == 297
+        @test size(topology) == 297
         @test name(Atom(topology, 0)) == "O"
         @test name(Atom(frame, 1)) == "H"
 
@@ -34,7 +34,7 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
         @test pos[:, 125] == Float64[5.13242, 0.079862, 14.194161]
 
         topology = Topology(frame)
-        @test natoms(topology) == 297
+        @test size(topology) == 297
         @test nbonds(topology) == 0
 
         guess_bonds!(frame)

@@ -1,7 +1,7 @@
 @testset "Topology type" begin
     top = Topology()
 
-    @test natoms(top) == 0
+    @test size(top) == 0
     @test size(top) == 0
 
     # Creating some H2O2
@@ -9,7 +9,7 @@
     push!(top, Atom("O"))
     push!(top, Atom("O"))
     push!(top, Atom("H"))
-    @test natoms(top) == 4
+    @test size(top) == 4
 
     @test nbonds(top) == 0
     @test nangles(top) == 0
@@ -42,7 +42,7 @@
     @test ndihedrals(top) == 0
 
     remove!(top, 3)
-    @test natoms(top) == 3
+    @test size(top) == 3
 
     resize!(top, 42)
     @test size(top) == 42

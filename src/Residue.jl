@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export name, id, natoms, add_atom!, residue_for_atom
+export name, id, add_atom!, residue_for_atom
 
 function Residue(name::String, resid::Integer)
     handle = lib.chfl_residue(pointer(name), UInt64(resid))
@@ -47,15 +47,13 @@ function id(residue::Residue)
     return resid[]
 end
 
-function natoms(residue::Residue)
+function Base.size(residue::Residue)
     atoms = Ref{UInt64}(0)
     check(
         lib.chfl_residue_atoms_count(residue.handle, atoms)
     )
     return atoms[]
 end
-
-Base.size(residue::Residue) = natoms(residue)
 
 function add_atom!(residue::Residue, i::Integer)
     check(

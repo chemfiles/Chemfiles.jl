@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export natoms, remove!, isbond, isangle, isdihedral, nbonds, nangles, ndihedrals,
+export remove!, isbond, isangle, isdihedral, nbonds, nangles, ndihedrals,
     bonds, angles, dihedrals, add_bond!, remove_bond!, add_residue!, residues,
     are_linked, count_residues
 
@@ -20,15 +20,13 @@ function free(topology::Topology)
     lib.chfl_topology_free(topology.handle)
 end
 
-function natoms(topology::Topology)
+function Base.size(topology::Topology)
     n = Ref{UInt64}(0)
     check(
         lib.chfl_topology_atoms_count(topology.handle, n)
     )
     return n[]
 end
-
-Base.size(topology::Topology) = natoms(topology)
 
 function Base.push!(topology::Topology, atom::Atom)
     check(

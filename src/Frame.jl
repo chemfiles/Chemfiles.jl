@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 export positions, velocities, add_atom!, remove_atom!, add_velocities!, has_velocities, set_cell!,
-set_topology!, set_step!, guess_bonds!, natoms
+set_topology!, set_step!, guess_bonds!
 
 function Frame()
     handle = lib.chfl_frame()
@@ -16,15 +16,13 @@ function free(frame::Frame)
     lib.chfl_frame_free(frame.handle)
 end
 
-function natoms(frame::Frame)
+function Base.size(frame::Frame)
     n = Ref{UInt64}(0)
     check(
         lib.chfl_frame_atoms_count(frame.handle, n)
     )
     return n[]
 end
-
-Base.size(frame::Frame) = natoms(frame)
 
 function Base.resize!(frame::Frame, size::Integer)
     check(

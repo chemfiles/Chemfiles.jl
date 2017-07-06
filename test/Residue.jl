@@ -23,5 +23,5 @@
     @test_throws ChemfilesError Residue(top, 3)
     add_residue!(top, residue)
     res = Residue(top, 0)
-    @test natoms(res) == 3
+    @test size(res) == 3
 end

@@ -42,7 +42,7 @@ using Chemfiles
 trajectory = Trajectory("filename.xyz")
 frame = read(trajectory)
 
-println("There are $(natoms(frame)) atoms in the frame")
+println("There are $(size(frame)) atoms in the frame")
 positions = positions(frame)
 
 # Do awesome things with the positions here !
