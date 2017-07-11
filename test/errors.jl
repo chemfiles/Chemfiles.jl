@@ -1,5 +1,6 @@
 function warning_callback(message::String)
-    warn("[TEST][chemfiles] ", message)
+    global TEST_CALLBACK = true
+    nothing
 end
 
 @testset "Error Functions" begin
@@ -10,7 +11,10 @@ end
 
     @test Chemfiles.last_error() == ""
 
-    @test_warn "[chemfiles]" @test_throws ChemfilesError Residue(Topology(), 3)
+    @test_throws ChemfilesError Residue(Topology(), 3)
+    @test_throws UndefVarError TEST_CALLBACK == false
+
     set_warning_callback(warning_callback)
-    @test_warn "[TEST][chemfiles]" @test_throws ChemfilesError Residue(Topology(), 3)
+    @test_throws ChemfilesError Residue(Topology(), 3)
+    @test TEST_CALLBACK == true
 end
