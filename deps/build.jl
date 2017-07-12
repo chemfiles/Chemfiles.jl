@@ -1,7 +1,7 @@
 using BinDeps
 @BinDeps.setup
 
-libchemfiles = library_dependency("libchemfiles")
+libchemfiles = library_dependency("libchemfiles", aliases = ["chemfiles"])
 version = "0.7.4"
 
 if Pkg.installed("Conda") === nothing
