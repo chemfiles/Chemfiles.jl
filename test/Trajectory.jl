@@ -58,7 +58,7 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
     end
 
     @testset "Write frames" begin
-        expected_content = """4
+        EXPECTED_CONTENT = """4
                               Written by the chemfiles library
                               X 1 2 3
                               X 1 2 3
@@ -73,6 +73,10 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
                               X 4 5 6
                               X 4 5 6
                               """
+
+        @static if is_windows()
+            EXPECTED_CONTENT = replace(EXPECTED_CONTENT, "\n", "\r\n")
+        end
 
         frame = Frame()
         resize!(frame, 4)
@@ -106,7 +110,7 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
         @test isopen(file) == false
 
         open("test-tmp.xyz") do fd
-            @test readstring(fd) == expected_content
+            @test readstring(fd) == EXPECTED_CONTENT
         end
 
         rm("test-tmp.xyz")
