@@ -36,7 +36,7 @@ function positions(frame::Frame)
     check(
         lib.chfl_frame_positions(frame.handle, ptr, natoms)
     )
-    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int64(natoms[])), false)
+    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])), false)
 end
 
 function velocities(frame::Frame)
@@ -45,7 +45,7 @@ function velocities(frame::Frame)
     check(
         lib.chfl_frame_velocities(frame.handle, ptr, natoms)
     )
-    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int64(natoms[])), false)
+    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])), false)
 end
 
 function add_velocities!(frame::Frame)
