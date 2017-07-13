@@ -10,7 +10,7 @@ end
 
 Base.show(io::IO, e::ChemfilesError) = show(io, "Chemfiles error: $(e.message)")
 
-export ChemfilesError, ChemfilesWarning, set_warning_callback
+export ChemfilesError, ChemfilesWarning
 
 function check(result::Integer, message = "Unknown error")
     if result != 0
