@@ -7,36 +7,17 @@
 export mass, set_mass!, charge, set_charge!, name, set_name!, fullname, vdw_radius,
 covalent_radius, atomic_number, atom_type, set_atom_type!, AtomType
 
-
-immutable AtomType
-    value::lib.CHFL_ATOM_TYPES
-
-    function AtomType(value)
-        value = lib.CHFL_ATOM_TYPES(value)
-        if value in [lib.CHFL_ATOM_ELEMENT, lib.CHFL_ATOM_COARSE_GRAINED, lib.CHFL_ATOM_DUMMY, lib.CHFL_ATOM_UNDEFINED]
-            return new(value)
-        else
-            throw(ChemfilesError("Invalid value for conversion to AtomType: $value"))
-        end
-    end
-end
-
-const ELEMENT = AtomType(lib.CHFL_ATOM_ELEMENT)
-const COARSE_GRAINED = AtomType(lib.CHFL_ATOM_COARSE_GRAINED)
-const DUMMY_ATOM = AtomType(lib.CHFL_ATOM_DUMMY)
-const UNDEFINED_ATOM = AtomType(lib.CHFL_ATOM_UNDEFINED)
-
-function Atom(name::ASCIIString)
+function Atom(name::String)
     return Atom(lib.chfl_atom(pointer(name)))
 end
 
 function Atom(frame::Frame, index::Integer)
-    handle = lib.chfl_atom_from_frame(frame.handle, Csize_t(index))
+    handle = lib.chfl_atom_from_frame(frame.handle, UInt64(index))
     return Atom(handle)
 end
 
 function Atom(topology::Topology, index::Integer)
-    handle = lib.chfl_atom_from_topology(topology.handle, Csize_t(index))
+    handle = lib.chfl_atom_from_topology(topology.handle, UInt64(index))
     return Atom(handle)
 end
 
@@ -45,7 +26,7 @@ function free(atom::Atom)
 end
 
 function mass(atom::Atom)
-    m = Ref{Cfloat}(0)
+    m = Ref{Float64}(0)
     check(
         lib.chfl_atom_mass(atom.handle, m)
     )
@@ -54,13 +35,13 @@ end
 
 function set_mass!(atom::Atom, m)
     check(
-        lib.chfl_atom_set_mass(atom.handle, Cfloat(m))
+        lib.chfl_atom_set_mass(atom.handle, Float64(m))
     )
     return nothing
 end
 
 function charge(atom::Atom)
-    c = Ref{Cfloat}(0)
+    c = Ref{Float64}(0)
     check(
         lib.chfl_atom_charge(atom.handle, c)
     )
@@ -69,7 +50,7 @@ end
 
 function set_charge!(atom::Atom, c)
     check(
-        lib.chfl_atom_set_charge(atom.handle, Cfloat(c))
+        lib.chfl_atom_set_charge(atom.handle, Float64(c))
     )
     return nothing
 end
@@ -77,31 +58,43 @@ end
 function name(atom::Atom)
     str = " " ^ 10
     check(
-        lib.chfl_atom_name(atom.handle, pointer(str), Csize_t(length(str)))
+        lib.chfl_atom_name(atom.handle, pointer(str), UInt64(length(str)))
     )
-    # Remove spaces and null char
-    return strip(str)[1:end-1]
+    return strip_null(str)
 end
 
-function set_name!(atom::Atom, name::ASCIIString)
+function set_name!(atom::Atom, name::String)
     check(
         lib.chfl_atom_set_name(atom.handle, pointer(name))
     )
-    # Remove spaces and null char
+    return nothing
+end
+
+function atom_type(atom::Atom)
+    str = " " ^ 10
+    check(
+        lib.chfl_atom_type(atom.handle, pointer(str), UInt64(length(str)))
+    )
+    return strip_null(str)
+end
+
+function set_atom_type!(atom::Atom, atom_type::String)
+    check(
+        lib.chfl_atom_set_type(atom.handle, pointer(atom_type))
+    )
     return nothing
 end
 
 function Base.fullname(atom::Atom)
     str = " " ^ 96
     check(
-        lib.chfl_atom_full_name(atom.handle, pointer(str), Csize_t(length(str)))
+        lib.chfl_atom_full_name(atom.handle, pointer(str), UInt64(length(str)))
     )
-    # Remove spaces and null char
-    return strip(str)[1:end-1]
+    return strip_null(str)
 end
 
 function vdw_radius(atom::Atom)
-    radius = Ref{Cdouble}(0)
+    radius = Ref{Float64}(0)
     check(
         lib.chfl_atom_vdw_radius(atom.handle, radius)
     )
@@ -109,7 +102,7 @@ function vdw_radius(atom::Atom)
 end
 
 function covalent_radius(atom::Atom)
-    radius = Ref{Cdouble}(0)
+    radius = Ref{Float64}(0)
     check(
         lib.chfl_atom_covalent_radius(atom.handle, radius)
     )
@@ -117,24 +110,14 @@ function covalent_radius(atom::Atom)
 end
 
 function atomic_number(atom::Atom)
-    number = Ref{Cint}(0)
+    number = Ref{Int64}(0)
     check(
         lib.chfl_atom_atomic_number(atom.handle, number)
     )
     return number[]
 end
 
-function atom_type(atom::Atom)
-    res = Ref{lib.CHFL_ATOM_TYPES}(0)
-    check(
-        lib.chfl_atom_type(atom.handle, res)
-    )
-    return AtomType(res[])
-end
-
-function set_atom_type!(atom::Atom, atom_type::AtomType)
-    check(
-        lib.chfl_atom_set_type(atom.handle, atom_type.value)
-    )
-    return nothing
+function Base.deepcopy(atom::Atom)
+    handle = lib.chfl_atom_copy(atom.handle)
+    return Atom(handle)
 end

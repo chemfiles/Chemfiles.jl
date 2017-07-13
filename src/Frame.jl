@@ -4,11 +4,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export positions, velocities, add_velocities!, has_velocities, set_cell!,
-set_topology!, set_step!, guess_topology!, natoms
+export positions, velocities, add_atom!, remove_atom!, add_velocities!, has_velocities, set_cell!,
+set_topology!, set_step!, guess_bonds!
 
-function Frame(natoms::Integer = 0)
-    handle = lib.chfl_frame(Csize_t(natoms))
+function Frame()
+    handle = lib.chfl_frame()
     return Frame(handle)
 end
 
@@ -16,38 +16,36 @@ function free(frame::Frame)
     lib.chfl_frame_free(frame.handle)
 end
 
-function natoms(frame::Frame)
-    n = Ref{Csize_t}(0)
+function Base.size(frame::Frame)
+    n = Ref{UInt64}(0)
     check(
         lib.chfl_frame_atoms_count(frame.handle, n)
     )
     return n[]
 end
 
-Base.size(frame::Frame) = natoms(frame)
-
 function Base.resize!(frame::Frame, size::Integer)
     check(
-        lib.chfl_frame_resize(frame.handle, Csize_t(size))
+        lib.chfl_frame_resize(frame.handle, UInt64(size))
     )
 end
 
 function positions(frame::Frame)
-    ptr = Ref{Ptr{Cfloat}}()
-    natoms = Ref{Csize_t}(0)
+    ptr = Ref{Ptr{Float64}}()
+    natoms = Ref{UInt64}(0)
     check(
         lib.chfl_frame_positions(frame.handle, ptr, natoms)
     )
-    return pointer_to_array(ptr[], (3, Int64(natoms[])), false)
+    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])), false)
 end
 
 function velocities(frame::Frame)
-    ptr = Ref{Ptr{Cfloat}}()
-    natoms = Ref{Csize_t}(0)
+    ptr = Ref{Ptr{Float64}}()
+    natoms = Ref{UInt64}(0)
     check(
         lib.chfl_frame_velocities(frame.handle, ptr, natoms)
     )
-    return pointer_to_array(ptr[], (3, Int64(natoms[])), false)
+    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])), false)
 end
 
 function add_velocities!(frame::Frame)
@@ -58,11 +56,11 @@ function add_velocities!(frame::Frame)
 end
 
 function has_velocities(frame::Frame)
-    res = Ref{UInt8}(0)
+    result = Ref{UInt8}(0)
     check(
-        lib.chfl_frame_has_velocities(frame.handle, res)
+        lib.chfl_frame_has_velocities(frame.handle, result)
     )
-    return convert(Bool, res[])
+    return convert(Bool, result[])
 end
 
 function set_cell!(frame::Frame, cell::UnitCell)
@@ -80,30 +78,40 @@ function set_topology!(frame::Frame, topology::Topology)
 end
 
 function Base.step(frame::Frame)
-    res = Ref{Csize_t}(0)
+    result = Ref{UInt64}(0)
     check(
-        lib.chfl_frame_step(frame.handle, res)
+        lib.chfl_frame_step(frame.handle, result)
     )
-    return res[]
+    return result[]
 end
 
 function set_step!(frame::Frame, step::Integer)
     check(
-        lib.chfl_frame_set_step(frame.handle, Csize_t(step))
+        lib.chfl_frame_set_step(frame.handle, UInt64(step))
     )
     return nothing
 end
 
-function guess_topology!(frame::Frame)
+function guess_bonds!(frame::Frame)
     check(lib.chfl_frame_guess_topology(frame.handle))
     return nothing
 end
 
-function Base.select(frame::Frame, selection::AbstractString)
-    natoms = size(frame)
-    data = Array(UInt8, natoms)
+function add_atom!(frame::Frame, atom::Atom, position::Array{Float64}, velocity::Array{Float64})
     check(
-        lib.chfl_frame_selection(frame.handle, pointer(selection), pointer(data), Csize_t(natoms))
+        lib.chfl_frame_add_atom(frame.handle, atom.handle, position, velocity)
     )
-    return convert(Vector{Bool}, data)
+    return nothing
+end
+
+function remove_atom!(frame::Frame, index::Integer)
+    check(
+        lib.chfl_frame_remove(frame.handle, UInt64(index))
+    )
+    return nothing
+end
+
+function Base.deepcopy(frame::Frame)
+    handle = lib.chfl_frame_copy(frame.handle)
+    return Frame(handle)
 end

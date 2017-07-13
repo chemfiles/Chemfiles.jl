@@ -42,9 +42,9 @@ These functions are not exported, and should be called by there fully qualified 
 
     Get the current log level.
 
-.. jl:function:: Chemfiles.set_loglevel(level)
+.. jl:function:: Chemfiles.set_warning_callback(callback)
 
-    Set the current log level to ``level``.
+    Set the global warning `callback` to be used for each warning event.
 
  The following logging levels are available:
 
@@ -171,10 +171,6 @@ the types of informations, some fields may be initialized to a default value. A
     Create an empty `Frame`_ with initial capacity of ``natoms``. It will be
     automatically resized if needed.
 
-.. jl:function:: natoms(frame::Frame) -> Integer
-
-    Get the `Frame`_ size, i.e. the current number of atoms
-
 .. jl:function:: size(frame::Frame) -> Integer
 
     Get the `Frame`_ size, i.e. the current number of atoms
@@ -186,7 +182,7 @@ the types of informations, some fields may be initialized to a default value. A
     velocities if the new size is bigger than the old one. In all the cases, previous
     data is conserved. This function conserve the presence or absence of velocities.
 
-.. jl:function:: positions(frame::Frame) -> Array{Float32, 2}
+.. jl:function:: positions(frame::Frame) -> Array{Float64, 2}
 
     Get a pointer to the positions in a `Frame`_. The positions are readable and
     writable from this array. If the frame is resized (by writing to it, or calling
@@ -206,6 +202,17 @@ the types of informations, some fields may be initialized to a default value. A
     Add velocities to this `Frame`_. The storage is initialized with the result of
     ``size(frame)`` as number of atoms. If the frame already have velocities, this
     does nothing.
+
+.. jl:function:: add_atom!(frame::Frame, atom::Atom, position::Array{Float64}, velocity::Array{Float64})
+
+    Add an `atom` and the corresponding `position` and `velocity` data to a `frame`.
+    `velocity` can be `NULL` if no velocity is associated with the atom.
+
+.. jl:function:: remove_atom!(frame::Frame, index::Integer)
+
+    Remove the `atom` at `index` in the frame.
+    This modify all the `atoms` indexes after `index`, and invalidate any pointer
+    obtained using `positions`_ or `velocities`_.
 
 .. jl:function:: has_velocities(frame::Frame) -> Bool
 
@@ -312,10 +319,6 @@ in the system, together with the list of bonds these atoms forms.
 
     Get the `Topology`_ size, i.e. the current number of atoms.
 
-.. jl:function:: natoms(topology::Topology)
-
-    Get the `Topology`_ size, i.e. the current number of atoms.
-
 .. jl:function:: push!(topology::Topology, atom::Atom)
 
     Add an `Atom`_ at the end of a `Topology`_.
@@ -368,6 +371,29 @@ in the system, together with the list of bonds these atoms forms.
 
     Remove any existing bond between the atoms ``i`` and ``j`` in the system.
 
+.. jl:function:: add_residue!(topology::Topology, residue::Residue)
+
+   Add a copy of `residue` to this `topology`.
+   The residue id must not already be in the topology, and the residue must
+   contain only atoms that are not already in another residue.
+
+.. jl:function:: count_residue(topology::Topology)
+
+   Get the number of residues in the `topology`.
+
+.. jl:function:: are_linked(topology::Topology, first::Residue, second::Residue)
+
+   Check if the two residues `first` and `second` from the `topology` are
+   linked together, *i.e.* if there is a bond between one atom in the first
+   residue and one atom in the second one.
+
+.. jl:function:: resize!(topology::Topology, natoms::Integer)
+
+   Resize the `topology` to hold `natoms` atoms. If the new number of atoms is
+   bigger than the current number, new atoms will be created with an empty name
+   and type. If it is lower than the current number of atoms, the last atoms
+   will be removed, together with the associated bonds, angles and dihedrals.
+
 .. _Atom:
 
 ``Atom`` type and associated function
@@ -416,12 +442,12 @@ it is disponible), mass, type of atom and so on.
 
     Try to get the full name of an `Atom`_ (``"Helium"``) from the short name (``"He"``).
 
-.. jl:function:: vdw_radius(atom::Atom) -> Float32
+.. jl:function:: vdw_radius(atom::Atom) -> Float64
 
     Try to get the Van der Waals radius of an `Atom`_ from the short name. Returns -1 if
     no value could be found.
 
-.. jl:function:: covalent_radius(atom::Atom) -> Float32
+.. jl:function:: covalent_radius(atom::Atom) -> Float64
 
     Try to get the covalent radius of an `Atom`_ from the short name. Returns -1 if no
     value could be found.
@@ -447,6 +473,56 @@ The following atom types are available:
 - ``Chemfiles.DUMMY_ATOM``: Dummy site, with no physical reality
 - ``Chemfiles.UNDEFINED_ATOM``: Undefined atom type
 
+.. _Residue:
+
+``Residue`` type and associated function
+------------------------------------------
+
+.. jl:function:: Residue(name::String, resid::Integer)
+
+    Create a new residue with the given `name` and residue identifier `resid`.
+
+.. jl:function:: Residue(name::String)
+
+    Create a new residue with the given `name`.
+
+.. jl:function:: Residue(topology::Topology, index::Integer)
+
+    Get a copy of the residue at `index` from a `topology`.
+    If `index` is bigger than the result of `count_residues`, this function will return `nothing`.
+    The residue index in the topology is not always the same as the residue `id`.
+
+.. jl:function:: residue_for_atom(topology::Topology, index::Integer)
+
+    Get a copy of the residue containing the atom at `index` in the `topology`.
+    This function will return `nothing` if the atom is not in a residue, or if the
+    `index` is bigger than `natoms`.
+
+.. jl:function:: name(residue::Residue)
+
+    Get the name of a `residue`.
+
+.. jl:function:: id(residue::Residue)
+
+    Get the identifier of a `residue` in the initial topology.
+
+.. jl:function:: id(residue::Residue)
+
+    Get the identifier of a `residue` in the initial topology.
+
+.. jl:function:: size(residue::Residue)
+
+    Get the number of atoms in a `residue`.
+
+.. jl:function:: add_atom!(residue::Residue, i::Integer)
+
+    Add the atom at index `i` in the `residue`.
+
+.. jl:function:: contains!(residue::Residue, i::Integer)
+
+    Check if the atom at index `i` is in the `residue`.
+
+
 .. _Selection:
 
 ``Selection`` type and associated function
@@ -466,3 +542,7 @@ information about the selection language.
 
     Evaluate a `Selection`_ on a given `Frame`_. This function return a list of
     indexes or tuples of indexes of atoms in the frame matching the selection.
+
+.. jl:function:: selection_string(selection::Selection)
+
+    Get the selection string used to create a given `selection`.

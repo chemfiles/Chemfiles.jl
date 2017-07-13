@@ -22,3 +22,10 @@ Write frames (convert.jl)
 .. literalinclude:: ../examples/convert.jl
    :language: julia
    :lines: 4-
+
+Use selections (select.jl)
+--------------------------
+
+.. literalinclude:: ../examples/select.jl
+   :language: julia
+   :lines: 4-

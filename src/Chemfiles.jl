@@ -4,8 +4,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-@unix_only VERSION >= v"0.4.0-dev+6521" && __precompile__()
-
 module Chemfiles
     module lib
         const ROOT = dirname(@__FILE__)
@@ -20,12 +18,20 @@ module Chemfiles
     end
 
     include("errors.jl")
-    include("logging.jl")
 
-    export Trajectory, Topology, Atom, UnitCell, Frame, Selection
+    export Trajectory, Topology, Atom, UnitCell, Frame, Selection, Residue
 
     function version()
-        bytestring(lib.chfl_version())
+        unsafe_string(lib.chfl_version())
+    end
+
+    function strip_null(string)
+        for i in 1:length(string)
+            if string[i] == '\0'
+                return string[1:i-1]
+            end
+        end
+        throw(ChemfilesError("A C string is not NULL terminated"))
     end
 
     type Trajectory
@@ -88,10 +94,21 @@ module Chemfiles
         end
     end
 
+    type Residue
+        handle :: Ptr{lib.CHFL_RESIDUE}
+        function Residue(ptr::Ptr{lib.CHFL_RESIDUE})
+            check(ptr)
+            this = new(ptr)
+            finalizer(this, free)
+            return this
+        end
+    end
+
     include("Atom.jl")
     include("Frame.jl")
     include("Topology.jl")
     include("Trajectory.jl")
     include("UnitCell.jl")
     include("Selection.jl")
+    include("Residue.jl")
 end

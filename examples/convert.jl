@@ -7,7 +7,7 @@ using Chemfiles
 
 input_file = Trajectory("water.xyz")
 water_topology = Topology()
-# ORTHORHOMBIC UnitCell with lengths of 20, 15 and 35 A
+# Orthorhombic UnitCell with lengths of 20, 15 and 35 A
 cell = UnitCell(20, 15, 35)
 
 # Create Atoms

@@ -1,24 +1,31 @@
+@testset "Atom Type" begin
+    atom = Atom("He")
 
-facts("Atom type") do
-    a = Atom("He")
+    @test_approx_eq_eps mass(atom) 4.002602 1e-6
+    @test charge(atom) == 0
+    @test name(atom) == "He"
+    @test atom_type(atom) == "He"
 
-    @fact mass(a) --> roughly(4.002602, 1e-6)
-    @fact charge(a) --> 0
-    @fact name(a) --> "He"
-    @fact atom_type(a) --> Chemfiles.ELEMENT
+    set_mass!(atom, 678)
+    @test mass(atom) == 678
+    set_charge!(atom, -1.5)
+    @test charge(atom) == -1.5
+    set_name!(atom, "Zn")
+    @test name(atom) == "Zn"
 
-    set_mass!(a, 678)
-    @fact mass(a) --> 678
-    set_charge!(a, -1.5)
-    @fact charge(a) --> -1.5
-    set_name!(a, "Zn")
-    @fact name(a) --> "Zn"
+    @test fullname(atom) == "Helium"
+    set_atom_type!(atom, "Zn")
+    @test atom_type(atom) == "Zn"
+    @test fullname(atom) == "Zinc"
 
-    set_atom_type!(a, Chemfiles.DUMMY_ATOM)
-    @fact atom_type(a) --> Chemfiles.DUMMY_ATOM
+    @test_approx_eq_eps vdw_radius(atom) 2.1 1e-1
+    @test_approx_eq_eps covalent_radius(atom) 1.31 1e-2
+    @test atomic_number(atom) == 30
 
-    @fact fullname(a) --> "Zinc"
-    @fact vdw_radius(a) --> roughly(2.1, 1e-1)
-    @fact covalent_radius(a) --> roughly(1.31, 1e-2)
-    @fact atomic_number(a) --> 30
+    copy = deepcopy(atom)
+    @test name(copy) == "Zn"
+
+    set_name!(copy, "I")
+    @test name(copy) == "I"
+    @test name(atom) == "Zn"
 end
