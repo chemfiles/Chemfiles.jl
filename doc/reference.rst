@@ -40,69 +40,29 @@ These functions are not exported, and should be called by there fully qualified 
 ``Trajectory`` type and associated functions
 --------------------------------------------
 
-A `Trajectory`_ uses a file and a format together to read simulation data from the
-file. It can read or write one or many `Frame`_ to this file. The file type and the
-format are automatically determined from the extention.
+.. jl:autotype:: src/Chemfiles.jl Trajectory
 
-.. jl:function:: Trajectory(filename::String, mode::Char)
+.. jl:autofunction:: src/Trajectory.jl Trajectory
 
-    Open a trajectory file.
+.. jl:autofunction:: src/Trajectory.jl read
 
-    :parameter filename: The path to the trajectory file
-    :parameter mode: The opening mode: 'r' for read, 'w' for write and
-                            'a' for append.
+.. jl:autofunction:: src/Trajectory.jl read!
 
-.. jl:function:: read(trajectory::Trajectory) -> Frame
+.. jl:autofunction:: src/Trajectory.jl read_step
 
-    Read the next step of the `Trajectory`_, and return the corresponding `Frame`_.
+.. jl:autofunction:: src/Trajectory.jl read_step!
 
-.. jl:function:: read!(trajectory::Trajectory, frame::Frame)
+.. jl:autofunction:: src/Trajectory.jl write
 
-    Read the next step of the `Trajectory`_ into an existing `Frame`_.
+.. jl:autofunction:: src/Trajectory.jl set_topology!
 
-.. jl:function:: read_step(trajectory::Trajectory, step) -> Frame
+.. jl:autofunction:: src/Trajectory.jl set_cell!
 
-    Read the given ``step`` of the `Trajectory`_, and return the corresponding
-    `Frame`_.
+.. jl:autofunction:: src/Trajectory.jl nsteps
 
-.. jl:function:: read_step(trajectory::Trajectory, step, frame::Frame)
+.. jl:autofunction:: src/Trajectory.jl close
 
-    Read the given ``step`` of the `Trajectory`_ into an existing `Frame`_.
-
-.. jl:function:: write(trajectory::Trajectory, frame::Frame)
-
-    Write a frame to the `Trajectory`_.
-
-.. jl:function:: set_topology!(trajectory::Trajectory, topology::Topology)
-
-    Set the `Topology`_ associated with a `Trajectory`_. This topology will be
-    used when reading and writing the files, replacing any topology in the
-    frames or files.
-
-.. jl:function:: set_topology!(trajectory::Trajectory, filename:AbstractString)
-
-    Set the `Topology`_ associated with a `Trajectory`_ by reading the first
-    frame of ``filename``; and extracting the topology of this frame.
-
-.. jl:function:: set_cell!(trajectory::Trajectory, cell::UnitCell)
-
-    Set the `UnitCell`_ associated with a `Trajectory`_. This cell will be
-    used when reading and writing the files, replacing any unit cell in the
-    frames or files.
-
-.. jl:function:: nsteps(trajectory::Trajectory) -> Integer
-
-    Get the number of steps (the number of frames) in a `Trajectory`_.
-
-.. jl:function:: sync(trajectory::Trajectory)
-
-    Synchronize any buffered content to the hard drive.
-
-.. jl:function:: close(trajectory::Trajectory)
-
-    Close a `Trajectory`_, flushing any buffer content to the hard drive, and
-    freeing the associated memory.
-
+.. jl:autofunction:: src/Trajectory.jl isopen
 
 .. _Frame:
 

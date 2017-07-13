@@ -34,6 +34,11 @@ module Chemfiles
         throw(ChemfilesError("A C string is not NULL terminated"))
     end
 
+    """
+    A ``Trajectory`` represents a simulation file on the hard drive. It can read
+    or write one or many ``Frame`` to this file. The file format can be
+    automatically determined from the extention, or manually specified.
+    """
     type Trajectory
         handle :: Ptr{lib.CHFL_TRAJECTORY}
         function Trajectory(ptr::Ptr{lib.CHFL_TRAJECTORY})
