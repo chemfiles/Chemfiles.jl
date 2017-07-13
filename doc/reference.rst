@@ -3,14 +3,13 @@
 Julia interface reference
 =========================
 
-The `Julia`_ interface to chemfiles wrap around the C interface providing a Julian
-API. All the functionalities are in the ``Chemfiles`` module, which can be imported
-by the ``using Chemfiles`` expression. The ``Chemfiles`` module is built around the 5
-main types of chemfiles: `Trajectory`_, `Frame`_, `UnitCell`_, `Topology`_, and
-`Atom`_.
+The `Julia`_ interface to chemfiles wrap around the C interface providing a
+Julian API. All the functionalities are in the ``Chemfiles`` module, which can
+be imported by the ``using Chemfiles`` expression. The ``Chemfiles`` module is
+built around the main types of chemfiles: `Trajectory`_, `Frame`_, `UnitCell`_,
+`Topology`_, `Residue`_, `Atom`_, and `Selection`_.
 
 .. _Julia: http://julialang.org/
-.. _overview: http://chemfiles.readthedocs.io/en/latest/overview.html
 
 .. warning::
    All indexing in chemfiles is 0-based! That means that the first atom in a frame
@@ -28,60 +27,13 @@ These functions are not exported, and should be called by there fully qualified 
 .. code-block:: julia
 
     Chemfiles.last_error()
-    Chemfiles.loglevel(Chemfiles.ERROR)
+    Chemfiles.set_warning_callback(my_callback)
 
-.. jl:function:: Chemfiles.last_error()
+.. jl:autofunction:: src/errors.jl last_error
 
-    Get the last error message.
+.. jl:autofunction:: src/errors.jl clear_errors
 
-.. jl:function:: Chemfiles.clear_errors()
-
-    Clear the last error message.
-
-.. jl:function:: Chemfiles.loglevel()
-
-    Get the current log level.
-
-.. jl:function:: Chemfiles.set_warning_callback(callback)
-
-    Set the global warning `callback` to be used for each warning event.
-
- The following logging levels are available:
-
-- ``Chemfiles.ERROR``: Only log errors;
-- ``Chemfiles.WARNING``: Log warnings and erors. This is the default;
-- ``Chemfiles.INFO``: Log infos, warnings and errors;
-- ``Chemfiles.DEBUG``: Log everything.
-
-.. jl:function:: Chemfiles.logfile(file)
-
-    Redirect the logs to ``file``, overwriting the file if it exists.
-
-.. jl:function:: Chemfiles.log_to_stdout()
-
-    Redirect the logs to the standard output.
-
-.. jl:function:: Chemfiles.log_to_stderr()
-
-    Redirect the logs to the standard error output. This is enabled by default.
-
-.. jl:function:: Chemfiles.log_silent()
-
-    Remove all logging output
-
-.. jl:function:: Chemfiles.log_callback(callback)
-
-    Use a callback for logging, instead of the built-in logging system. The callback
-    function will be called at each log event, with the event level and message.
-
-    The ``callback`` function must have the following signature:
-
-    .. code-block:: julia
-
-        function callback(level::Chemfiles.LogLevel, message::AbstractString)
-            # Do work as needed
-            return nothing
-        end
+.. jl:autofunction:: src/errors.jl set_warning_callback
 
 .. _Trajectory:
 
