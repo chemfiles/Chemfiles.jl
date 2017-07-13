@@ -6,8 +6,10 @@
 
 export read_step, read_step!, set_topology!, set_cell!, nsteps
 
-function Trajectory(filename::AbstractString, mode::Char='r')
-    handle = lib.chfl_trajectory_open(pointer(filename), Int8(mode))
+function Trajectory(filename::AbstractString, mode::Char='r', format::AbstractString="")
+    handle = lib.chfl_trajectory_with_format(
+        pointer(filename), Int8(mode), pointer(format),
+    )
     return Trajectory(handle)
 end
 
