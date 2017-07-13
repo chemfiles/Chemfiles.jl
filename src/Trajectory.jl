@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export read_step, read_step!, set_topology!, set_cell!, nsteps, sync
+export read_step, read_step!, set_topology!, set_cell!, nsteps
 
 function Trajectory(filename::AbstractString, mode::Char='r')
     handle = lib.chfl_trajectory_open(pointer(filename), Int8(mode))
@@ -71,13 +71,6 @@ function nsteps(file::Trajectory)
         lib.chfl_trajectory_nsteps(file.handle, res)
     )
     return res[]
-end
-
-function sync(file::Trajectory)
-    check(
-        lib.chfl_trajectory_sync(file.handle)
-    )
-    return nothing
 end
 
 function Base.close(file::Trajectory)
