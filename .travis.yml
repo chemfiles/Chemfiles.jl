@@ -16,7 +16,7 @@ env:
 
 before_install:
   - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" && "${TRAVIS_JULIA_VERSION}" == "release" ]]; then
+    if [[ "$TRAVIS_OS_NAME" == "linux" && "${TRAVIS_JULIA_VERSION}" == "0.6" ]]; then
         export EXTRA_WORK=true
     else
         export EXTRA_WORK=false
