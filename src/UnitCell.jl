@@ -93,11 +93,11 @@ function cell_matrix(cell::UnitCell)
 end
 
 function shape(cell::UnitCell)
-    res = Ref{lib.chfl_cell_shape_t}(0)
+    result = Ref{lib.chfl_cell_shape_t}(0)
     check(
-        lib.chfl_cell_shape(cell.handle, res)
+        lib.chfl_cell_shape(cell.handle, result)
     )
-    return CellShape(res[])
+    return CellShape(result[])
 end
 
 function set_shape!(cell::UnitCell, shape::CellShape)

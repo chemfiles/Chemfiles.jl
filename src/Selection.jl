@@ -11,19 +11,19 @@ function Selection(selection::AbstractString)
 end
 
 function selection_string(selection::Selection)
-    res = " " ^ 64
+    result = " " ^ 64
     check(
-        lib.chfl_selection_string(selection.handle, pointer(res), UInt64(length(res)))
+        lib.chfl_selection_string(selection.handle, pointer(result), UInt64(length(result)))
     )
-    return strip_null(res)
+    return strip_null(result)
 end
 
 function Base.size(selection::Selection)
-    res = Ref{UInt64}(0)
+    result = Ref{UInt64}(0)
     check(
-        lib.chfl_selection_size(selection.handle, res)
+        lib.chfl_selection_size(selection.handle, result)
     )
-    return res[]
+    return result[]
 end
 
 function evaluate(selection::Selection, frame::Frame)
@@ -36,21 +36,21 @@ function evaluate(selection::Selection, frame::Frame)
     check(
         lib.chfl_selection_matches(selection.handle, pointer(matches), matching)
     )
-    res = []
+    result = []
     selection_size = size(selection)
     for match in matches
         assert(match.size == selection_size)
         if selection_size == 1
-            push!(res, match.atoms_1)
+            push!(result, match.atoms_1)
         elseif selection_size == 2
-            push!(res, (match.atoms_1, match.atoms_2))
+            push!(result, (match.atoms_1, match.atoms_2))
         elseif selection_size == 3
-            push!(res, (match.atoms_1, match.atoms_2, match.atoms_3))
+            push!(result, (match.atoms_1, match.atoms_2, match.atoms_3))
         elseif selection_size == 4
-            push!(res, (match.atoms_1, match.atoms_2, match.atoms_3, match.atoms_4))
+            push!(result, (match.atoms_1, match.atoms_2, match.atoms_3, match.atoms_4))
         end
     end
-    return res
+    return result
 end
 
 function free(selection::Selection)

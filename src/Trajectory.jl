@@ -11,74 +11,76 @@ function Trajectory(filename::AbstractString, mode::Char='r')
     return Trajectory(handle)
 end
 
-free(file::Trajectory) = close(file)
+free(trajectory::Trajectory) = close(trajectory)
 
-function Base.read!(file::Trajectory, frame::Frame)
+function Base.read!(trajectory::Trajectory, frame::Frame)
     check(
-        lib.chfl_trajectory_read(file.handle, frame.handle)
+        lib.chfl_trajectory_read(trajectory.handle, frame.handle)
     )
     return frame
 end
 
-function Base.read(file::Trajectory)
+function Base.read(trajectory::Trajectory)
     frame = Frame()
-    return read!(file, frame)
+    return read!(trajectory, frame)
 end
 
-function read_step!(file::Trajectory, step::Integer, frame::Frame)
+function read_step!(trajectory::Trajectory, step::Integer, frame::Frame)
     check(
-        lib.chfl_trajectory_read_step(file.handle, UInt64(step), frame.handle)
+        lib.chfl_trajectory_read_step(trajectory.handle, UInt64(step), frame.handle)
     )
     return frame
 end
 
-function read_step(file::Trajectory, step::Integer)
+function read_step(trajectory::Trajectory, step::Integer)
     frame = Frame()
-    return read_step!(file, step, frame)
+    return read_step!(trajectory, step, frame)
 end
 
-function Base.write(file::Trajectory, frame::Frame)
+function Base.write(trajectory::Trajectory, frame::Frame)
     check(
-        lib.chfl_trajectory_write(file.handle, frame.handle)
+        lib.chfl_trajectory_write(trajectory.handle, frame.handle)
     )
     return nothing
 end
 
-function set_topology!(file::Trajectory, topology::Topology)
+function set_topology!(trajectory::Trajectory, topology::Topology)
     check(
-        lib.chfl_trajectory_set_topology(file.handle, topology.handle)
+        lib.chfl_trajectory_set_topology(trajectory.handle, topology.handle)
     )
     return nothing
 end
 
-function set_topology!(file::Trajectory, filename::AbstractString, format::AbstractString = "")
+function set_topology!(trajectory::Trajectory, filename::AbstractString, format::AbstractString = "")
     check(
-        lib.chfl_trajectory_topology_file(file.handle, pointer(filename), pointer(format))
+        lib.chfl_trajectory_topology_file(trajectory.handle, pointer(filename), pointer(format))
     )
     return nothing
 end
 
-function set_cell!(file::Trajectory, cell::UnitCell)
+function set_cell!(trajectory::Trajectory, cell::UnitCell)
     check(
-        lib.chfl_trajectory_set_cell(file.handle, cell.handle)
+        lib.chfl_trajectory_set_cell(trajectory.handle, cell.handle)
     )
     return nothing
 end
 
-function nsteps(file::Trajectory)
-    res = Ref{UInt64}(0)
+function nsteps(trajectory::Trajectory)
+    result = Ref{UInt64}(0)
     check(
-        lib.chfl_trajectory_nsteps(file.handle, res)
+        lib.chfl_trajectory_nsteps(trajectory.handle, result)
     )
-    return res[]
+    return result[]
 end
 
-function Base.close(file::Trajectory)
+function Base.close(trajectory::Trajectory)
     check(
-        lib.chfl_trajectory_close(file.handle)
+        lib.chfl_trajectory_close(trajectory.handle)
     )
-    file.handle = Ptr{lib.CHFL_TRAJECTORY}(0)
+    trajectory.handle = Ptr{lib.CHFL_TRAJECTORY}(0)
     return nothing
 end
 
-Base.isopen(file::Trajectory) = (file.handle != Ptr{lib.CHFL_TRAJECTORY}(0))
+function Base.isopen(trajectory::Trajectory)
+    return trajectory.handle != Ptr{lib.CHFL_TRAJECTORY}(0)
+end

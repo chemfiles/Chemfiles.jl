@@ -56,11 +56,11 @@ function add_velocities!(frame::Frame)
 end
 
 function has_velocities(frame::Frame)
-    res = Ref{UInt8}(0)
+    result = Ref{UInt8}(0)
     check(
-        lib.chfl_frame_has_velocities(frame.handle, res)
+        lib.chfl_frame_has_velocities(frame.handle, result)
     )
-    return convert(Bool, res[])
+    return convert(Bool, result[])
 end
 
 function set_cell!(frame::Frame, cell::UnitCell)
@@ -78,11 +78,11 @@ function set_topology!(frame::Frame, topology::Topology)
 end
 
 function Base.step(frame::Frame)
-    res = Ref{UInt64}(0)
+    result = Ref{UInt64}(0)
     check(
-        lib.chfl_frame_step(frame.handle, res)
+        lib.chfl_frame_step(frame.handle, result)
     )
-    return res[]
+    return result[]
 end
 
 function set_step!(frame::Frame, step::Integer)

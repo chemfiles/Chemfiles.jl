@@ -63,9 +63,9 @@ function add_atom!(residue::Residue, i::Integer)
 end
 
 function Base.contains(residue::Residue, i::Integer)
-    res = Ref{UInt8}(0)
+    result = Ref{UInt8}(0)
     check(
-        lib.chfl_residue_contains(residue.handle, UInt64(i), res)
+        lib.chfl_residue_contains(residue.handle, UInt64(i), result)
     )
-    return convert(Bool, res[])
+    return convert(Bool, result[])
 end

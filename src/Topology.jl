@@ -43,27 +43,27 @@ function remove!(topology::Topology, i::Integer)
 end
 
 function isbond(topology::Topology, i::Integer, j::Integer)
-    res = Ref{UInt8}(0)
+    result = Ref{UInt8}(0)
     check(
-        lib.chfl_topology_isbond(topology.handle, UInt64(i), UInt64(j), res)
+        lib.chfl_topology_isbond(topology.handle, UInt64(i), UInt64(j), result)
     )
-    return convert(Bool, res[])
+    return convert(Bool, result[])
 end
 
 function isangle(topology::Topology, i::Integer, j::Integer, k::Integer)
-    res = Ref{UInt8}(0)
+    result = Ref{UInt8}(0)
     check(
-        lib.chfl_topology_isangle(topology.handle, UInt64(i), UInt64(j), UInt64(k), res)
+        lib.chfl_topology_isangle(topology.handle, UInt64(i), UInt64(j), UInt64(k), result)
     )
-    return convert(Bool, res[])
+    return convert(Bool, result[])
 end
 
 function isdihedral(topology::Topology, i::Integer, j::Integer, k::Integer, m::Integer)
-    res = Ref{UInt8}(0)
+    result = Ref{UInt8}(0)
     check(
-        lib.chfl_topology_isdihedral(topology.handle, UInt64(i), UInt64(j), UInt64(k), UInt64(m), res)
+        lib.chfl_topology_isdihedral(topology.handle, UInt64(i), UInt64(j), UInt64(k), UInt64(m), result)
     )
-    return convert(Bool, res[])
+    return convert(Bool, result[])
 end
 
 function nbonds(topology::Topology)
@@ -92,29 +92,29 @@ end
 
 function bonds(topology::Topology)
     count = nbonds(topology)
-    res = Array{UInt64}(2, count)
+    result = Array{UInt64}(2, count)
     check(
-        lib.chfl_topology_bonds(topology.handle, pointer(res), count)
+        lib.chfl_topology_bonds(topology.handle, pointer(result), count)
     )
-    return res
+    return result
 end
 
 function angles(topology::Topology)
     count = nangles(topology)
-    res = Array{UInt64}(3, count)
+    result = Array{UInt64}(3, count)
     check(
-        lib.chfl_topology_angles(topology.handle, pointer(res), count)
+        lib.chfl_topology_angles(topology.handle, pointer(result), count)
     )
-    return res
+    return result
 end
 
 function dihedrals(topology::Topology)
     count = ndihedrals(topology)
-    res = Array{UInt64}(4, count)
+    result = Array{UInt64}(4, count)
     check(
-        lib.chfl_topology_dihedrals(topology.handle, pointer(res), count)
+        lib.chfl_topology_dihedrals(topology.handle, pointer(result), count)
     )
-    return res
+    return result
 end
 
 function add_bond!(topology::Topology, i::Integer, j::Integer)
@@ -147,15 +147,15 @@ function count_residues(topology::Topology)
 end
 
 function are_linked(topology::Topology, first::Residue, second::Residue)
-    res = Ref{UInt8}(0)
+    result = Ref{UInt8}(0)
     check(
-        lib.chfl_topology_residues_linked(topology.handle, first.handle, second.handle, res)
+        lib.chfl_topology_residues_linked(topology.handle, first.handle, second.handle, result)
     )
-    return convert(Bool, res[])
+    return convert(Bool, result[])
 end
 
-function Base.resize!(topology::Topology, natoms::Integer)
+function Base.resize!(topology::Topology, size::Integer)
     check(
-        lib.chfl_topology_resize(topology.handle, UInt64(natoms))
+        lib.chfl_topology_resize(topology.handle, UInt64(size))
     )
 end
