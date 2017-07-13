@@ -29,4 +29,12 @@
 
     set_angles!(cell, 80, 89, 100)
     @test angles(cell) == [80.0, 89.0, 100.0]
+
+
+    copy = deepcopy(cell)
+    @test lengths(copy) == [10.0, 20.0, 30.0]
+
+    set_lengths!(copy, 10, 10, 10)
+    @test lengths(copy) == [10.0, 10.0, 10.0]
+    @test lengths(cell) == [10.0, 20.0, 30.0]
 end

@@ -8,11 +8,11 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
     end
 
     @testset "Read frames" begin
-        file = Trajectory(joinpath(DATAPATH, "water.xyz"))
+        trajectory = Trajectory(joinpath(DATAPATH, "water.xyz"))
 
-        @test nsteps(file) == 100
+        @test nsteps(trajectory) == 100
 
-        frame = read(file)
+        frame = read(trajectory)
 
         @test size(frame) == 297
         pos = positions(frame)
@@ -24,8 +24,8 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
         @test name(Atom(topology, 0)) == "O"
         @test name(Atom(frame, 1)) == "H"
 
-        set_cell!(file, UnitCell(30, 30, 30))
-        frame = read_step(file, 41)
+        set_cell!(trajectory, UnitCell(30, 30, 30))
+        frame = read_step(trajectory, 41)
 
         @test lengths(UnitCell(frame)) == [30.0, 30.0, 30.0]
 
@@ -48,12 +48,12 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
             push!(topology, a)
         end
 
-        set_topology!(file, topology)
-        frame = read_step(file, 10)
+        set_topology!(trajectory, topology)
+        frame = read_step(trajectory, 10)
         @test name(Atom(frame, 10)) == "Cs"
 
-        set_topology!(file, joinpath(DATAPATH, "topology.xyz"))
-        frame = read(file)
+        set_topology!(trajectory, joinpath(DATAPATH, "topology.xyz"))
+        frame = read(trajectory)
         @test name(Atom(frame, 100)) == "Rd"
     end
 
@@ -91,8 +91,8 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
         end
         set_topology!(frame, top)
 
-        file = Trajectory("test-tmp.xyz", 'w');
-        write(file, frame)
+        trajectory = Trajectory("test-tmp.xyz", 'w');
+        write(trajectory, frame)
 
         resize!(frame, 6)
         pos = positions(frame)
@@ -105,9 +105,9 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
         end
         set_topology!(frame, top)
 
-        write(file, frame)
-        close(file)
-        @test isopen(file) == false
+        write(trajectory, frame)
+        close(trajectory)
+        @test isopen(trajectory) == false
 
         open("test-tmp.xyz") do fd
             @test readstring(fd) == EXPECTED_CONTENT

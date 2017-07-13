@@ -110,3 +110,8 @@ function remove_atom!(frame::Frame, index::Integer)
     )
     return nothing
 end
+
+function Base.deepcopy(frame::Frame)
+    handle = lib.chfl_frame_copy(frame.handle)
+    return Frame(handle)
+end

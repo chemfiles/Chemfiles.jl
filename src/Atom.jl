@@ -116,3 +116,8 @@ function atomic_number(atom::Atom)
     )
     return number[]
 end
+
+function Base.deepcopy(atom::Atom)
+    handle = lib.chfl_atom_copy(atom.handle)
+    return Atom(handle)
+end

@@ -56,3 +56,8 @@ end
 function free(selection::Selection)
     lib.chfl_selection_free(selection.handle)
 end
+
+function Base.deepcopy(selection::Selection)
+    handle = lib.chfl_selection_copy(selection.handle)
+    return Selection(handle)
+end

@@ -51,4 +51,7 @@ end
     @test ((0, 1, 2, 3) in matches) == true
 
     @test selection_string(selection) == "dihedrals: all"
+
+    copy = deepcopy(selection)
+    @test selection_string(copy) == "dihedrals: all"
 end

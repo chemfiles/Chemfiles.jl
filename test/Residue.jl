@@ -18,10 +18,17 @@
 
     @test contains(residue, 56) == true
 
-    top = Topology()
-    @test count_residues(top) == 0
-    @test_throws ChemfilesError Residue(top, 3)
-    add_residue!(top, residue)
-    res = Residue(top, 0)
-    @test size(res) == 3
+    topology = Topology()
+    @test count_residues(topology) == 0
+    @test_throws ChemfilesError Residue(topology, 3)
+    add_residue!(topology, residue)
+    residue = Residue(topology, 0)
+    @test size(residue) == 3
+
+    copy = deepcopy(residue)
+    @test size(copy) == 3
+
+    add_atom!(copy, 42)
+    @test size(copy) == 4
+    @test size(residue) == 3
 end

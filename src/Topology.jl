@@ -159,3 +159,8 @@ function Base.resize!(topology::Topology, size::Integer)
         lib.chfl_topology_resize(topology.handle, UInt64(size))
     )
 end
+
+function Base.deepcopy(topology::Topology)
+    handle = lib.chfl_topology_copy(topology.handle)
+    return Topology(handle)
+end

@@ -106,3 +106,8 @@ function set_shape!(cell::UnitCell, shape::CellShape)
     )
     return nothing
 end
+
+function Base.deepcopy(cell::UnitCell)
+    handle = lib.chfl_cell_copy(cell.handle)
+    return UnitCell(handle)
+end

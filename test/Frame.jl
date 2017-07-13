@@ -51,4 +51,11 @@
 
     remove_atom!(frame, 4)
     @test size(frame) == 4
+
+    copy = deepcopy(frame)
+    @test size(copy) == 4
+
+    resize!(copy, 10)
+    @test size(copy) == 10
+    @test size(frame) == 4
 end

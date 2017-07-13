@@ -69,3 +69,8 @@ function Base.contains(residue::Residue, i::Integer)
     )
     return convert(Bool, result[])
 end
+
+function Base.deepcopy(residue::Residue)
+    handle = lib.chfl_residue_copy(residue.handle)
+    return Residue(handle)
+end
