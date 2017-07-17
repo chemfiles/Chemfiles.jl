@@ -348,50 +348,27 @@ in the system, together with the list of bonds these atoms forms.
 ``Residue`` type and associated function
 ------------------------------------------
 
-.. jl:function:: Residue(name::String, resid::Integer)
+.. jl:autotype:: src/Chemfiles.jl Residue
 
-    Create a new residue with the given `name` and residue identifier `resid`.
+.. jl:function:: src/Residue.jl Residue(name::String, resid::Integer)
 
-.. jl:function:: Residue(name::String)
+.. jl:function:: src/Residue.jl Residue(name::String)
 
-    Create a new residue with the given `name`.
+.. jl:function:: src/Residue.jl Residue(topology::Topology, index::Integer)
 
-.. jl:function:: Residue(topology::Topology, index::Integer)
+.. jl:function:: src/Residue.jl residue_for_atom
 
-    Get a copy of the residue at `index` from a `topology`.
-    If `index` is bigger than the result of `count_residues`, this function will return `nothing`.
-    The residue index in the topology is not always the same as the residue `id`.
+.. jl:function:: src/Residue.jl name
 
-.. jl:function:: residue_for_atom(topology::Topology, index::Integer)
+.. jl:function:: src/Residue.jl id
 
-    Get a copy of the residue containing the atom at `index` in the `topology`.
-    This function will return `nothing` if the atom is not in a residue, or if the
-    `index` is bigger than `natoms`.
+.. jl:function:: src/Residue.jl size
 
-.. jl:function:: name(residue::Residue)
+.. jl:function:: src/Residue.jl add_atom!
 
-    Get the name of a `residue`.
+.. jl:function:: src/Residue.jl contains!
 
-.. jl:function:: id(residue::Residue)
-
-    Get the identifier of a `residue` in the initial topology.
-
-.. jl:function:: id(residue::Residue)
-
-    Get the identifier of a `residue` in the initial topology.
-
-.. jl:function:: size(residue::Residue)
-
-    Get the number of atoms in a `residue`.
-
-.. jl:function:: add_atom!(residue::Residue, i::Integer)
-
-    Add the atom at index `i` in the `residue`.
-
-.. jl:function:: contains!(residue::Residue, i::Integer)
-
-    Check if the atom at index `i` is in the `residue`.
-
+.. jl:function:: src/Residue.jl deepcopy
 
 .. _Selection:
 
