@@ -59,6 +59,17 @@ module Chemfiles
         end
     end
 
+    """
+    An ``Atom`` is a particle in the current ``Frame``.
+
+    An atom stores the following atomic properties:
+      - atom name
+      - atom type
+      - atom mass
+      - atom charge
+
+    The atom name is usually an unique identifier (“H1”, “C_a”) while the atom type will be shared between all particles of the same type: “H”, “Ow”, “CH3”.
+    """
     type Atom
         handle :: Ptr{lib.CHFL_ATOM}
         function Atom(ptr::Ptr{lib.CHFL_ATOM})

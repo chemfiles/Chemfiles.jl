@@ -311,79 +311,37 @@ in the system, together with the list of bonds these atoms forms.
 ``Atom`` type and associated function
 -------------------------------------
 
-An `Atom`_ contains basic information about a single atom in the system: the name (if
-it is disponible), mass, type of atom and so on.
+.. jl:autotype:: src/Chemfiles.jl Atom
 
-.. jl:function:: Atom(name)
+.. jl:autofunction:: src/Atom.jl Atom(name::String)
 
-    Create an `Atom`_ from an atomic name.
+.. jl:autofunction:: src/Atom.jl Atom(frame::Frame, i::Integer)
 
-.. jl:function:: Atom(frame::Frame, idx::Integer)
+.. jl:autofunction:: src/Atom.jl Atom(topology::Topology, i::Integer)
 
-    Get the `Atom`_ at index ``idx`` from the frame.
+.. jl:autofunction:: src/Atom.jl mass
 
-.. jl:function:: Atom(topology::Topology, idx::Integer)
+.. jl:autofunction:: src/Atom.jl set_mass!
 
-    Get the `Atom`_ at index ``idx`` from the topology.
+.. jl:autofunction:: src/Atom.jl charge
 
-.. jl:function:: mass(atom::Atom) -> Float64
+.. jl:autofunction:: src/Atom.jl set_charge!
 
-    Get the mass of an `Atom`_, in atomic mass units.
+.. jl:autofunction:: src/Atom.jl name
+    
+.. jl:autofunction:: src/Atom.jl set_name!
 
-.. jl:function:: set_mass!(atom::Atom, mass::Number)
+.. jl:autofunction:: src/Atom.jl Base.fullname
 
-    Set the mass of an `Atom`_ to ``mass``, in atomic mass units.
+.. jl:autofunction:: src/Atom.jl vdw_radius
 
-.. jl:function:: charge(atom::Atom) -> Float64
+.. jl:autofunction:: src/Atom.jl covalent_radius
 
-    Get the charge of an `Atom`_, in number of the electron charge e.
+.. jl:autofunction:: src/Atom.jl atomic_number
 
-.. jl:function:: set_charge!(atom::Atom, charge::Number)
+.. jl:autofunction:: src/Atom.jl atom_type
 
-    Set the charge of an `Atom`_ to ``charge``, in number of the electron charge e.
-
-.. jl:function:: name(atom::Atom) -> ASCIIString
-
-    Get the name of an `Atom`_.
-
-.. jl:function:: set_name!(atom::Atom, name::ASCIIString)
-
-    Set the name of an `Atom`_ to ``name``.
-
-.. jl:function:: full_name(atom::Atom) -> ASCIIString
-
-    Try to get the full name of an `Atom`_ (``"Helium"``) from the short name (``"He"``).
-
-.. jl:function:: vdw_radius(atom::Atom) -> Float64
-
-    Try to get the Van der Waals radius of an `Atom`_ from the short name. Returns -1 if
-    no value could be found.
-
-.. jl:function:: covalent_radius(atom::Atom) -> Float64
-
-    Try to get the covalent radius of an `Atom`_ from the short name. Returns -1 if no
-    value could be found.
-
-.. jl:function:: atomic_number(atom::Atom) -> Integer
-
-    Try to get the atomic number of an `Atom`_ from the short name. Returns -1 if no
-    value could be found.
-
-.. jl:function:: atom_type(atom::Atom) -> AtomType
-
-    Get the `Atom`_ type
-
-.. jl:function:: set_atom_type!(atom::Atom, type::AtomType)
-
-    Set the `Atom`_ type
-
-The following atom types are available:
-
-- ``Chemfiles.ELEMENT``: Element from the periodic table of elements
-- ``Chemfiles.COARSE_GRAINED``: Coarse-grained atom are composed of more than one
-  element: CH3 groups, amino-acids are coarse-grained atoms.
-- ``Chemfiles.DUMMY_ATOM``: Dummy site, with no physical reality
-- ``Chemfiles.UNDEFINED_ATOM``: Undefined atom type
+.. jl:autofunction:: src/Atom.jl set_atom_type!
 
 .. _Residue:
 

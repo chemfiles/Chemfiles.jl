@@ -7,24 +7,52 @@
 export mass, set_mass!, charge, set_charge!, name, set_name!, fullname, vdw_radius,
 covalent_radius, atomic_number, atom_type, set_atom_type!, AtomType
 
+"""
+    Atom(name::String)
+
+Create an atom with the given ``name`` and set the atom ``type`` to be the same as ``name``.
+"""
 function Atom(name::String)
     return Atom(lib.chfl_atom(pointer(name)))
 end
 
-function Atom(frame::Frame, index::Integer)
-    handle = lib.chfl_atom_from_frame(frame.handle, UInt64(index))
+"""
+    Atom(frame::Frame, i::Integer)
+
+Get a copy of the ``atom`` at index ``i`` from a ``frame``
+"""
+function Atom(frame::Frame, i::Integer)
+    handle = lib.chfl_atom_from_frame(frame.handle, UInt64(i))
     return Atom(handle)
 end
 
-function Atom(topology::Topology, index::Integer)
-    handle = lib.chfl_atom_from_topology(topology.handle, UInt64(index))
+"""
+    Atom(topology::Topology, index::Integer)
+
+Get a copy of the ``atom`` at index ``i`` from a `topology`
+"""
+function Atom(topology::Topology, i::Integer)
+    handle = lib.chfl_atom_from_topology(topology.handle, UInt64(i))
     return Atom(handle)
 end
 
+"""
+    free(atom::Atom)
+
+Close a ``atom``, flushing any buffer content to the hard drive, and
+freeing the associated memory.
+"""
 function free(atom::Atom)
     lib.chfl_atom_free(atom.handle)
 end
 
+"""
+    mass(atom::Atom)
+
+Get the mass of an ``atom``.
+
+The mass is given in atomic mass units.
+"""
 function mass(atom::Atom)
     m = Ref{Float64}(0)
     check(
@@ -33,13 +61,27 @@ function mass(atom::Atom)
     return m[]
 end
 
-function set_mass!(atom::Atom, m)
+"""
+    set_mass!(atom::Atom, mass)
+
+Set the mass of an ``atom`` to ``mass``.
+
+The mass must be in atomic mass units.
+"""
+function set_mass!(atom::Atom, mass)
     check(
-        lib.chfl_atom_set_mass(atom.handle, Float64(m))
+        lib.chfl_atom_set_mass(atom.handle, Float64(mass))
     )
     return nothing
 end
 
+"""
+    charge(atom::Atom)
+
+Get the charge of an ``atom``.
+
+The charge is in number of the electron charge *e*.
+"""
 function charge(atom::Atom)
     c = Ref{Float64}(0)
     check(
@@ -48,13 +90,25 @@ function charge(atom::Atom)
     return c[]
 end
 
-function set_charge!(atom::Atom, c)
+"""
+    set_charge!(atom::Atom, charge)
+
+Set the charge of an ``atom`` to ``charge``.
+
+The charge must be in number of the electron charge *e*.
+"""
+function set_charge!(atom::Atom, charge)
     check(
-        lib.chfl_atom_set_charge(atom.handle, Float64(c))
+        lib.chfl_atom_set_charge(atom.handle, Float64(charge))
     )
     return nothing
 end
 
+"""
+    name(atom::Atom)
+
+Get the name of an ``atom``
+"""
 function name(atom::Atom)
     str = " " ^ 10
     check(
@@ -63,6 +117,11 @@ function name(atom::Atom)
     return strip_null(str)
 end
 
+"""
+    set_name!(atom::Atom, name::String)
+
+Set the name of an ``atom`` to ``name``.
+"""
 function set_name!(atom::Atom, name::String)
     check(
         lib.chfl_atom_set_name(atom.handle, pointer(name))
@@ -70,6 +129,11 @@ function set_name!(atom::Atom, name::String)
     return nothing
 end
 
+"""
+    atom_type(atom::Atom)
+
+Get the type of an ``atom``.
+"""
 function atom_type(atom::Atom)
     str = " " ^ 10
     check(
@@ -78,6 +142,11 @@ function atom_type(atom::Atom)
     return strip_null(str)
 end
 
+"""
+    set_atom_type!(atom::Atom, type::String)
+
+Set the type of an ``atom`` to ```type``.
+"""
 function set_atom_type!(atom::Atom, atom_type::String)
     check(
         lib.chfl_atom_set_type(atom.handle, pointer(atom_type))
@@ -85,6 +154,11 @@ function set_atom_type!(atom::Atom, atom_type::String)
     return nothing
 end
 
+"""
+    Base.fullname(atom::Atom)
+
+Get the full name of an ``atom``.
+"""
 function Base.fullname(atom::Atom)
     str = " " ^ 96
     check(
@@ -93,6 +167,13 @@ function Base.fullname(atom::Atom)
     return strip_null(str)
 end
 
+"""
+    vdw_radius(atom::Atom)
+
+Get the Van der Waals radius of an ``atom`` from the atom type.
+
+If the radius can not be found, returns -1.
+"""
 function vdw_radius(atom::Atom)
     radius = Ref{Float64}(0)
     check(
@@ -101,6 +182,13 @@ function vdw_radius(atom::Atom)
     return radius[]
 end
 
+"""
+    covalent_radius(atom::Atom)
+
+Get the covalent radius of an ``atom`` from the atom type.
+
+If the radius can not be found, returns -1.
+"""
 function covalent_radius(atom::Atom)
     radius = Ref{Float64}(0)
     check(
@@ -109,6 +197,13 @@ function covalent_radius(atom::Atom)
     return radius[]
 end
 
+"""
+    atomic_number(atom::Atom)
+
+Get the atomic number of an ``atom`` from the atom type.
+
+If the atomic number can not be found, returns -1.
+"""
 function atomic_number(atom::Atom)
     number = Ref{Int64}(0)
     check(
@@ -117,6 +212,11 @@ function atomic_number(atom::Atom)
     return number[]
 end
 
+"""
+    Base.deepcopy(atom::Atom)
+
+Get a copy of an `atom`.
+"""
 function Base.deepcopy(atom::Atom)
     handle = lib.chfl_atom_copy(atom.handle)
     return Atom(handle)
