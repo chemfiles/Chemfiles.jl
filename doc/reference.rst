@@ -217,45 +217,45 @@ The following cell types are defined:
 
 .. jl:autotype:: src/Chemfiles.jl Topology
 
-.. jl:function:: src/Topology.jl Topology()
+.. jl:autofunction:: src/Topology.jl Topology()
 
-.. jl:function:: src/Topology.jl Topology(frame::Frame)
+.. jl:autofunction:: src/Topology.jl Topology(frame::Frame)
 
-.. jl:function:: src/Topology.jl size
+.. jl:autofunction:: src/Topology.jl size
 
-.. jl:function:: src/Topology.jl push!
+.. jl:autofunction:: src/Topology.jl push!
 
-.. jl:function:: src/Topology.jl remove!
+.. jl:autofunction:: src/Topology.jl remove!
 
-.. jl:function:: src/Topology.jl isbond
+.. jl:autofunction:: src/Topology.jl isbond
 
-.. jl:function:: src/Topology.jl isangle
+.. jl:autofunction:: src/Topology.jl isangle
 
-.. jl:function:: src/Topology.jl isdihedral
+.. jl:autofunction:: src/Topology.jl isdihedral
 
-.. jl:function:: src/Topology.jl nbonds
+.. jl:autofunction:: src/Topology.jl nbonds
 
-.. jl:function:: src/Topology.jl nangles
+.. jl:autofunction:: src/Topology.jl nangles
 
-.. jl:function:: src/Topology.jl ndihedrals
+.. jl:autofunction:: src/Topology.jl ndihedrals
 
-.. jl:function:: src/Topology.jl bonds
+.. jl:autofunction:: src/Topology.jl bonds
 
-.. jl:function:: src/Topology.jl angles
+.. jl:autofunction:: src/Topology.jl angles
 
-.. jl:function:: src/Topology.jl dihedrals
+.. jl:autofunction:: src/Topology.jl dihedrals
 
-.. jl:function:: src/Topology.jl add_bond!
+.. jl:autofunction:: src/Topology.jl add_bond!
 
-.. jl:function:: src/Topology.jl remove_bond!
+.. jl:autofunction:: src/Topology.jl remove_bond!
 
-.. jl:function:: src/Topology.jl add_residue!
+.. jl:autofunction:: src/Topology.jl add_residue!
 
-.. jl:function:: src/Topology.jl count_residue
+.. jl:autofunction:: src/Topology.jl count_residues
 
-.. jl:function:: src/Topology.jl are_linked
+.. jl:autofunction:: src/Topology.jl are_linked
 
-.. jl:function:: src/Topology.jl resize!
+.. jl:autofunction:: src/Topology.jl resize!
 
 .. _Atom:
 
@@ -301,25 +301,25 @@ The following cell types are defined:
 
 .. jl:autotype:: src/Chemfiles.jl Residue
 
-.. jl:function:: src/Residue.jl Residue(name::String, resid::Integer)
+.. jl:autofunction:: src/Residue.jl Residue(name::String, resid::Integer)
 
-.. jl:function:: src/Residue.jl Residue(name::String)
+.. jl:autofunction:: src/Residue.jl Residue(name::String)
 
-.. jl:function:: src/Residue.jl Residue(topology::Topology, index::Integer)
+.. jl:autofunction:: src/Residue.jl Residue(topology::Topology, index::Integer)
 
-.. jl:function:: src/Residue.jl residue_for_atom
+.. jl:autofunction:: src/Residue.jl residue_for_atom
 
-.. jl:function:: src/Residue.jl name
+.. jl:autofunction:: src/Residue.jl name
 
-.. jl:function:: src/Residue.jl id
+.. jl:autofunction:: src/Residue.jl id
 
-.. jl:function:: src/Residue.jl size
+.. jl:autofunction:: src/Residue.jl size
 
-.. jl:function:: src/Residue.jl add_atom!
+.. jl:autofunction:: src/Residue.jl add_atom!
 
-.. jl:function:: src/Residue.jl contains!
+.. jl:autofunction:: src/Residue.jl contains
 
-.. jl:function:: src/Residue.jl deepcopy
+.. jl:autofunction:: src/Residue.jl deepcopy
 
 .. _Selection:
 
