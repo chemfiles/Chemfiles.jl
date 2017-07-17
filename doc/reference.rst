@@ -215,96 +215,47 @@ The following cell types are defined:
 ``Topology`` type and associated function
 -----------------------------------------
 
-A `Topology`_ describes the organisation of the particles in the system. What are
-there names, how are they bonded together, *etc.* A `Topology`_ is a list of `Atom`_
-in the system, together with the list of bonds these atoms forms.
+.. jl:autotype:: src/Chemfiles.jl Topology
 
-.. jl:function:: Topology()
+.. jl:function:: src/Topology.jl Topology()
 
-    Create an empty `Topology`_.
+.. jl:function:: src/Topology.jl Topology(frame::Frame)
 
-.. jl:function:: Topology(frame::Frame)
+.. jl:function:: src/Topology.jl size
 
-    Extract the `Topology`_ from a frame.
+.. jl:function:: src/Topology.jl push!
 
-.. jl:function:: size(topology::Topology)
+.. jl:function:: src/Topology.jl remove!
 
-    Get the `Topology`_ size, i.e. the current number of atoms.
+.. jl:function:: src/Topology.jl isbond
 
-.. jl:function:: push!(topology::Topology, atom::Atom)
+.. jl:function:: src/Topology.jl isangle
 
-    Add an `Atom`_ at the end of a `Topology`_.
+.. jl:function:: src/Topology.jl isdihedral
 
-.. jl:function:: remove!(topology::Topology, i)
+.. jl:function:: src/Topology.jl nbonds
 
-    Remove an atom from a `Topology`_ by index.
+.. jl:function:: src/Topology.jl nangles
 
-.. jl:function:: isbond(topology::Topology, i, j) -> Bool
+.. jl:function:: src/Topology.jl ndihedrals
 
-    Tell if the atoms ``i`` and ``j`` are bonded together.
+.. jl:function:: src/Topology.jl bonds
 
-.. jl:function:: isangle(topology::Topology, i, j, k) -> Bool
+.. jl:function:: src/Topology.jl angles
 
-    Tell if the atoms ``i``, ``j`` and ``k`` constitues an angle.
+.. jl:function:: src/Topology.jl dihedrals
 
-.. jl:function:: isdihedral(topology::Topology, i, j, k, m) -> Bool
+.. jl:function:: src/Topology.jl add_bond!
 
-    Tell if the atoms ``i``, ``j``, ``k`` and ``m`` constitues a dihedral angle.
+.. jl:function:: src/Topology.jl remove_bond!
 
-.. jl:function:: nbonds(topology::Topology) -> Integer
+.. jl:function:: src/Topology.jl add_residue!
 
-    Get the number of bonds in the system.
+.. jl:function:: src/Topology.jl count_residue
 
-.. jl:function:: nangles(topology::Topology) -> Integer
+.. jl:function:: src/Topology.jl are_linked
 
-    Get the number of angles in the system.
-
-.. jl:function:: ndihedrals(topology::Topology) -> Integer
-
-    Get the number of dihedral angles in the system.
-
-.. jl:function:: bonds(topology::Topology) -> Array{UInt, 2}
-
-    Get the bonds in the system, arranged in a 2x ``nbonds`` array.
-
-.. jl:function:: angles(topology::Topology) -> Array{UInt, 2}
-
-    Get the angles in the system, arranges as a 3x ``nangles`` array.
-
-.. jl:function:: dihedrals(topology::Topology) -> Array{UInt, 2}
-
-    Get the dihedral angles in the system, arranged as a 4x ``ndihedrals`` array.
-
-.. jl:function:: add_bond!(topology::Topology, i, j)
-
-    Add a bond between the atoms ``i`` and ``j`` in the system.
-
-.. jl:function:: remove_bond!(topology::Topology, i, j)
-
-    Remove any existing bond between the atoms ``i`` and ``j`` in the system.
-
-.. jl:function:: add_residue!(topology::Topology, residue::Residue)
-
-   Add a copy of `residue` to this `topology`.
-   The residue id must not already be in the topology, and the residue must
-   contain only atoms that are not already in another residue.
-
-.. jl:function:: count_residue(topology::Topology)
-
-   Get the number of residues in the `topology`.
-
-.. jl:function:: are_linked(topology::Topology, first::Residue, second::Residue)
-
-   Check if the two residues `first` and `second` from the `topology` are
-   linked together, *i.e.* if there is a bond between one atom in the first
-   residue and one atom in the second one.
-
-.. jl:function:: resize!(topology::Topology, natoms::Integer)
-
-   Resize the `topology` to hold `natoms` atoms. If the new number of atoms is
-   bigger than the current number, new atoms will be created with an empty name
-   and type. If it is lower than the current number of atoms, the last atoms
-   will be removed, together with the associated bonds, angles and dihedrals.
+.. jl:function:: src/Topology.jl resize!
 
 .. _Atom:
 

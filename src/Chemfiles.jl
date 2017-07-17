@@ -49,6 +49,10 @@ module Chemfiles
         end
     end
 
+    """
+    A ``Topology`` describes the organisation of the particles in the system. What are
+    there names, how are they bonded together, *etc.* A ``Topology`` is a list of ``Atom`` in the system, together with the list of bonds these atoms forms.
+    """
     type Topology
         handle :: Ptr{lib.CHFL_TOPOLOGY}
         function Topology(ptr::Ptr{lib.CHFL_TOPOLOGY})
