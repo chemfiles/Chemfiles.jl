@@ -44,11 +44,11 @@ function Base.size(topology::Topology)
 end
 
 """
-    push!(topology::Topology, atom::Atom)
+    add_atom!(topology::Topology, atom::Atom)
 
 Add an ``Atom`` at the end of a ``Topology``.
 """
-function Base.push!(topology::Topology, atom::Atom)
+function add_atom!(topology::Topology, atom::Atom)
     check(
         lib.chfl_topology_add_atom(topology.handle, atom.handle)
     )

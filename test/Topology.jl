@@ -1,14 +1,12 @@
 @testset "Topology type" begin
     topology = Topology()
-
-    @test size(topology) == 0
     @test size(topology) == 0
 
     # Creating some H2O2
-    push!(topology, Atom("H"))
-    push!(topology, Atom("O"))
-    push!(topology, Atom("O"))
-    push!(topology, Atom("H"))
+    add_atom!(topology, Atom("H"))
+    add_atom!(topology, Atom("O"))
+    add_atom!(topology, Atom("O"))
+    add_atom!(topology, Atom("H"))
     @test size(topology) == 4
 
     @test nbonds(topology) == 0
@@ -57,7 +55,7 @@
     @testset "Residues" begin
         topology = Topology()
         for i = 1:10
-            push!(topology, Atom("X"))
+            add_atom!(topology, Atom("X"))
         end
 
         for atoms in [[2,3,6], [0,1,9], [4,5,8]]
