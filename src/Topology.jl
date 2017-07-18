@@ -232,7 +232,7 @@ function Base.resize!(topology::Topology, size::Integer)
 end
 
 """
-Get a copy of an ``topology``.
+Make a deep copy of a ``topology``.
 """
 function Base.deepcopy(topology::Topology)
     handle = lib.chfl_topology_copy(topology.handle)

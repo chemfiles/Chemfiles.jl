@@ -101,7 +101,7 @@ function Base.contains(residue::Residue, index::Integer)
 end
 
 """
-Get a copy of a ``residue``.
+Make a deep copy of a ``residue``.
 """
 function Base.deepcopy(residue::Residue)
     handle = lib.chfl_residue_copy(residue.handle)

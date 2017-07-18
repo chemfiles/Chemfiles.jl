@@ -97,6 +97,16 @@ module Chemfiles
         end
     end
 
+    """
+    A ``Frame`` holds data for one step of a simulation. As not all formats
+    provides all the types of informations, some fields may be initialized to a
+    default value. A ``Frame`` may contains the following data:
+
+    - Positions for all the atoms in the system;
+    - Velocities for all the atoms in the system;
+    - The ``Topology`` of the system;
+    - The ``UnitCell`` of the system.
+    """
     type Frame
         handle :: Ptr{lib.CHFL_FRAME}
         function Frame(ptr::Ptr{lib.CHFL_FRAME})

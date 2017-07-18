@@ -69,86 +69,37 @@ These functions are not exported, and should be called by there fully qualified 
 ``Frame`` type and associated functions
 ---------------------------------------
 
-A `Frame`_ holds data for one step of a simulation. As not all formats provides all
-the types of informations, some fields may be initialized to a default value. A
-`Frame`_ may contains the following data:
+.. jl:autotype:: src/Chemfiles.jl Frame
 
-- Positions for all the atoms in the system;
-- Velocities for all the atoms in the system;
-- The `Topology`_ of the system;
-- The `UnitCell`_ of the system.
+.. jl:autofunction:: src/Frame.jl Frame
 
-.. jl:function:: Frame(natoms = 0)
+.. jl:autofunction:: src/Frame.jl deepcopy
 
-    Create an empty `Frame`_ with initial capacity of ``natoms``. It will be
-    automatically resized if needed.
+.. jl:autofunction:: src/Frame.jl size
 
-.. jl:function:: size(frame::Frame) -> Integer
+.. jl:autofunction:: src/Frame.jl resize!
 
-    Get the `Frame`_ size, i.e. the current number of atoms
+.. jl:autofunction:: src/Frame.jl positions
 
-.. jl:function:: resize!(frame::Frame, natoms::Integer)
+.. jl:autofunction:: src/Frame.jl velocities
 
-    Resize the positions and the velocities in `Frame`_, to make space for `natoms`
-    atoms. This function may invalidate any pointer to the positions or the
-    velocities if the new size is bigger than the old one. In all the cases, previous
-    data is conserved. This function conserve the presence or absence of velocities.
+.. jl:autofunction:: src/Frame.jl add_velocities!
 
-.. jl:function:: positions(frame::Frame) -> Array{Float64, 2}
+.. jl:autofunction:: src/Frame.jl has_velocities
 
-    Get a pointer to the positions in a `Frame`_. The positions are readable and
-    writable from this array. If the frame is resized (by writing to it, or calling
-    ``resize``), the array is invalidated.
+.. jl:autofunction:: src/Frame.jl add_atom!
 
-.. jl:function:: velocities(frame::Frame)
+.. jl:autofunction:: src/Frame.jl remove_atom!
 
-    Get a pointer to the velocities in a `Frame`_. The velocities are readable and
-    writable from this array. If the frame is resized (by writing to it, or calling
-    ``resize``), the array is invalidated.
+.. jl:autofunction:: src/Frame.jl set_cell!
 
-    If the frame do not have velocity, this will return an error. Use
-    ``add_velocities!`` to add velocities to a frame before calling this function.
+.. jl:autofunction:: src/Frame.jl set_topology!
 
-.. jl:function:: add_velocities!(frame::Frame)
+.. jl:autofunction:: src/Frame.jl step
 
-    Add velocities to this `Frame`_. The storage is initialized with the result of
-    ``size(frame)`` as number of atoms. If the frame already have velocities, this
-    does nothing.
+.. jl:autofunction:: src/Frame.jl set_step!
 
-.. jl:function:: add_atom!(frame::Frame, atom::Atom, position::Array{Float64}, velocity::Array{Float64})
-
-    Add an `atom` and the corresponding `position` and `velocity` data to a `frame`.
-    `velocity` can be `NULL` if no velocity is associated with the atom.
-
-.. jl:function:: remove_atom!(frame::Frame, index::Integer)
-
-    Remove the `atom` at `index` in the frame.
-    This modify all the `atoms` indexes after `index`, and invalidate any pointer
-    obtained using `positions`_ or `velocities`_.
-
-.. jl:function:: has_velocities(frame::Frame) -> Bool
-
-    Ask wether this `Frame`_ contains velocity data or not.
-
-.. jl:function:: set_cell!(frame::Frame, cell::UnitCell)
-
-    Set the `UnitCell`_ of a `Frame`_.
-
-.. jl:function:: set_topology!(frame::Frame, topology::Topology)
-
-    Set the `Topology`_ of a `Frame`_.
-
-.. jl:function:: step(frame::Frame) -> Integer
-
-    Get the `Frame`_ step, i.e. the frame number in the trajectory.
-
-.. jl:function:: set_step!(frame::Frame, step)
-
-    Set the `Frame`_ step to ``step``.
-
-.. jl:function:: guess_topology!(frame::Frame)
-
-    Guess the bonds, angles and dihedrals in the system using a distance criteria.
+.. jl:autofunction:: src/Frame.jl guess_bonds!
 
 .. _UnitCell:
 
@@ -219,6 +170,8 @@ The following cell types are defined:
 
 .. jl:autofunction:: src/Topology.jl Topology
 
+.. jl:autofunction:: src/Topology.jl deepcopy
+
 .. jl:autofunction:: src/Topology.jl size
 
 .. jl:autofunction:: src/Topology.jl add_atom!
@@ -264,6 +217,8 @@ The following cell types are defined:
 
 .. jl:autofunction:: src/Atom.jl Atom
 
+.. jl:autofunction:: src/Atom.jl deepcopy
+
 .. jl:autofunction:: src/Atom.jl mass
 
 .. jl:autofunction:: src/Atom.jl set_mass!
@@ -298,6 +253,8 @@ The following cell types are defined:
 .. jl:autofunction:: src/Residue.jl Residue
 
 .. jl:autofunction:: src/Residue.jl residue_for_atom
+
+.. jl:autofunction:: src/Residue.jl deepcopy
 
 .. jl:autofunction:: src/Residue.jl name
 

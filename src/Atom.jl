@@ -180,7 +180,7 @@ function atomic_number(atom::Atom)
 end
 
 """
-Get a copy of an `atom`.
+Make a deep copy of an ``atom``.
 """
 function Base.deepcopy(atom::Atom)
     handle = lib.chfl_atom_copy(atom.handle)
