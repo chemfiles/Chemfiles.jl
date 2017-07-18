@@ -5,11 +5,17 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 export evaluate, selection_string
 
+"""
+Create a ``Selection`` from a selection string 
+"""
 function Selection(selection::AbstractString)
     handle = lib.chfl_selection(pointer(selection))
     return Selection(handle)
 end
 
+"""
+Get the selection string used to create a given ``selection``.
+"""
 function selection_string(selection::Selection)
     result = " " ^ 64
     check(
@@ -18,6 +24,10 @@ function selection_string(selection::Selection)
     return strip_null(result)
 end
 
+"""
+Get the size of a ``selection``, *i.e.* the number of atoms we are selecting
+together.
+"""
 function Base.size(selection::Selection)
     result = Ref{UInt64}(0)
     check(
@@ -26,6 +36,10 @@ function Base.size(selection::Selection)
     return result[]
 end
 
+"""
+Evaluate a ``selection`` on a given ``frame``. This function return a list of
+indexes or tuples of indexes of atoms in the frame matching the selection.
+"""
 function evaluate(selection::Selection, frame::Frame)
     matching = Ref{UInt64}(0)
     check(
@@ -57,6 +71,9 @@ function free(selection::Selection)
     lib.chfl_selection_free(selection.handle)
 end
 
+"""
+Make a deep copy of a ``selection``.
+"""
 function Base.deepcopy(selection::Selection)
     handle = lib.chfl_selection_copy(selection.handle)
     return Selection(handle)

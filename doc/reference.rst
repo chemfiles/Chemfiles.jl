@@ -243,21 +243,14 @@ These functions are not exported, and should be called by there fully qualified 
 ``Selection`` type and associated function
 ------------------------------------------
 
-A `Selection`_ allow to select a group of atoms. Examples of selections are
-"name H" and "(x < 45 and name O) or name C". See the `full documentation
-<http://chemfiles.readthedocs.io/en/latest/selections.html>`_ for more
-information about the selection language.
+.. jl:autotype:: src/Chemfiles.jl Selection
 
-.. jl:function:: size(selection::Selection) -> Integer
+.. jl:autofunction:: src/Selection.jl Selection
 
-    Get the size of the `Selection`_, *i.e.* the number of atoms we are
-    selecting together.
+.. jl:autofunction:: src/Selection.jl deepcopy
 
-.. jl:function:: evaluate(selection::Selection, frame::Frame) -> Array(Match, 1)
+.. jl:autofunction:: src/Selection.jl size
 
-    Evaluate a `Selection`_ on a given `Frame`_. This function return a list of
-    indexes or tuples of indexes of atoms in the frame matching the selection.
+.. jl:autofunction:: src/Selection.jl evaluate
 
-.. jl:function:: selection_string(selection::Selection)
-
-    Get the selection string used to create a given `selection`.
+.. jl:autofunction:: src/Selection.jl selection_string
