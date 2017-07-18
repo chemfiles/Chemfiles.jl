@@ -55,27 +55,33 @@
     @test size(topology) == 42
 
     @testset "Residues" begin
-        topo = Topology()
-        [push!(topo, Atom("X")) for i=0:10]
-
-        for atoms in [[2,3,6], [0,1,9], [4,5,8]]
-            res = Residue("X")
-            [add_atom!(res, i) for i in atoms]
-            add_residue!(topo, res)
+        topology = Topology()
+        for i = 1:10
+            push!(topology, Atom("X"))
         end
 
-        @test count_residues(topo) == 3
+        for atoms in [[2,3,6], [0,1,9], [4,5,8]]
+            residue = Residue("X")
+            for i in atoms
+                add_atom!(residue, i)
+            end
+            add_residue!(topology, residue)
+        end
 
-        first = residue_for_atom(topo, 2)
-        second = residue_for_atom(topo, 0)
+        @test count_residues(topology) == 3
+
+        first = residue_for_atom(topology, 2)
+        second = residue_for_atom(topology, 0)
+
+        @test residue_for_atom(topology, 7) == nothing
 
         @test first != nothing
         @test second != nothing
-        @test_throws ChemfilesError Residue(topo, 4)
+        @test_throws ChemfilesError Residue(topology, 4)
 
-        @test are_linked(topo, first, second) == false
+        @test are_linked(topology, first, second) == false
 
-        add_bond!(topo, 6, 9)
-        @test are_linked(topo, first, second) == true
+        add_bond!(topology, 6, 9)
+        @test are_linked(topology, first, second) == true
     end
 end

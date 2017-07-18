@@ -49,7 +49,11 @@ This function will return ``nothing`` if the atom is not in a residue, or if the
 """
 function residue_for_atom(topology::Topology, index::Integer)
     handle = lib.chfl_residue_for_atom(topology.handle, UInt64(index))
-    return Residue(handle)
+    if Int(handle) == 0
+        return nothing
+    else
+        return Residue(handle)
+    end
 end
 
 
