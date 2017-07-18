@@ -87,6 +87,11 @@ module Chemfiles
         end
     end
 
+    """
+    An ``UnitCell`` describe the bounding box of a system. It is represented by
+    three base vectors of lengthes ``a``, ``b`` and ``c``; and the angles
+    between these vectors are ``alpha``, ``beta`` and ``gamma``.
+    """
     type UnitCell
         handle :: Ptr{lib.CHFL_CELL}
         function UnitCell(ptr::Ptr{lib.CHFL_CELL})

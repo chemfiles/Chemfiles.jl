@@ -106,60 +106,30 @@ These functions are not exported, and should be called by there fully qualified 
 ``UnitCell`` type and associated function
 -----------------------------------------
 
-An `UnitCell`_ describe the bounding box of a system. It is represented by three base
-vectors of lengthes ``a``, ``b`` and ``c``; and the angles between these vectors are
-``alpha``, ``beta`` and ``gamma``.
+.. jl:autotype:: src/Chemfiles.jl UnitCell
 
-.. jl:function:: UnitCell(a, b, c, alpha=90, beta=90, gamma=90)
+.. jl:autofunction:: src/UnitCell.jl UnitCell
 
-    Create an `UnitCell`_ from the three lenghts and the three angles.
+.. jl:autofunction:: src/UnitCell.jl deepcopy
 
-.. jl:function:: UnitCell(frame::Frame)
+.. jl:autofunction:: src/UnitCell.jl volume
 
-    Get a copy of the `UnitCell`_ of a frame.
+.. jl:autofunction:: src/UnitCell.jl lengths
 
-.. jl:function:: lengths(cell::UnitCell) -> (Float64, Float64, Float64)
+.. jl:autofunction:: src/UnitCell.jl set_lengths!
 
-    Get the three `UnitCell`_ lenghts (a, b and c) in angstroms.
+.. jl:autofunction:: src/UnitCell.jl angles
 
-.. jl:function:: set_lengths!(cell::UnitCell, a, b, c)
+.. jl:autofunction:: src/UnitCell.jl set_angles!
 
-    Set the `UnitCell`_ lenghts to ``a``, ``b`` and ``c`` in angstroms.
+.. jl:autofunction:: src/UnitCell.jl cell_matrix
 
-.. jl:function:: angles(cell::UnitCell) -> (Float64, Float64, Float64)
+.. jl:autofunction:: src/UnitCell.jl shape
 
-    Get the three `UnitCell`_ angles (alpha, beta and gamma) in degrees.
+.. jl:autofunction:: src/UnitCell.jl set_shape!
 
-.. jl:function:: set_angles!(cell::UnitCell, alpha, beta, gamma)
+.. jl:autotype:: src/UnitCell.jl CellShape
 
-    Set the `UnitCell`_ angles to ``alpha``, ``beta`` and ``gamma`` in degrees.
-
-.. jl:function:: cell_matrix(cell::UnitCell) -> Array{Float64, 2}
-
-    Get the `UnitCell`_ matricial representation, i.e. the representation of the
-    three base vectors as::
-
-        | a_x   b_x   c_x |
-        |  0    b_y   c_y |
-        |  0     0    c_z |
-
-.. jl:function:: type(cell::UnitCell) -> CellType
-
-    Get the `UnitCell`_ type.
-
-.. jl:function:: set_type!(cell::UnitCell, celltype::CellType)
-
-    Set the `UnitCell`_ type to ``celltype``.
-
-The following cell types are defined:
-
-- ``Chemfiles.ORTHORHOMBIC`` : The three angles are 90°
-- ``Chemfiles.TRICLINIC`` : The three angles may not be 90°
-- ``Chemfiles.INFINITE`` : Cell type when there is no periodic boundary conditions
-
-.. jl:function:: volume(cell::UnitCell) -> Float64
-
-    Get the unit cell volume
 
 .. _Topology:
 
