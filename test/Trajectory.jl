@@ -35,12 +35,12 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
 
         topology = Topology(frame)
         @test size(topology) == 297
-        @test nbonds(topology) == 0
+        @test bonds_count(topology) == 0
 
         guess_bonds!(frame)
         topology = Topology(frame)
-        @test nbonds(topology) == 181
-        @test nangles(topology) == 87
+        @test bonds_count(topology) == 181
+        @test angles_count(topology) == 87
 
         topology = Topology()
         a = Atom("Cs")

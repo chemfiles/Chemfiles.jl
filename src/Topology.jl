@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export remove!, isbond, isangle, isdihedral, nbonds, nangles, ndihedrals,
+export remove!, isbond, isangle, isdihedral, bonds_count, angles_count, dihedrals_count,
     bonds, angles, dihedrals, add_bond!, remove_bond!, add_residue!, residues,
     are_linked, count_residues
 
@@ -107,11 +107,11 @@ function isdihedral(topology::Topology, i::Integer, j::Integer, k::Integer, m::I
 end
 
 """
-    nbonds(topology::Topology)
+    bonds_count(topology::Topology)
 
 Get the number of bonds in the system.
 """
-function nbonds(topology::Topology)
+function bonds_count(topology::Topology)
     n = Ref{UInt64}(0)
     check(
         lib.chfl_topology_bonds_count(topology.handle, n)
@@ -120,11 +120,11 @@ function nbonds(topology::Topology)
 end
 
 """
-    nangles(topology::Topology)
+    angles_count(topology::Topology)
 
 Get the number of angles in the system.
 """
-function nangles(topology::Topology)
+function angles_count(topology::Topology)
     n = Ref{UInt64}(0)
     check(
         lib.chfl_topology_angles_count(topology.handle, n)
@@ -133,11 +133,11 @@ function nangles(topology::Topology)
 end
 
 """
-    ndihedrals(topology::Topology)
+    dihedrals_count(topology::Topology)
 
 Get the number of dihedral angles in the system.
 """
-function ndihedrals(topology::Topology)
+function dihedrals_count(topology::Topology)
     n = Ref{UInt64}(0)
     check(
         lib.chfl_topology_dihedrals_count(topology.handle, n)
@@ -148,10 +148,10 @@ end
 """
     bonds(topology::Topology)
 
-Get the bonds in the system, arranged in a 2x ``nbonds`` array.
+Get the bonds in the system, arranged in a 2x ``bonds_count`` array.
 """
 function bonds(topology::Topology)
-    count = nbonds(topology)
+    count = bonds_count(topology)
     result = Array{UInt64}(2, count)
     check(
         lib.chfl_topology_bonds(topology.handle, pointer(result), count)
@@ -162,10 +162,10 @@ end
 """
     angles(topology::Topology)
 
-Get the angles in the system, arranges as a 3x ``nangles`` array.
+Get the angles in the system, arranges as a 3x ``angles_count`` array.
 """
 function angles(topology::Topology)
-    count = nangles(topology)
+    count = angles_count(topology)
     result = Array{UInt64}(3, count)
     check(
         lib.chfl_topology_angles(topology.handle, pointer(result), count)
@@ -176,9 +176,9 @@ end
 """
     dihedrals(topology::Topology)
 
-Get the dihedral angles in the system, arranged as a 4x ``ndihedrals`` array."""
+Get the dihedral angles in the system, arranged as a 4x ``dihedrals_count`` array."""
 function dihedrals(topology::Topology)
-    count = ndihedrals(topology)
+    count = dihedrals_count(topology)
     result = Array{UInt64}(4, count)
     check(
         lib.chfl_topology_dihedrals(topology.handle, pointer(result), count)

@@ -9,17 +9,17 @@
     add_atom!(topology, Atom("H"))
     @test size(topology) == 4
 
-    @test nbonds(topology) == 0
-    @test nangles(topology) == 0
-    @test ndihedrals(topology) == 0
+    @test bonds_count(topology) == 0
+    @test angles_count(topology) == 0
+    @test dihedrals_count(topology) == 0
 
     add_bond!(topology, 0, 1)
     add_bond!(topology, 1, 2)
     add_bond!(topology, 2, 3)
 
-    @test nbonds(topology) == 3
-    @test nangles(topology) == 2
-    @test ndihedrals(topology) == 1
+    @test bonds_count(topology) == 3
+    @test angles_count(topology) == 2
+    @test dihedrals_count(topology) == 1
 
     @test isbond(topology, 0, 1) == true
     @test isbond(topology, 0, 3) == false
@@ -35,9 +35,9 @@
     @test dihedrals(topology) == reshape(UInt64[0, 1, 2, 3], (4,1))
 
     remove_bond!(topology, 2, 3)
-    @test nbonds(topology) == 2
-    @test nangles(topology) == 1
-    @test ndihedrals(topology) == 0
+    @test bonds_count(topology) == 2
+    @test angles_count(topology) == 1
+    @test dihedrals_count(topology) == 0
 
     remove!(topology, 3)
     @test size(topology) == 3
