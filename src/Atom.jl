@@ -8,47 +8,34 @@ export mass, set_mass!, charge, set_charge!, name, set_name!, fullname, vdw_radi
 covalent_radius, atomic_number, atom_type, set_atom_type!, AtomType
 
 """
-    Atom(name::String)
-
-Create an atom with the given ``name`` and set the atom ``type`` to be the same as ``name``.
+Create an atom with the given ``name`` and set the atom ``type`` to be the same
+as ``name``.
 """
 function Atom(name::String)
     return Atom(lib.chfl_atom(pointer(name)))
 end
 
 """
-    Atom(frame::Frame, i::Integer)
-
-Get a copy of the ``atom`` at index ``i`` from a ``frame``
+Get a copy of the ``atom`` at the given ``index`` from a ``frame``
 """
-function Atom(frame::Frame, i::Integer)
-    handle = lib.chfl_atom_from_frame(frame.handle, UInt64(i))
+function Atom(frame::Frame, index::Integer)
+    handle = lib.chfl_atom_from_frame(frame.handle, UInt64(index))
     return Atom(handle)
 end
 
 """
-    Atom(topology::Topology, index::Integer)
-
-Get a copy of the ``atom`` at index ``i`` from a `topology`
+Get a copy of the ``atom`` at a given ``index`` from a ``topology``
 """
-function Atom(topology::Topology, i::Integer)
-    handle = lib.chfl_atom_from_topology(topology.handle, UInt64(i))
+function Atom(topology::Topology, index::Integer)
+    handle = lib.chfl_atom_from_topology(topology.handle, UInt64(index))
     return Atom(handle)
 end
 
-"""
-    free(atom::Atom)
-
-Close a ``atom``, flushing any buffer content to the hard drive, and
-freeing the associated memory.
-"""
 function free(atom::Atom)
     lib.chfl_atom_free(atom.handle)
 end
 
 """
-    mass(atom::Atom)
-
 Get the mass of an ``atom``.
 
 The mass is given in atomic mass units.
@@ -62,8 +49,6 @@ function mass(atom::Atom)
 end
 
 """
-    set_mass!(atom::Atom, mass)
-
 Set the mass of an ``atom`` to ``mass``.
 
 The mass must be in atomic mass units.
@@ -76,8 +61,6 @@ function set_mass!(atom::Atom, mass)
 end
 
 """
-    charge(atom::Atom)
-
 Get the charge of an ``atom``.
 
 The charge is in number of the electron charge *e*.
@@ -91,8 +74,6 @@ function charge(atom::Atom)
 end
 
 """
-    set_charge!(atom::Atom, charge)
-
 Set the charge of an ``atom`` to ``charge``.
 
 The charge must be in number of the electron charge *e*.
@@ -105,8 +86,6 @@ function set_charge!(atom::Atom, charge)
 end
 
 """
-    name(atom::Atom)
-
 Get the name of an ``atom``
 """
 function name(atom::Atom)
@@ -118,8 +97,6 @@ function name(atom::Atom)
 end
 
 """
-    set_name!(atom::Atom, name::String)
-
 Set the name of an ``atom`` to ``name``.
 """
 function set_name!(atom::Atom, name::String)
@@ -130,8 +107,6 @@ function set_name!(atom::Atom, name::String)
 end
 
 """
-    atom_type(atom::Atom)
-
 Get the type of an ``atom``.
 """
 function atom_type(atom::Atom)
@@ -143,9 +118,7 @@ function atom_type(atom::Atom)
 end
 
 """
-    set_atom_type!(atom::Atom, type::String)
-
-Set the type of an ``atom`` to ```type``.
+Set the type of an ``atom`` to ``type``.
 """
 function set_atom_type!(atom::Atom, atom_type::String)
     check(
@@ -155,9 +128,9 @@ function set_atom_type!(atom::Atom, atom_type::String)
 end
 
 """
-    Base.fullname(atom::Atom)
+Get the full name of an ``atom`` from the atom type.
 
-Get the full name of an ``atom``.
+For example, the full name of an atom with type "He" is "Helium".
 """
 function Base.fullname(atom::Atom)
     str = " " ^ 96
@@ -168,11 +141,9 @@ function Base.fullname(atom::Atom)
 end
 
 """
-    vdw_radius(atom::Atom)
-
 Get the Van der Waals radius of an ``atom`` from the atom type.
 
-If the radius can not be found, returns -1.
+If the radius can not be found, this function returns -1.
 """
 function vdw_radius(atom::Atom)
     radius = Ref{Float64}(0)
@@ -183,8 +154,6 @@ function vdw_radius(atom::Atom)
 end
 
 """
-    covalent_radius(atom::Atom)
-
 Get the covalent radius of an ``atom`` from the atom type.
 
 If the radius can not be found, returns -1.
@@ -198,8 +167,6 @@ function covalent_radius(atom::Atom)
 end
 
 """
-    atomic_number(atom::Atom)
-
 Get the atomic number of an ``atom`` from the atom type.
 
 If the atomic number can not be found, returns -1.
@@ -213,8 +180,6 @@ function atomic_number(atom::Atom)
 end
 
 """
-    Base.deepcopy(atom::Atom)
-
 Get a copy of an `atom`.
 """
 function Base.deepcopy(atom::Atom)

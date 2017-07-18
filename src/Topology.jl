@@ -9,8 +9,6 @@ export remove!, isbond, isangle, isdihedral, bonds_count, angles_count, dihedral
     are_linked, count_residues
 
 """
-    Topology()
-
 Create an empty ``Topology``.
 """
 function Topology()
@@ -18,9 +16,7 @@ function Topology()
 end
 
 """
-    Topology(frame::Frame)
-
-Extract the ``Topology`` from a frame.
+Get a copy of the ``Topology`` of the given ``frame``.
 """
 function Topology(frame::Frame)
     return Topology(lib.chfl_topology_from_frame(frame.handle))
@@ -31,8 +27,6 @@ function free(topology::Topology)
 end
 
 """
-    size(topology::Topology)
-
 Get the ``Topology`` size, i.e. the current number of atoms.
 """
 function Base.size(topology::Topology)
@@ -44,9 +38,7 @@ function Base.size(topology::Topology)
 end
 
 """
-    add_atom!(topology::Topology, atom::Atom)
-
-Add an ``Atom`` at the end of a ``Topology``.
+Add an ``atom`` at the end of a ``topology``.
 """
 function add_atom!(topology::Topology, atom::Atom)
     check(
@@ -56,21 +48,17 @@ function add_atom!(topology::Topology, atom::Atom)
 end
 
 """
-    remove!(topology::Topology, i::Integer)
-
-Remove an atom from a ``Topology`` at index ``i``.
+Remove the atom at the given ``index`` from a ``topology``.
 """
-function remove!(topology::Topology, i::Integer)
+function remove!(topology::Topology, index::Integer)
     check(
-        lib.chfl_topology_remove(topology.handle, UInt64(i))
+        lib.chfl_topology_remove(topology.handle, UInt64(index))
     )
     return nothing
 end
 
 """
-    isbond(topology::Topology, i::Integer, j::Integer)
-
-Tell if the atoms ``i`` and ``j`` are bonded together.
+Check if the atoms ``i`` and ``j`` are bonded together.
 """
 function isbond(topology::Topology, i::Integer, j::Integer)
     result = Ref{UInt8}(0)
@@ -81,9 +69,7 @@ function isbond(topology::Topology, i::Integer, j::Integer)
 end
 
 """
-    isangle(topology::Topology, i::Integer, j::Integer, k::Integer)
-
-Tell if the atoms ``i``, ``j`` and ``k`` constitues an angle.
+Check if the atoms ``i``, ``j`` and ``k`` constitues an angle.
 """
 function isangle(topology::Topology, i::Integer, j::Integer, k::Integer)
     result = Ref{UInt8}(0)
@@ -94,9 +80,7 @@ function isangle(topology::Topology, i::Integer, j::Integer, k::Integer)
 end
 
 """
-    isdihedral(topology::Topology, i::Integer, j::Integer, k::Integer, m::Integer)
-
-Tell if the atoms ``i``, ``j``, ``k`` and ``m`` constitues a dihedral angle.
+Check if the atoms ``i``, ``j``, ``k`` and ``m`` constitues a dihedral angle.
 """
 function isdihedral(topology::Topology, i::Integer, j::Integer, k::Integer, m::Integer)
     result = Ref{UInt8}(0)
@@ -107,9 +91,7 @@ function isdihedral(topology::Topology, i::Integer, j::Integer, k::Integer, m::I
 end
 
 """
-    bonds_count(topology::Topology)
-
-Get the number of bonds in the system.
+Get the number of bonds in the ``topology``.
 """
 function bonds_count(topology::Topology)
     n = Ref{UInt64}(0)
@@ -120,9 +102,7 @@ function bonds_count(topology::Topology)
 end
 
 """
-    angles_count(topology::Topology)
-
-Get the number of angles in the system.
+Get the number of angles in the ``topology``.
 """
 function angles_count(topology::Topology)
     n = Ref{UInt64}(0)
@@ -133,9 +113,7 @@ function angles_count(topology::Topology)
 end
 
 """
-    dihedrals_count(topology::Topology)
-
-Get the number of dihedral angles in the system.
+Get the number of dihedral angles in the ``topology``.
 """
 function dihedrals_count(topology::Topology)
     n = Ref{UInt64}(0)
@@ -146,9 +124,7 @@ function dihedrals_count(topology::Topology)
 end
 
 """
-    bonds(topology::Topology)
-
-Get the bonds in the system, arranged in a 2x ``bonds_count`` array.
+Get the bonds in the ``topology``, in a ``2 x bonds_count(topology)`` array.
 """
 function bonds(topology::Topology)
     count = bonds_count(topology)
@@ -160,9 +136,7 @@ function bonds(topology::Topology)
 end
 
 """
-    angles(topology::Topology)
-
-Get the angles in the system, arranges as a 3x ``angles_count`` array.
+Get the angles in the ``topology``, in a ``3 x angles_count(topology)`` array.
 """
 function angles(topology::Topology)
     count = angles_count(topology)
@@ -174,9 +148,9 @@ function angles(topology::Topology)
 end
 
 """
-    dihedrals(topology::Topology)
-
-Get the dihedral angles in the system, arranged as a 4x ``dihedrals_count`` array."""
+Get the dihedral angles in the ``topology``, in a ``4 x dihedrals_count(topology)``
+array.
+"""
 function dihedrals(topology::Topology)
     count = dihedrals_count(topology)
     result = Array{UInt64}(4, count)
@@ -187,9 +161,7 @@ function dihedrals(topology::Topology)
 end
 
 """
-    add_bond!(topology::Topology, i::Integer, j::Integer)
-
-Add a bond between the atoms ``i`` and ``j`` in the system.
+Add a bond between the atoms ``i`` and ``j`` in the ``topology``.
 """
 function add_bond!(topology::Topology, i::Integer, j::Integer)
     check(
@@ -199,9 +171,7 @@ function add_bond!(topology::Topology, i::Integer, j::Integer)
 end
 
 """
-    remove_bond!(topology::Topology, i::Integer, j::Integer)
-
-Remove any existing bond between the atoms ``i`` and ``j`` in the system.
+Remove any existing bond between the atoms ``i`` and ``j`` in the ``topology``.
 """
 function remove_bond!(topology::Topology, i::Integer, j::Integer)
     check(
@@ -211,11 +181,10 @@ function remove_bond!(topology::Topology, i::Integer, j::Integer)
 end
 
 """
-    add_residue!(topology::Topology, residue::Residue)
-
 Add a copy of ``residue`` to this ``topology``.
 
-The residue id must not already be in the topology, and the residue must contain only atoms that are not already in another residue.
+The residue id must not already be in the topology, and the residue must
+contain only atoms that are not already in another residue.
 """
 function add_residue!(topology::Topology, residue::Residue)
     check(
@@ -225,8 +194,6 @@ function add_residue!(topology::Topology, residue::Residue)
 end
 
 """
-    count_residues(topology::Topology)
-
 Get the number of residues in the ``topology``.
 """
 function count_residues(topology::Topology)
@@ -238,9 +205,9 @@ function count_residues(topology::Topology)
 end
 
 """
-    are_linked(topology::Topology, first::Residue, second::Residue)
-
-Check if the two residues ``first`` and ``second`` from the ``topology`` are linked together. *i.e.* if there is a bond between one atom in the first residue and one atom in the second one.
+Check if the two residues ``first`` and ``second`` from the ``topology`` are
+linked together. *i.e.* if there is a bond between one atom in the first
+residue and one atom in the second one.
 """
 function are_linked(topology::Topology, first::Residue, second::Residue)
     result = Ref{UInt8}(0)
@@ -251,11 +218,12 @@ function are_linked(topology::Topology, first::Residue, second::Residue)
 end
 
 """
-    resize!(topology::Topology, size::Integer)
+Resize the ``topology`` to hold ``natoms`` atoms. If the new number of atoms is
+bigger than the current number, new atoms will be created with an empty name
+and type.
 
-Resize the ``topology`` to hold ``natoms`` atoms. If the new number of atoms is bigger than the current number, new atoms will be created with an empty name and type.
-
-If it is lower than the current number of atoms, the last atoms will be removed, together with the associated bonds, angles and dihedrals.
+If it is lower than the current number of atoms, the last atoms will be removed,
+together with the associated bonds, angles and dihedrals.
 """
 function Base.resize!(topology::Topology, size::Integer)
     check(
@@ -264,8 +232,6 @@ function Base.resize!(topology::Topology, size::Integer)
 end
 
 """
-    deepcopy(topology::Topology)
-
 Get a copy of an ``topology``.
 """
 function Base.deepcopy(topology::Topology)

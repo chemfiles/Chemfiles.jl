@@ -217,13 +217,11 @@ The following cell types are defined:
 
 .. jl:autotype:: src/Chemfiles.jl Topology
 
-.. jl:autofunction:: src/Topology.jl Topology()
-
-.. jl:autofunction:: src/Topology.jl Topology(frame::Frame)
+.. jl:autofunction:: src/Topology.jl Topology
 
 .. jl:autofunction:: src/Topology.jl size
 
-.. jl:autofunction:: src/Topology.jl push!
+.. jl:autofunction:: src/Topology.jl add_atom!
 
 .. jl:autofunction:: src/Topology.jl remove!
 
@@ -233,11 +231,11 @@ The following cell types are defined:
 
 .. jl:autofunction:: src/Topology.jl isdihedral
 
-.. jl:autofunction:: src/Topology.jl nbonds
+.. jl:autofunction:: src/Topology.jl bonds_count
 
-.. jl:autofunction:: src/Topology.jl nangles
+.. jl:autofunction:: src/Topology.jl angles_count
 
-.. jl:autofunction:: src/Topology.jl ndihedrals
+.. jl:autofunction:: src/Topology.jl dihedrals_count
 
 .. jl:autofunction:: src/Topology.jl bonds
 
@@ -264,11 +262,7 @@ The following cell types are defined:
 
 .. jl:autotype:: src/Chemfiles.jl Atom
 
-.. jl:autofunction:: src/Atom.jl Atom(name::String)
-
-.. jl:autofunction:: src/Atom.jl Atom(frame::Frame, i::Integer)
-
-.. jl:autofunction:: src/Atom.jl Atom(topology::Topology, i::Integer)
+.. jl:autofunction:: src/Atom.jl Atom
 
 .. jl:autofunction:: src/Atom.jl mass
 
@@ -279,10 +273,10 @@ The following cell types are defined:
 .. jl:autofunction:: src/Atom.jl set_charge!
 
 .. jl:autofunction:: src/Atom.jl name
-    
+
 .. jl:autofunction:: src/Atom.jl set_name!
 
-.. jl:autofunction:: src/Atom.jl Base.fullname
+.. jl:autofunction:: src/Atom.jl fullname
 
 .. jl:autofunction:: src/Atom.jl vdw_radius
 
@@ -301,11 +295,7 @@ The following cell types are defined:
 
 .. jl:autotype:: src/Chemfiles.jl Residue
 
-.. jl:autofunction:: src/Residue.jl Residue(name::String, resid::Integer)
-
-.. jl:autofunction:: src/Residue.jl Residue(name::String)
-
-.. jl:autofunction:: src/Residue.jl Residue(topology::Topology, index::Integer)
+.. jl:autofunction:: src/Residue.jl Residue
 
 .. jl:autofunction:: src/Residue.jl residue_for_atom
 

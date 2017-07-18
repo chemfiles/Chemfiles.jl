@@ -50,8 +50,10 @@ module Chemfiles
     end
 
     """
-    A ``Topology`` describes the organisation of the particles in the system. What are
-    there names, how are they bonded together, *etc.* A ``Topology`` is a list of ``Atom`` in the system, together with the list of bonds these atoms forms.
+    A ``Topology`` describes the organisation of the particles in the system:
+    what are there names, how are they bonded together, *etc.* A ``Topology``
+    is a list of ``Atom`` in the system, together with the list of bonds between
+    the atoms.
     """
     type Topology
         handle :: Ptr{lib.CHFL_TOPOLOGY}
@@ -72,7 +74,8 @@ module Chemfiles
       - atom mass
       - atom charge
 
-    The atom name is usually an unique identifier (“H1”, “C_a”) while the atom type will be shared between all particles of the same type: “H”, “Ow”, “CH3”.
+    The atom name is usually an unique identifier ("H1", "C_a") while the atom
+    type will be shared between all particles of the same type: "H", "Ow", "CH3".
     """
     type Atom
         handle :: Ptr{lib.CHFL_ATOM}
@@ -115,7 +118,9 @@ module Chemfiles
     end
 
     """
-    A ``Residue`` is a group of atoms belonging to the same logical unit. They can be small molecules, amino-acids in a protein, monomers in polymers, etc.*
+    A ``Residue`` is a group of atoms belonging to the same logical unit. They
+    can be small molecules, amino-acids in a protein, monomers in polymers,
+    *etc.*
     """
     type Residue
         handle :: Ptr{lib.CHFL_RESIDUE}
