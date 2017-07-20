@@ -12,7 +12,8 @@ sys.path.append(DOC_ROOT)
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'julia',
+    'sphinxjulia.juliadomain',
+    'sphinxjulia.juliaautodoc',
 ]
 
 # The suffix of source filenames.

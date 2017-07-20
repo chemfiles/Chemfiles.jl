@@ -3,14 +3,13 @@
 Julia interface reference
 =========================
 
-The `Julia`_ interface to chemfiles wrap around the C interface providing a Julian
-API. All the functionalities are in the ``Chemfiles`` module, which can be imported
-by the ``using Chemfiles`` expression. The ``Chemfiles`` module is built around the 5
-main types of chemfiles: `Trajectory`_, `Frame`_, `UnitCell`_, `Topology`_, and
-`Atom`_.
+The `Julia`_ interface to chemfiles wrap around the C interface providing a
+Julian API. All the functionalities are in the ``Chemfiles`` module, which can
+be imported by the ``using Chemfiles`` expression. The ``Chemfiles`` module is
+built around the main types of chemfiles: `Trajectory`_, `Frame`_, `UnitCell`_,
+`Topology`_, `Residue`_, `Atom`_, and `Selection`_.
 
 .. _Julia: http://julialang.org/
-.. _overview: http://chemfiles.readthedocs.io/en/latest/overview.html
 
 .. warning::
    All indexing in chemfiles is 0-based! That means that the first atom in a frame
@@ -28,521 +27,230 @@ These functions are not exported, and should be called by there fully qualified 
 .. code-block:: julia
 
     Chemfiles.last_error()
-    Chemfiles.loglevel(Chemfiles.ERROR)
+    Chemfiles.set_warning_callback(my_callback)
 
-.. jl:function:: Chemfiles.last_error()
+.. jl:autofunction:: src/errors.jl last_error
 
-    Get the last error message.
+.. jl:autofunction:: src/errors.jl clear_errors
 
-.. jl:function:: Chemfiles.clear_errors()
-
-    Clear the last error message.
-
-.. jl:function:: Chemfiles.loglevel()
-
-    Get the current log level.
-
-.. jl:function:: Chemfiles.set_warning_callback(callback)
-
-    Set the global warning `callback` to be used for each warning event.
-
- The following logging levels are available:
-
-- ``Chemfiles.ERROR``: Only log errors;
-- ``Chemfiles.WARNING``: Log warnings and erors. This is the default;
-- ``Chemfiles.INFO``: Log infos, warnings and errors;
-- ``Chemfiles.DEBUG``: Log everything.
-
-.. jl:function:: Chemfiles.logfile(file)
-
-    Redirect the logs to ``file``, overwriting the file if it exists.
-
-.. jl:function:: Chemfiles.log_to_stdout()
-
-    Redirect the logs to the standard output.
-
-.. jl:function:: Chemfiles.log_to_stderr()
-
-    Redirect the logs to the standard error output. This is enabled by default.
-
-.. jl:function:: Chemfiles.log_silent()
-
-    Remove all logging output
-
-.. jl:function:: Chemfiles.log_callback(callback)
-
-    Use a callback for logging, instead of the built-in logging system. The callback
-    function will be called at each log event, with the event level and message.
-
-    The ``callback`` function must have the following signature:
-
-    .. code-block:: julia
-
-        function callback(level::Chemfiles.LogLevel, message::AbstractString)
-            # Do work as needed
-            return nothing
-        end
+.. jl:autofunction:: src/errors.jl set_warning_callback
 
 .. _Trajectory:
 
 ``Trajectory`` type and associated functions
 --------------------------------------------
 
-A `Trajectory`_ uses a file and a format together to read simulation data from the
-file. It can read or write one or many `Frame`_ to this file. The file type and the
-format are automatically determined from the extention.
+.. jl:autotype:: src/Chemfiles.jl Trajectory
 
-.. jl:function:: Trajectory(filename::String, mode::Char)
+.. jl:autofunction:: src/Trajectory.jl Trajectory
 
-    Open a trajectory file.
+.. jl:autofunction:: src/Trajectory.jl read
 
-    :parameter filename: The path to the trajectory file
-    :parameter mode: The opening mode: 'r' for read, 'w' for write and
-                            'a' for append.
+.. jl:autofunction:: src/Trajectory.jl read!
 
-.. jl:function:: read(trajectory::Trajectory) -> Frame
+.. jl:autofunction:: src/Trajectory.jl read_step
 
-    Read the next step of the `Trajectory`_, and return the corresponding `Frame`_.
+.. jl:autofunction:: src/Trajectory.jl read_step!
 
-.. jl:function:: read!(trajectory::Trajectory, frame::Frame)
+.. jl:autofunction:: src/Trajectory.jl write
 
-    Read the next step of the `Trajectory`_ into an existing `Frame`_.
+.. jl:autofunction:: src/Trajectory.jl set_topology!
 
-.. jl:function:: read_step(trajectory::Trajectory, step) -> Frame
+.. jl:autofunction:: src/Trajectory.jl set_cell!
 
-    Read the given ``step`` of the `Trajectory`_, and return the corresponding
-    `Frame`_.
+.. jl:autofunction:: src/Trajectory.jl nsteps
 
-.. jl:function:: read_step(trajectory::Trajectory, step, frame::Frame)
+.. jl:autofunction:: src/Trajectory.jl close
 
-    Read the given ``step`` of the `Trajectory`_ into an existing `Frame`_.
-
-.. jl:function:: write(trajectory::Trajectory, frame::Frame)
-
-    Write a frame to the `Trajectory`_.
-
-.. jl:function:: set_topology!(trajectory::Trajectory, topology::Topology)
-
-    Set the `Topology`_ associated with a `Trajectory`_. This topology will be
-    used when reading and writing the files, replacing any topology in the
-    frames or files.
-
-.. jl:function:: set_topology!(trajectory::Trajectory, filename:AbstractString)
-
-    Set the `Topology`_ associated with a `Trajectory`_ by reading the first
-    frame of ``filename``; and extracting the topology of this frame.
-
-.. jl:function:: set_cell!(trajectory::Trajectory, cell::UnitCell)
-
-    Set the `UnitCell`_ associated with a `Trajectory`_. This cell will be
-    used when reading and writing the files, replacing any unit cell in the
-    frames or files.
-
-.. jl:function:: nsteps(trajectory::Trajectory) -> Integer
-
-    Get the number of steps (the number of frames) in a `Trajectory`_.
-
-.. jl:function:: sync(trajectory::Trajectory)
-
-    Synchronize any buffered content to the hard drive.
-
-.. jl:function:: close(trajectory::Trajectory)
-
-    Close a `Trajectory`_, flushing any buffer content to the hard drive, and
-    freeing the associated memory.
-
+.. jl:autofunction:: src/Trajectory.jl isopen
 
 .. _Frame:
 
 ``Frame`` type and associated functions
 ---------------------------------------
 
-A `Frame`_ holds data for one step of a simulation. As not all formats provides all
-the types of informations, some fields may be initialized to a default value. A
-`Frame`_ may contains the following data:
+.. jl:autotype:: src/Chemfiles.jl Frame
 
-- Positions for all the atoms in the system;
-- Velocities for all the atoms in the system;
-- The `Topology`_ of the system;
-- The `UnitCell`_ of the system.
+.. jl:autofunction:: src/Frame.jl Frame
 
-.. jl:function:: Frame(natoms = 0)
+.. jl:autofunction:: src/Frame.jl deepcopy
 
-    Create an empty `Frame`_ with initial capacity of ``natoms``. It will be
-    automatically resized if needed.
+.. jl:autofunction:: src/Frame.jl size
 
-.. jl:function:: size(frame::Frame) -> Integer
+.. jl:autofunction:: src/Frame.jl resize!
 
-    Get the `Frame`_ size, i.e. the current number of atoms
+.. jl:autofunction:: src/Frame.jl positions
 
-.. jl:function:: resize!(frame::Frame, natoms::Integer)
+.. jl:autofunction:: src/Frame.jl velocities
 
-    Resize the positions and the velocities in `Frame`_, to make space for `natoms`
-    atoms. This function may invalidate any pointer to the positions or the
-    velocities if the new size is bigger than the old one. In all the cases, previous
-    data is conserved. This function conserve the presence or absence of velocities.
+.. jl:autofunction:: src/Frame.jl add_velocities!
 
-.. jl:function:: positions(frame::Frame) -> Array{Float64, 2}
+.. jl:autofunction:: src/Frame.jl has_velocities
 
-    Get a pointer to the positions in a `Frame`_. The positions are readable and
-    writable from this array. If the frame is resized (by writing to it, or calling
-    ``resize``), the array is invalidated.
+.. jl:autofunction:: src/Frame.jl add_atom!
 
-.. jl:function:: velocities(frame::Frame)
+.. jl:autofunction:: src/Frame.jl remove_atom!
 
-    Get a pointer to the velocities in a `Frame`_. The velocities are readable and
-    writable from this array. If the frame is resized (by writing to it, or calling
-    ``resize``), the array is invalidated.
+.. jl:autofunction:: src/Frame.jl set_cell!
 
-    If the frame do not have velocity, this will return an error. Use
-    ``add_velocities!`` to add velocities to a frame before calling this function.
+.. jl:autofunction:: src/Frame.jl set_topology!
 
-.. jl:function:: add_velocities!(frame::Frame)
+.. jl:autofunction:: src/Frame.jl step
 
-    Add velocities to this `Frame`_. The storage is initialized with the result of
-    ``size(frame)`` as number of atoms. If the frame already have velocities, this
-    does nothing.
+.. jl:autofunction:: src/Frame.jl set_step!
 
-.. jl:function:: add_atom!(frame::Frame, atom::Atom, position::Array{Float64}, velocity::Array{Float64})
-
-    Add an `atom` and the corresponding `position` and `velocity` data to a `frame`.
-    `velocity` can be `NULL` if no velocity is associated with the atom.
-
-.. jl:function:: remove_atom!(frame::Frame, index::Integer)
-
-    Remove the `atom` at `index` in the frame.
-    This modify all the `atoms` indexes after `index`, and invalidate any pointer
-    obtained using `positions`_ or `velocities`_.
-
-.. jl:function:: has_velocities(frame::Frame) -> Bool
-
-    Ask wether this `Frame`_ contains velocity data or not.
-
-.. jl:function:: set_cell!(frame::Frame, cell::UnitCell)
-
-    Set the `UnitCell`_ of a `Frame`_.
-
-.. jl:function:: set_topology!(frame::Frame, topology::Topology)
-
-    Set the `Topology`_ of a `Frame`_.
-
-.. jl:function:: step(frame::Frame) -> Integer
-
-    Get the `Frame`_ step, i.e. the frame number in the trajectory.
-
-.. jl:function:: set_step!(frame::Frame, step)
-
-    Set the `Frame`_ step to ``step``.
-
-.. jl:function:: guess_topology!(frame::Frame)
-
-    Guess the bonds, angles and dihedrals in the system using a distance criteria.
+.. jl:autofunction:: src/Frame.jl guess_bonds!
 
 .. _UnitCell:
 
 ``UnitCell`` type and associated function
 -----------------------------------------
 
-An `UnitCell`_ describe the bounding box of a system. It is represented by three base
-vectors of lengthes ``a``, ``b`` and ``c``; and the angles between these vectors are
-``alpha``, ``beta`` and ``gamma``.
+.. jl:autotype:: src/Chemfiles.jl UnitCell
 
-.. jl:function:: UnitCell(a, b, c, alpha=90, beta=90, gamma=90)
+.. jl:autofunction:: src/UnitCell.jl UnitCell
 
-    Create an `UnitCell`_ from the three lenghts and the three angles.
+.. jl:autofunction:: src/UnitCell.jl deepcopy
 
-.. jl:function:: UnitCell(frame::Frame)
+.. jl:autofunction:: src/UnitCell.jl volume
 
-    Get a copy of the `UnitCell`_ of a frame.
+.. jl:autofunction:: src/UnitCell.jl lengths
 
-.. jl:function:: lengths(cell::UnitCell) -> (Float64, Float64, Float64)
+.. jl:autofunction:: src/UnitCell.jl set_lengths!
 
-    Get the three `UnitCell`_ lenghts (a, b and c) in angstroms.
+.. jl:autofunction:: src/UnitCell.jl angles
 
-.. jl:function:: set_lengths!(cell::UnitCell, a, b, c)
+.. jl:autofunction:: src/UnitCell.jl set_angles!
 
-    Set the `UnitCell`_ lenghts to ``a``, ``b`` and ``c`` in angstroms.
+.. jl:autofunction:: src/UnitCell.jl cell_matrix
 
-.. jl:function:: angles(cell::UnitCell) -> (Float64, Float64, Float64)
+.. jl:autofunction:: src/UnitCell.jl shape
 
-    Get the three `UnitCell`_ angles (alpha, beta and gamma) in degrees.
+.. jl:autofunction:: src/UnitCell.jl set_shape!
 
-.. jl:function:: set_angles!(cell::UnitCell, alpha, beta, gamma)
+.. jl:autotype:: src/UnitCell.jl CellShape
 
-    Set the `UnitCell`_ angles to ``alpha``, ``beta`` and ``gamma`` in degrees.
-
-.. jl:function:: cell_matrix(cell::UnitCell) -> Array{Float64, 2}
-
-    Get the `UnitCell`_ matricial representation, i.e. the representation of the
-    three base vectors as::
-
-        | a_x   b_x   c_x |
-        |  0    b_y   c_y |
-        |  0     0    c_z |
-
-.. jl:function:: type(cell::UnitCell) -> CellType
-
-    Get the `UnitCell`_ type.
-
-.. jl:function:: set_type!(cell::UnitCell, celltype::CellType)
-
-    Set the `UnitCell`_ type to ``celltype``.
-
-The following cell types are defined:
-
-- ``Chemfiles.ORTHORHOMBIC`` : The three angles are 90°
-- ``Chemfiles.TRICLINIC`` : The three angles may not be 90°
-- ``Chemfiles.INFINITE`` : Cell type when there is no periodic boundary conditions
-
-.. jl:function:: volume(cell::UnitCell) -> Float64
-
-    Get the unit cell volume
 
 .. _Topology:
 
 ``Topology`` type and associated function
 -----------------------------------------
 
-A `Topology`_ describes the organisation of the particles in the system. What are
-there names, how are they bonded together, *etc.* A `Topology`_ is a list of `Atom`_
-in the system, together with the list of bonds these atoms forms.
+.. jl:autotype:: src/Chemfiles.jl Topology
 
-.. jl:function:: Topology()
+.. jl:autofunction:: src/Topology.jl Topology
 
-    Create an empty `Topology`_.
+.. jl:autofunction:: src/Topology.jl deepcopy
 
-.. jl:function:: Topology(frame::Frame)
+.. jl:autofunction:: src/Topology.jl size
 
-    Extract the `Topology`_ from a frame.
+.. jl:autofunction:: src/Topology.jl add_atom!
 
-.. jl:function:: size(topology::Topology)
+.. jl:autofunction:: src/Topology.jl remove!
 
-    Get the `Topology`_ size, i.e. the current number of atoms.
+.. jl:autofunction:: src/Topology.jl isbond
 
-.. jl:function:: push!(topology::Topology, atom::Atom)
+.. jl:autofunction:: src/Topology.jl isangle
 
-    Add an `Atom`_ at the end of a `Topology`_.
+.. jl:autofunction:: src/Topology.jl isdihedral
 
-.. jl:function:: remove!(topology::Topology, i)
+.. jl:autofunction:: src/Topology.jl bonds_count
 
-    Remove an atom from a `Topology`_ by index.
+.. jl:autofunction:: src/Topology.jl angles_count
 
-.. jl:function:: isbond(topology::Topology, i, j) -> Bool
+.. jl:autofunction:: src/Topology.jl dihedrals_count
 
-    Tell if the atoms ``i`` and ``j`` are bonded together.
+.. jl:autofunction:: src/Topology.jl bonds
 
-.. jl:function:: isangle(topology::Topology, i, j, k) -> Bool
+.. jl:autofunction:: src/Topology.jl angles
 
-    Tell if the atoms ``i``, ``j`` and ``k`` constitues an angle.
+.. jl:autofunction:: src/Topology.jl dihedrals
 
-.. jl:function:: isdihedral(topology::Topology, i, j, k, m) -> Bool
+.. jl:autofunction:: src/Topology.jl add_bond!
 
-    Tell if the atoms ``i``, ``j``, ``k`` and ``m`` constitues a dihedral angle.
+.. jl:autofunction:: src/Topology.jl remove_bond!
 
-.. jl:function:: nbonds(topology::Topology) -> Integer
+.. jl:autofunction:: src/Topology.jl add_residue!
 
-    Get the number of bonds in the system.
+.. jl:autofunction:: src/Topology.jl count_residues
 
-.. jl:function:: nangles(topology::Topology) -> Integer
+.. jl:autofunction:: src/Topology.jl are_linked
 
-    Get the number of angles in the system.
-
-.. jl:function:: ndihedrals(topology::Topology) -> Integer
-
-    Get the number of dihedral angles in the system.
-
-.. jl:function:: bonds(topology::Topology) -> Array{UInt, 2}
-
-    Get the bonds in the system, arranged in a 2x ``nbonds`` array.
-
-.. jl:function:: angles(topology::Topology) -> Array{UInt, 2}
-
-    Get the angles in the system, arranges as a 3x ``nangles`` array.
-
-.. jl:function:: dihedrals(topology::Topology) -> Array{UInt, 2}
-
-    Get the dihedral angles in the system, arranged as a 4x ``ndihedrals`` array.
-
-.. jl:function:: add_bond!(topology::Topology, i, j)
-
-    Add a bond between the atoms ``i`` and ``j`` in the system.
-
-.. jl:function:: remove_bond!(topology::Topology, i, j)
-
-    Remove any existing bond between the atoms ``i`` and ``j`` in the system.
-
-.. jl:function:: add_residue!(topology::Topology, residue::Residue)
-
-   Add a copy of `residue` to this `topology`.
-   The residue id must not already be in the topology, and the residue must
-   contain only atoms that are not already in another residue.
-
-.. jl:function:: count_residue(topology::Topology)
-
-   Get the number of residues in the `topology`.
-
-.. jl:function:: are_linked(topology::Topology, first::Residue, second::Residue)
-
-   Check if the two residues `first` and `second` from the `topology` are
-   linked together, *i.e.* if there is a bond between one atom in the first
-   residue and one atom in the second one.
-
-.. jl:function:: resize!(topology::Topology, natoms::Integer)
-
-   Resize the `topology` to hold `natoms` atoms. If the new number of atoms is
-   bigger than the current number, new atoms will be created with an empty name
-   and type. If it is lower than the current number of atoms, the last atoms
-   will be removed, together with the associated bonds, angles and dihedrals.
+.. jl:autofunction:: src/Topology.jl resize!
 
 .. _Atom:
 
 ``Atom`` type and associated function
 -------------------------------------
 
-An `Atom`_ contains basic information about a single atom in the system: the name (if
-it is disponible), mass, type of atom and so on.
+.. jl:autotype:: src/Chemfiles.jl Atom
 
-.. jl:function:: Atom(name)
+.. jl:autofunction:: src/Atom.jl Atom
 
-    Create an `Atom`_ from an atomic name.
+.. jl:autofunction:: src/Atom.jl deepcopy
 
-.. jl:function:: Atom(frame::Frame, idx::Integer)
+.. jl:autofunction:: src/Atom.jl mass
 
-    Get the `Atom`_ at index ``idx`` from the frame.
+.. jl:autofunction:: src/Atom.jl set_mass!
 
-.. jl:function:: Atom(topology::Topology, idx::Integer)
+.. jl:autofunction:: src/Atom.jl charge
 
-    Get the `Atom`_ at index ``idx`` from the topology.
+.. jl:autofunction:: src/Atom.jl set_charge!
 
-.. jl:function:: mass(atom::Atom) -> Float64
+.. jl:autofunction:: src/Atom.jl name
 
-    Get the mass of an `Atom`_, in atomic mass units.
+.. jl:autofunction:: src/Atom.jl set_name!
 
-.. jl:function:: set_mass!(atom::Atom, mass::Number)
+.. jl:autofunction:: src/Atom.jl fullname
 
-    Set the mass of an `Atom`_ to ``mass``, in atomic mass units.
+.. jl:autofunction:: src/Atom.jl vdw_radius
 
-.. jl:function:: charge(atom::Atom) -> Float64
+.. jl:autofunction:: src/Atom.jl covalent_radius
 
-    Get the charge of an `Atom`_, in number of the electron charge e.
+.. jl:autofunction:: src/Atom.jl atomic_number
 
-.. jl:function:: set_charge!(atom::Atom, charge::Number)
+.. jl:autofunction:: src/Atom.jl atom_type
 
-    Set the charge of an `Atom`_ to ``charge``, in number of the electron charge e.
-
-.. jl:function:: name(atom::Atom) -> ASCIIString
-
-    Get the name of an `Atom`_.
-
-.. jl:function:: set_name!(atom::Atom, name::ASCIIString)
-
-    Set the name of an `Atom`_ to ``name``.
-
-.. jl:function:: full_name(atom::Atom) -> ASCIIString
-
-    Try to get the full name of an `Atom`_ (``"Helium"``) from the short name (``"He"``).
-
-.. jl:function:: vdw_radius(atom::Atom) -> Float64
-
-    Try to get the Van der Waals radius of an `Atom`_ from the short name. Returns -1 if
-    no value could be found.
-
-.. jl:function:: covalent_radius(atom::Atom) -> Float64
-
-    Try to get the covalent radius of an `Atom`_ from the short name. Returns -1 if no
-    value could be found.
-
-.. jl:function:: atomic_number(atom::Atom) -> Integer
-
-    Try to get the atomic number of an `Atom`_ from the short name. Returns -1 if no
-    value could be found.
-
-.. jl:function:: atom_type(atom::Atom) -> AtomType
-
-    Get the `Atom`_ type
-
-.. jl:function:: set_atom_type!(atom::Atom, type::AtomType)
-
-    Set the `Atom`_ type
-
-The following atom types are available:
-
-- ``Chemfiles.ELEMENT``: Element from the periodic table of elements
-- ``Chemfiles.COARSE_GRAINED``: Coarse-grained atom are composed of more than one
-  element: CH3 groups, amino-acids are coarse-grained atoms.
-- ``Chemfiles.DUMMY_ATOM``: Dummy site, with no physical reality
-- ``Chemfiles.UNDEFINED_ATOM``: Undefined atom type
+.. jl:autofunction:: src/Atom.jl set_atom_type!
 
 .. _Residue:
 
 ``Residue`` type and associated function
 ------------------------------------------
 
-.. jl:function:: Residue(name::String, resid::Integer)
+.. jl:autotype:: src/Chemfiles.jl Residue
 
-    Create a new residue with the given `name` and residue identifier `resid`.
+.. jl:autofunction:: src/Residue.jl Residue
 
-.. jl:function:: Residue(name::String)
+.. jl:autofunction:: src/Residue.jl residue_for_atom
 
-    Create a new residue with the given `name`.
+.. jl:autofunction:: src/Residue.jl deepcopy
 
-.. jl:function:: Residue(topology::Topology, index::Integer)
+.. jl:autofunction:: src/Residue.jl name
 
-    Get a copy of the residue at `index` from a `topology`.
-    If `index` is bigger than the result of `count_residues`, this function will return `nothing`.
-    The residue index in the topology is not always the same as the residue `id`.
+.. jl:autofunction:: src/Residue.jl id
 
-.. jl:function:: residue_for_atom(topology::Topology, index::Integer)
+.. jl:autofunction:: src/Residue.jl size
 
-    Get a copy of the residue containing the atom at `index` in the `topology`.
-    This function will return `nothing` if the atom is not in a residue, or if the
-    `index` is bigger than `natoms`.
+.. jl:autofunction:: src/Residue.jl add_atom!
 
-.. jl:function:: name(residue::Residue)
+.. jl:autofunction:: src/Residue.jl contains
 
-    Get the name of a `residue`.
-
-.. jl:function:: id(residue::Residue)
-
-    Get the identifier of a `residue` in the initial topology.
-
-.. jl:function:: id(residue::Residue)
-
-    Get the identifier of a `residue` in the initial topology.
-
-.. jl:function:: size(residue::Residue)
-
-    Get the number of atoms in a `residue`.
-
-.. jl:function:: add_atom!(residue::Residue, i::Integer)
-
-    Add the atom at index `i` in the `residue`.
-
-.. jl:function:: contains!(residue::Residue, i::Integer)
-
-    Check if the atom at index `i` is in the `residue`.
-
+.. jl:autofunction:: src/Residue.jl deepcopy
 
 .. _Selection:
 
 ``Selection`` type and associated function
 ------------------------------------------
 
-A `Selection`_ allow to select a group of atoms. Examples of selections are
-"name H" and "(x < 45 and name O) or name C". See the `full documentation
-<http://chemfiles.readthedocs.io/en/latest/selections.html>`_ for more
-information about the selection language.
+.. jl:autotype:: src/Chemfiles.jl Selection
 
-.. jl:function:: size(selection::Selection) -> Integer
+.. jl:autofunction:: src/Selection.jl Selection
 
-    Get the size of the `Selection`_, *i.e.* the number of atoms we are
-    selecting together.
+.. jl:autofunction:: src/Selection.jl deepcopy
 
-.. jl:function:: evaluate(selection::Selection, frame::Frame) -> Array(Match, 1)
+.. jl:autofunction:: src/Selection.jl size
 
-    Evaluate a `Selection`_ on a given `Frame`_. This function return a list of
-    indexes or tuples of indexes of atoms in the frame matching the selection.
+.. jl:autofunction:: src/Selection.jl evaluate
 
-.. jl:function:: selection_string(selection::Selection)
-
-    Get the selection string used to create a given `selection`.
+.. jl:autofunction:: src/Selection.jl selection_string

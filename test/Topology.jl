@@ -1,27 +1,25 @@
 @testset "Topology type" begin
     topology = Topology()
-
-    @test size(topology) == 0
     @test size(topology) == 0
 
     # Creating some H2O2
-    push!(topology, Atom("H"))
-    push!(topology, Atom("O"))
-    push!(topology, Atom("O"))
-    push!(topology, Atom("H"))
+    add_atom!(topology, Atom("H"))
+    add_atom!(topology, Atom("O"))
+    add_atom!(topology, Atom("O"))
+    add_atom!(topology, Atom("H"))
     @test size(topology) == 4
 
-    @test nbonds(topology) == 0
-    @test nangles(topology) == 0
-    @test ndihedrals(topology) == 0
+    @test bonds_count(topology) == 0
+    @test angles_count(topology) == 0
+    @test dihedrals_count(topology) == 0
 
     add_bond!(topology, 0, 1)
     add_bond!(topology, 1, 2)
     add_bond!(topology, 2, 3)
 
-    @test nbonds(topology) == 3
-    @test nangles(topology) == 2
-    @test ndihedrals(topology) == 1
+    @test bonds_count(topology) == 3
+    @test angles_count(topology) == 2
+    @test dihedrals_count(topology) == 1
 
     @test isbond(topology, 0, 1) == true
     @test isbond(topology, 0, 3) == false
@@ -37,9 +35,9 @@
     @test dihedrals(topology) == reshape(UInt64[0, 1, 2, 3], (4,1))
 
     remove_bond!(topology, 2, 3)
-    @test nbonds(topology) == 2
-    @test nangles(topology) == 1
-    @test ndihedrals(topology) == 0
+    @test bonds_count(topology) == 2
+    @test angles_count(topology) == 1
+    @test dihedrals_count(topology) == 0
 
     remove!(topology, 3)
     @test size(topology) == 3
@@ -55,27 +53,33 @@
     @test size(topology) == 42
 
     @testset "Residues" begin
-        topo = Topology()
-        [push!(topo, Atom("X")) for i=0:10]
-
-        for atoms in [[2,3,6], [0,1,9], [4,5,8]]
-            res = Residue("X")
-            [add_atom!(res, i) for i in atoms]
-            add_residue!(topo, res)
+        topology = Topology()
+        for i = 1:10
+            add_atom!(topology, Atom("X"))
         end
 
-        @test count_residues(topo) == 3
+        for atoms in [[2,3,6], [0,1,9], [4,5,8]]
+            residue = Residue("X")
+            for i in atoms
+                add_atom!(residue, i)
+            end
+            add_residue!(topology, residue)
+        end
 
-        first = residue_for_atom(topo, 2)
-        second = residue_for_atom(topo, 0)
+        @test count_residues(topology) == 3
+
+        first = residue_for_atom(topology, 2)
+        second = residue_for_atom(topology, 0)
+
+        @test residue_for_atom(topology, 7) == nothing
 
         @test first != nothing
         @test second != nothing
-        @test_throws ChemfilesError Residue(topo, 4)
+        @test_throws ChemfilesError Residue(topology, 4)
 
-        @test are_linked(topo, first, second) == false
+        @test are_linked(topology, first, second) == false
 
-        add_bond!(topo, 6, 9)
-        @test are_linked(topo, first, second) == true
+        add_bond!(topology, 6, 9)
+        @test are_linked(topology, first, second) == true
     end
 end

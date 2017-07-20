@@ -2,17 +2,17 @@ function testing_frame()
     frame = Frame()
     resize!(frame, 4)
 
-    top = Topology()
-    push!(top, Atom("H"))
-    push!(top, Atom("O"))
-    push!(top, Atom("O"))
-    push!(top, Atom("H"))
+    topology = Topology()
+    add_atom!(topology, Atom("H"))
+    add_atom!(topology, Atom("O"))
+    add_atom!(topology, Atom("O"))
+    add_atom!(topology, Atom("H"))
 
-    add_bond!(top, 0, 1)
-    add_bond!(top, 1, 2)
-    add_bond!(top, 2, 3)
+    add_bond!(topology, 0, 1)
+    add_bond!(topology, 1, 2)
+    add_bond!(topology, 2, 3)
 
-    set_topology!(frame, top)
+    set_topology!(frame, topology)
     return frame
 end
 

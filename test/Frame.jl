@@ -27,16 +27,16 @@
     cell = UnitCell(frame)
     @test lengths(cell) == [3.0, 4.0, 5.0]
 
-    top = Topology()
-    push!(top, Atom("H"))
-    push!(top, Atom("O"))
-    push!(top, Atom("Zn"))
-    push!(top, Atom("H"))
-    set_topology!(frame, top)
-    new_top = Topology(frame)
+    topology = Topology()
+    add_atom!(topology, Atom("H"))
+    add_atom!(topology, Atom("O"))
+    add_atom!(topology, Atom("Zn"))
+    add_atom!(topology, Atom("H"))
+    set_topology!(frame, topology)
+    new_topology = Topology(frame)
 
-    @test name(Atom(new_top, 0)) == "H"
-    @test name(Atom(new_top, 2)) == "Zn"
+    @test name(Atom(new_topology, 0)) == "H"
+    @test name(Atom(new_topology, 2)) == "Zn"
 
     @test step(frame) == 0
     set_step!(frame, 42)

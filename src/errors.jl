@@ -29,10 +29,16 @@ function check(result::Ptr)
     return nothing
 end
 
+"""
+Get the last error message from the chemfiles runtime.
+"""
 function last_error()
     unsafe_string(lib.chfl_last_error())
 end
 
+"""
+Clear any error message stored by the chemfiles runtime.
+"""
 function clear_errors()
     check(lib.chfl_clear_errors())
 end
@@ -41,10 +47,16 @@ function warning_callback(message::String)
     warn("[chemfiles] ", message)
 end
 
-function set_warning_callback(cb::Function)
-    cb_adaptor = (x) -> cb(unsafe_string(x))
-    callback = cfunction(cb_adaptor, Void, (Ptr{UInt8},))
-    check(lib.chfl_set_warning_callback(callback))
+
+"""
+Set the global warning ``callback`` to be used for each warning event.
+
+The ``callback`` function must take a ``String`` and return nothing.
+"""
+function set_warning_callback(callback::Function)
+    cb_adaptor = (x) -> callback(unsafe_string(x))
+    cb = cfunction(cb_adaptor, Void, (Ptr{UInt8},))
+    check(lib.chfl_set_warning_callback(cb))
 end
 
 set_warning_callback(warning_callback)

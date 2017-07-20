@@ -34,6 +34,11 @@ module Chemfiles
         throw(ChemfilesError("A C string is not NULL terminated"))
     end
 
+    """
+    A ``Trajectory`` represents a simulation file on the hard drive. It can read
+    or write one or many ``Frame`` to this file. The file format can be
+    automatically determined from the extention, or manually specified.
+    """
     type Trajectory
         handle :: Ptr{lib.CHFL_TRAJECTORY}
         function Trajectory(ptr::Ptr{lib.CHFL_TRAJECTORY})
@@ -44,6 +49,12 @@ module Chemfiles
         end
     end
 
+    """
+    A ``Topology`` describes the organisation of the particles in the system:
+    what are there names, how are they bonded together, *etc.* A ``Topology``
+    is a list of ``Atom`` in the system, together with the list of bonds between
+    the atoms.
+    """
     type Topology
         handle :: Ptr{lib.CHFL_TOPOLOGY}
         function Topology(ptr::Ptr{lib.CHFL_TOPOLOGY})
@@ -54,6 +65,18 @@ module Chemfiles
         end
     end
 
+    """
+    An ``Atom`` is a particle in the current ``Frame``.
+
+    An atom stores the following atomic properties:
+      - atom name
+      - atom type
+      - atom mass
+      - atom charge
+
+    The atom name is usually an unique identifier ("H1", "C_a") while the atom
+    type will be shared between all particles of the same type: "H", "Ow", "CH3".
+    """
     type Atom
         handle :: Ptr{lib.CHFL_ATOM}
         function Atom(ptr::Ptr{lib.CHFL_ATOM})
@@ -64,6 +87,11 @@ module Chemfiles
         end
     end
 
+    """
+    An ``UnitCell`` describe the bounding box of a system. It is represented by
+    three base vectors of lengthes ``a``, ``b`` and ``c``; and the angles
+    between these vectors are ``alpha``, ``beta`` and ``gamma``.
+    """
     type UnitCell
         handle :: Ptr{lib.CHFL_CELL}
         function UnitCell(ptr::Ptr{lib.CHFL_CELL})
@@ -74,6 +102,16 @@ module Chemfiles
         end
     end
 
+    """
+    A ``Frame`` holds data for one step of a simulation. As not all formats
+    provides all the types of informations, some fields may be initialized to a
+    default value. A ``Frame`` may contains the following data:
+
+    - Positions for all the atoms in the system;
+    - Velocities for all the atoms in the system;
+    - The ``Topology`` of the system;
+    - The ``UnitCell`` of the system.
+    """
     type Frame
         handle :: Ptr{lib.CHFL_FRAME}
         function Frame(ptr::Ptr{lib.CHFL_FRAME})
@@ -84,6 +122,12 @@ module Chemfiles
         end
     end
 
+    """
+    A ``Selection`` allow to select a group of atoms. Examples of selections are
+    "name H" and "(x < 45 and name O) or name C". See the `full documentation
+    <http://chemfiles.readthedocs.io/en/latest/selections.html>`_ for more
+    information about the selection language.
+    """
     type Selection
         handle :: Ptr{lib.CHFL_SELECTION}
         function Selection(ptr::Ptr{lib.CHFL_SELECTION})
@@ -94,6 +138,11 @@ module Chemfiles
         end
     end
 
+    """
+    A ``Residue`` is a group of atoms belonging to the same logical unit. They
+    can be small molecules, amino-acids in a protein, monomers in polymers,
+    *etc.*
+    """
     type Residue
         handle :: Ptr{lib.CHFL_RESIDUE}
         function Residue(ptr::Ptr{lib.CHFL_RESIDUE})

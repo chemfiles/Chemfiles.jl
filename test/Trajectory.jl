@@ -35,17 +35,17 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
 
         topology = Topology(frame)
         @test size(topology) == 297
-        @test nbonds(topology) == 0
+        @test bonds_count(topology) == 0
 
         guess_bonds!(frame)
         topology = Topology(frame)
-        @test nbonds(topology) == 181
-        @test nangles(topology) == 87
+        @test bonds_count(topology) == 181
+        @test angles_count(topology) == 87
 
         topology = Topology()
         a = Atom("Cs")
         for i=1:297
-            push!(topology, a)
+            add_atom!(topology, a)
         end
 
         set_topology!(trajectory, topology)
@@ -85,11 +85,11 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
             pos[:, i] = Float64[1, 2, 3]
         end
 
-        top = Topology()
+        topology = Topology()
         for i=1:4
-            push!(top, Atom("X"))
+            add_atom!(topology, Atom("X"))
         end
-        set_topology!(frame, top)
+        set_topology!(frame, topology)
 
         trajectory = Trajectory("test-tmp.xyz", 'w');
         write(trajectory, frame)
@@ -99,11 +99,12 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
         for i=1:6
             pos[:, i] = Float64[4, 5, 6]
         end
-        top = Topology()
+
+        topology = Topology()
         for i=1:6
-            push!(top, Atom("X"))
+            add_atom!(topology, Atom("X"))
         end
-        set_topology!(frame, top)
+        set_topology!(frame, topology)
 
         write(trajectory, frame)
         close(trajectory)
