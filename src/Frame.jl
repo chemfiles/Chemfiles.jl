@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 export positions, velocities, add_atom!, remove_atom!, add_velocities!, has_velocities, set_cell!,
-set_topology!, set_step!, guess_bonds!, distance, bend, dihedral, out_of_plane, add_bond!, remove_bond!, add_residue!
+set_topology!, set_step!, guess_bonds!, distance, angle, dihedral, out_of_plane, add_bond!, remove_bond!, add_residue!
 
 """
 Create a new empty ``Frame``.
@@ -164,7 +164,7 @@ end
 """
 Calculate the angle made by three atoms.
 """
-function bend(frame::Frame, i::Integer, j::Integer, k::Integer)
+function Base.angle(frame::Frame, i::Integer, j::Integer, k::Integer)
     result = Ref{Float64}(0)
     check(
         lib.chfl_frame_angle(frame.handle, UInt64(i), UInt64(j), UInt64(k), result)

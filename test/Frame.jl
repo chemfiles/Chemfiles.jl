@@ -69,7 +69,7 @@
         add_atom!(angle_frame, Atom(""), [1.0,0.0,0.0])
         add_atom!(angle_frame, Atom(""), [0.0,0.0,0.0])
         add_atom!(angle_frame, Atom(""), [0.0,1.0,0.0])
-        @test bend(angle_frame, 0, 1, 2) ≈ pi/2 atol=1e-10
+        @test angle(angle_frame, 0, 1, 2) ≈ pi/2 atol=1e-10
 
         dihedral_frame = Frame()
         add_atom!(dihedral_frame, Atom(""), [1.0,0.0,0.0])

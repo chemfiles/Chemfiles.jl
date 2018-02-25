@@ -24,21 +24,21 @@ const Cbool = Cuchar
 const chfl_vector3d = Array{Cdouble, 1}
 # === End of manual translation
 
-struct CHFL_TRAJECTORY end
+immutable CHFL_TRAJECTORY end
 
-struct CHFL_CELL end
+immutable CHFL_CELL end
 
-struct CHFL_ATOM end
+immutable CHFL_ATOM end
 
-struct CHFL_FRAME end
+immutable CHFL_FRAME end
 
-struct CHFL_TOPOLOGY end
+immutable CHFL_TOPOLOGY end
 
-struct CHFL_SELECTION end
+immutable CHFL_SELECTION end
 
-struct CHFL_RESIDUE end
+immutable CHFL_RESIDUE end
 
-struct CHFL_PROPERTY end
+immutable CHFL_PROPERTY end
 
 # enum chfl_status
 const chfl_status = UInt32
