@@ -19,7 +19,7 @@ module Chemfiles
 
     include("errors.jl")
 
-    export Trajectory, Topology, Atom, UnitCell, Frame, Selection, Residue
+    export Trajectory, Topology, Atom, UnitCell, Frame, Selection, Residue, Property
 
     function version()
         unsafe_string(lib.chfl_version())
@@ -153,6 +153,20 @@ module Chemfiles
         end
     end
 
+    """
+    A ``Property`` is a generic container for various forms of metadata
+    stored for other structures.
+    """
+    type Property
+        handle :: Ptr{lib.CHFL_PROPERTY}
+        function Property(ptr::Ptr{lib.CHFL_PROPERTY})
+            check(ptr)
+            this = new(ptr)
+            finalizer(this, free)
+            return this
+        end
+    end
+
     include("Atom.jl")
     include("Frame.jl")
     include("Topology.jl")
@@ -160,4 +174,5 @@ module Chemfiles
     include("UnitCell.jl")
     include("Selection.jl")
     include("Residue.jl")
+    include("Property.jl")
 end

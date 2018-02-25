@@ -20,16 +20,15 @@
     expected = reshape(Float64[10, 0, 0,
                                0, 20, 0,
                                0, 0, 30], (3, 3))
-    @test_approx_eq_eps cell_matrix(cell) expected 1e-10
+    @test cell_matrix(cell) ≈ expected atol=1e-10
 
-    @test shape(cell) == Chemfiles.ORTHORHOMBIC
+    @test shape(cell).value == Chemfiles.ORTHORHOMBIC.value
 
     set_shape!(cell, Chemfiles.TRICLINIC)
-    @test shape(cell) == Chemfiles.TRICLINIC
+    @test shape(cell).value == Chemfiles.TRICLINIC.value
 
     set_angles!(cell, 80, 89, 100)
     @test angles(cell) == [80.0, 89.0, 100.0]
-
 
     copy = deepcopy(cell)
     @test lengths(copy) == [10.0, 20.0, 30.0]

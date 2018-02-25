@@ -12,7 +12,7 @@
 # =========================================================================== #
 
 # === Manually translated from the header
-immutable chfl_match_t
+struct chfl_match
     size    ::UInt64
     atoms_1 ::UInt64
     atoms_2 ::UInt64
@@ -21,22 +21,24 @@ immutable chfl_match_t
 end
 
 const Cbool = Cuchar
-const chfl_vector_t = Array{Cdouble, 1}
+const chfl_vector3d = Array{Cdouble, 1}
 # === End of manual translation
 
-immutable CHFL_TRAJECTORY end
+struct CHFL_TRAJECTORY end
 
-immutable CHFL_CELL end
+struct CHFL_CELL end
 
-immutable CHFL_ATOM end
+struct CHFL_ATOM end
 
-immutable CHFL_FRAME end
+struct CHFL_FRAME end
 
-immutable CHFL_TOPOLOGY end
+struct CHFL_TOPOLOGY end
 
-immutable CHFL_SELECTION end
+struct CHFL_SELECTION end
 
-immutable CHFL_RESIDUE end
+struct CHFL_RESIDUE end
+
+struct CHFL_PROPERTY end
 
 # enum chfl_status
 const chfl_status = UInt32
@@ -45,11 +47,21 @@ const CHFL_MEMORY_ERROR = chfl_status(1)
 const CHFL_FILE_ERROR = chfl_status(2)
 const CHFL_FORMAT_ERROR = chfl_status(3)
 const CHFL_SELECTION_ERROR = chfl_status(4)
-const CHFL_GENERIC_ERROR = chfl_status(5)
-const CHFL_CXX_ERROR = chfl_status(6)
+const CHFL_CONFIGURATION_ERROR = chfl_status(5)
+const CHFL_OUT_OF_BOUNDS = chfl_status(6)
+const CHFL_PROPERTY_ERROR = chfl_status(7)
+const CHFL_GENERIC_ERROR = chfl_status(254)
+const CHFL_CXX_ERROR = chfl_status(255)
 
-# enum chfl_cell_shape_t
-const chfl_cell_shape_t = UInt32
-const CHFL_CELL_ORTHORHOMBIC = chfl_cell_shape_t(0)
-const CHFL_CELL_TRICLINIC = chfl_cell_shape_t(1)
-const CHFL_CELL_INFINITE = chfl_cell_shape_t(2)
+# enum chfl_property_kind
+const chfl_property_kind = UInt32
+const CHFL_PROPERTY_BOOL = chfl_property_kind(0)
+const CHFL_PROPERTY_DOUBLE = chfl_property_kind(1)
+const CHFL_PROPERTY_STRING = chfl_property_kind(2)
+const CHFL_PROPERTY_VECTOR3D = chfl_property_kind(3)
+
+# enum chfl_cellshape
+const chfl_cellshape = UInt32
+const CHFL_CELL_ORTHORHOMBIC = chfl_cellshape(0)
+const CHFL_CELL_TRICLINIC = chfl_cellshape(1)
+const CHFL_CELL_INFINITE = chfl_cellshape(2)

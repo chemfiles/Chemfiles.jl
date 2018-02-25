@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 export positions, velocities, add_atom!, remove_atom!, add_velocities!, has_velocities, set_cell!,
-set_topology!, set_step!, guess_bonds!
+set_topology!, set_step!, guess_bonds!, distance, bend, dihedral, out_of_plane, add_bond!, remove_bond!, add_residue!
 
 """
 Create a new empty ``Frame``.
@@ -151,16 +151,59 @@ function guess_bonds!(frame::Frame)
 end
 
 """
+Calculate the distance between two atoms.
+"""
+function distance(frame::Frame, i::Integer, j::Integer)
+    result = Ref{Float64}(0)
+    check(
+        lib.chfl_frame_distance(frame.handle, UInt64(i), UInt64(j), result)
+    )
+    return result[]
+end
+
+"""
+Calculate the angle made by three atoms.
+"""
+function bend(frame::Frame, i::Integer, j::Integer, k::Integer)
+    result = Ref{Float64}(0)
+    check(
+        lib.chfl_frame_angle(frame.handle, UInt64(i), UInt64(j), UInt64(k), result)
+    )
+    return result[]
+end
+
+"""
+Calculate the dihedral (torsional) angle made by four unbranched atoms.
+"""
+function dihedral(frame::Frame, i::Integer, j::Integer, k::Integer, m::Integer)
+    result = Ref{Float64}(0)
+    check(
+        lib.chfl_frame_dihedral(frame.handle, UInt64(i), UInt64(j), UInt64(k), UInt64(m), result)
+    )
+    return result[]
+end
+
+"""
+Calculate the out-of-plane (improper) angle made by four atoms.
+"""
+function out_of_plane(frame::Frame, i::Integer, j::Integer, k::Integer, m::Integer)
+    result = Ref{Float64}(0)
+    check(
+        lib.chfl_frame_out_of_plane(frame.handle, UInt64(i), UInt64(j), UInt64(k), UInt64(m), result)
+    )
+    return result[]
+end
+
+"""
 Add an ``atom`` and the corresponding ``position`` and ``velocity`` data to a
 ``frame``.
 """
-function add_atom!(frame::Frame, atom::Atom, position::Array{Float64}, velocity::Array{Float64})
+function add_atom!(frame::Frame, atom::Atom, position::Vector{Float64}, velocity::Vector{Float64} = Float64[0.0,0.0,0.0])
     check(
         lib.chfl_frame_add_atom(frame.handle, atom.handle, position, velocity)
     )
     return nothing
 end
-
 
 """
 Remove the ``atom`` at ``index`` from the ``frame``.
@@ -171,6 +214,53 @@ array obtained using ``positions`` or ``velocities``.
 function remove_atom!(frame::Frame, index::Integer)
     check(
         lib.chfl_frame_remove(frame.handle, UInt64(index))
+    )
+    return nothing
+end
+
+"""
+Set a named property for the given ``Frame``.
+"""
+function set_property!(frame::Frame, name::String, property::Property)
+    check(
+        lib.chfl_frame_set_property(frame.handle, pointer(name), property.handle)
+    )
+    return nothing
+end
+
+"""
+Get a named property for the given atom.
+"""
+function get_property(frame::Frame, name::String)
+    Property(lib.chfl_frame_get_property(frame.handle, pointer(name)))
+end
+
+"""
+Add an additional bond to the ``Frames``'s ``Topology``.
+"""
+function add_bond!(frame::Frame, i::Integer, j::Integer)
+    check(
+        lib.chfl_frame_add_bond(frame.handle, UInt64(i), UInt64(j))
+    )
+    return nothing
+end
+
+"""
+Remove a bond from the ``Frames``'s ``Topology``.
+"""
+function remove_bond!(frame::Frame, i::Integer, j::Integer)
+    check(
+        lib.chfl_frame_remove_bond(frame.handle, UInt64(i), UInt64(j))
+    )
+    return nothing
+end
+
+"""
+Add a residue to the ``Frames``'s ``Topology``.
+"""
+function add_residue!(frame::Frame, residue::Residue)
+    check(
+        lib.chfl_frame_add_residue(frame.handle, residue.handle)
     )
     return nothing
 end

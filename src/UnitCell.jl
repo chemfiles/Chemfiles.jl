@@ -14,11 +14,11 @@ The possible shape for an unit cell are:
 - ``Chemfiles.TRICLINIC`` for unit cell where the three angles may not be 90°
 - ``Chemfiles.INFINITE`` for unit cells without boundaries
 """
-immutable CellShape
-    value::lib.chfl_cell_shape_t
+type CellShape
+    value::lib.chfl_cellshape
 
     function CellShape(value)
-        value = lib.chfl_cell_shape_t(value)
+        value = lib.chfl_cellshape(value)
         if value in [lib.CHFL_CELL_INFINITE, lib.CHFL_CELL_ORTHORHOMBIC, lib.CHFL_CELL_TRICLINIC]
             return new(value)
         else
@@ -141,7 +141,7 @@ end
 Get the ``cell`` shape, as a ``CellShape`` value
 """
 function shape(cell::UnitCell)
-    result = Ref{lib.chfl_cell_shape_t}(0)
+    result = Ref{lib.chfl_cellshape}(0)
     check(
         lib.chfl_cell_shape(cell.handle, result)
     )

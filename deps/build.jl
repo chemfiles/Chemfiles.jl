@@ -2,7 +2,7 @@ using BinDeps
 @BinDeps.setup
 
 libchemfiles = library_dependency("libchemfiles", aliases = ["chemfiles"])
-version = "0.7.4"
+version = "0.8.0"
 
 if Pkg.installed("Conda") === nothing
     error("Conda package not installed, please run Pkg.add(\"Conda\")")

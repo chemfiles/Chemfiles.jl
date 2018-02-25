@@ -5,7 +5,7 @@
 
     residue = Residue("GUA")
     @test name(residue) == "GUA"
-    @test id(residue) == typemax(UInt64)
+    @test_throws ChemfilesError id(residue)
 
     @test size(residue) == 0
     add_atom!(residue, 0);
