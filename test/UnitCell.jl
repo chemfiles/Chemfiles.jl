@@ -22,10 +22,10 @@
                                0, 0, 30], (3, 3))
     @test cell_matrix(cell) ≈ expected atol=1e-10
 
-    @test shape(cell).value == Chemfiles.ORTHORHOMBIC.value
+    @test shape(cell) == Chemfiles.ORTHORHOMBIC
 
     set_shape!(cell, Chemfiles.TRICLINIC)
-    @test shape(cell).value == Chemfiles.TRICLINIC.value
+    @test shape(cell) == Chemfiles.TRICLINIC
 
     set_angles!(cell, 80, 89, 100)
     @test angles(cell) == [80.0, 89.0, 100.0]

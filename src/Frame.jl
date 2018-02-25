@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 export positions, velocities, add_atom!, remove_atom!, add_velocities!, has_velocities, set_cell!,
-set_topology!, set_step!, guess_bonds!, distance, angle, dihedral, out_of_plane, add_bond!, remove_bond!, add_residue!
+set_topology!, set_step!, guess_bonds!, distance, dihedral, out_of_plane, add_bond!, remove_bond!, add_residue!
 
 """
 Create a new empty ``Frame``.
@@ -221,9 +221,12 @@ end
 """
 Set a named property for the given ``Frame``.
 """
-function set_property!(frame::Frame, name::String, property::Property)
+function set_property!(frame::Frame, name::String, property)
+
+    prop = Property(property)
+
     check(
-        lib.chfl_frame_set_property(frame.handle, pointer(name), property.handle)
+        lib.chfl_frame_set_property(frame.handle, pointer(name), prop.handle)
     )
     return nothing
 end
@@ -231,8 +234,8 @@ end
 """
 Get a named property for the given atom.
 """
-function get_property(frame::Frame, name::String)
-    Property(lib.chfl_frame_get_property(frame.handle, pointer(name)))
+function property(frame::Frame, name::String)
+    get(Property(lib.chfl_frame_get_property(frame.handle, pointer(name))))
 end
 
 """

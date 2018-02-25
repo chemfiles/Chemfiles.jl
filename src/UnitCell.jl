@@ -27,6 +27,8 @@ type CellShape
     end
 end
 
+Base.:(==)(x::CellShape, y::CellShape) = x.value == y.value
+
 const ORTHORHOMBIC = CellShape(lib.CHFL_CELL_ORTHORHOMBIC)
 const TRICLINIC = CellShape(lib.CHFL_CELL_TRICLINIC)
 const INFINITE = CellShape(lib.CHFL_CELL_INFINITE)

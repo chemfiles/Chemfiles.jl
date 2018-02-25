@@ -19,7 +19,7 @@ module Chemfiles
 
     include("errors.jl")
 
-    export Trajectory, Topology, Atom, UnitCell, Frame, Selection, Residue, Property
+    export Trajectory, Topology, Atom, UnitCell, Frame, Selection, Residue
 
     function version()
         unsafe_string(lib.chfl_version())
@@ -39,7 +39,7 @@ module Chemfiles
     or write one or many ``Frame`` to this file. The file format can be
     automatically determined from the extention, or manually specified.
     """
-    type Trajectory
+    mutable struct Trajectory
         handle :: Ptr{lib.CHFL_TRAJECTORY}
         function Trajectory(ptr::Ptr{lib.CHFL_TRAJECTORY})
             check(ptr)
@@ -55,7 +55,7 @@ module Chemfiles
     is a list of ``Atom`` in the system, together with the list of bonds between
     the atoms.
     """
-    type Topology
+    mutable struct Topology
         handle :: Ptr{lib.CHFL_TOPOLOGY}
         function Topology(ptr::Ptr{lib.CHFL_TOPOLOGY})
             check(ptr)
@@ -77,7 +77,7 @@ module Chemfiles
     The atom name is usually an unique identifier ("H1", "C_a") while the atom
     type will be shared between all particles of the same type: "H", "Ow", "CH3".
     """
-    type Atom
+    mutable struct Atom
         handle :: Ptr{lib.CHFL_ATOM}
         function Atom(ptr::Ptr{lib.CHFL_ATOM})
             check(ptr)
@@ -92,7 +92,7 @@ module Chemfiles
     three base vectors of lengthes ``a``, ``b`` and ``c``; and the angles
     between these vectors are ``alpha``, ``beta`` and ``gamma``.
     """
-    type UnitCell
+    mutable struct UnitCell
         handle :: Ptr{lib.CHFL_CELL}
         function UnitCell(ptr::Ptr{lib.CHFL_CELL})
             check(ptr)
@@ -112,7 +112,7 @@ module Chemfiles
     - The ``Topology`` of the system;
     - The ``UnitCell`` of the system.
     """
-    type Frame
+    mutable struct Frame
         handle :: Ptr{lib.CHFL_FRAME}
         function Frame(ptr::Ptr{lib.CHFL_FRAME})
             check(ptr)
@@ -128,7 +128,7 @@ module Chemfiles
     <http://chemfiles.readthedocs.io/en/latest/selections.html>`_ for more
     information about the selection language.
     """
-    type Selection
+    mutable struct Selection
         handle :: Ptr{lib.CHFL_SELECTION}
         function Selection(ptr::Ptr{lib.CHFL_SELECTION})
             check(ptr)
@@ -143,7 +143,7 @@ module Chemfiles
     can be small molecules, amino-acids in a protein, monomers in polymers,
     *etc.*
     """
-    type Residue
+    mutable struct Residue
         handle :: Ptr{lib.CHFL_RESIDUE}
         function Residue(ptr::Ptr{lib.CHFL_RESIDUE})
             check(ptr)
@@ -157,7 +157,7 @@ module Chemfiles
     A ``Property`` is a generic container for various forms of metadata
     stored for other structures.
     """
-    type Property
+    mutable struct Property
         handle :: Ptr{lib.CHFL_PROPERTY}
         function Property(ptr::Ptr{lib.CHFL_PROPERTY})
             check(ptr)

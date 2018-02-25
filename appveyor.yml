@@ -1,11 +1,5 @@
 environment:
   matrix:
-      - JULIA_VERSION: "v0.5"
-        ARCH: x86
-        JULIA_URL: "https://julialang-s3.julialang.org/bin/winnt/x86/0.5/julia-0.5.2-win32.exe"
-      - JULIA_VERSION: "v0.5"
-        ARCH: x64
-        JULIA_URL: "https://julialang-s3.julialang.org/bin/winnt/x64/0.5/julia-0.5.2-win64.exe"
       - JULIA_VERSION: "v0.6"
         ARCH: x86
         JULIA_URL: "https://julialang-s3.julialang.org/bin/winnt/x86/0.6/julia-0.6.0-win32.exe"

@@ -4,14 +4,13 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export Property, kind, free, get_bool, get_double, get_string, get_vector3d, PropertyKind
-
 """
-The possible shape for an unit cell are:
+The possible types of Properties are:
 
-- ``Chemfiles.ORTHORHOMBIC`` for unit cell with the three angles are 90°
-- ``Chemfiles.TRICLINIC`` for unit cell where the three angles may not be 90°
-- ``Chemfiles.INFINITE`` for unit cells without boundaries
+- ``Chemfiles.PROPERTY_BOOL`` for storing bools
+- ``Chemfiles.PROPERTY_DOUBLE`` for storing doubles
+- ``Chemfiles.PROPERTY_STRING`` for storing strings
+- ``Chemfiles.PROPERTY_VECTOR3D`` for storing vectors
 """
 type PropertyKind
     value::lib.chfl_property_kind
@@ -25,6 +24,8 @@ type PropertyKind
         end
     end
 end
+
+Base.:(==)(x::PropertyKind, y::PropertyKind) = x.value == y.value
 
 const PROPERTY_BOOL = PropertyKind(lib.CHFL_PROPERTY_BOOL)
 const PROPERTY_DOUBLE = PropertyKind(lib.CHFL_PROPERTY_DOUBLE)
@@ -71,48 +72,49 @@ function kind(property::Property)
 end
 
 """
-Obtain a bool property.
+Obtain the value stored by a property.
 """
-function get_bool(property::Property)
-    result = Ref{UInt8}(0)
-    check(
-        lib.chfl_property_get_bool(property.handle, result)
-    )
-    return convert(Bool, result[])
-end
+function Base.get(property::Property; buffersize::Integer = 100 )
 
-"""
-Obtain a double property.
-"""
-function get_double(property::Property)
-    result = Ref{Cdouble}(0)
-    check(
-        lib.chfl_property_get_double(property.handle, result)
-    )
-    return result[]
-end
+    type_of_property = kind(property)
 
-"""
-Obtain a string property.
-"""
-function get_string(property::Property, buffersize::Integer = 100)
-    buffersize = UInt64(buffersize)
-    str = " " ^ buffersize
-    check(
-        lib.chfl_property_get_string(property.handle, pointer(str), buffersize)
-    )
-    return strip_null(str)
-end
+    if type_of_property == PROPERTY_BOOL
 
-"""
-Obtain a Vector3d property.
-"""
-function get_vector3d(property::Property)
-    result = Float64[0, 0, 0]
-    check(
-        lib.chfl_property_get_vector3d(property.handle, result)
-    )
-    return result
+        result = Ref{UInt8}(0)
+        check(
+            lib.chfl_property_get_bool(property.handle, result)
+        )
+        return convert(Bool, result[])
+
+    elseif type_of_property == PROPERTY_DOUBLE
+
+        result = Ref{Cdouble}(0)
+        check(
+            lib.chfl_property_get_double(property.handle, result)
+        )
+        return result[]
+
+    elseif type_of_property == PROPERTY_STRING
+
+        buffersize = UInt64(buffersize)
+        str = " " ^ buffersize
+        check(
+            lib.chfl_property_get_string(property.handle, pointer(str), buffersize)
+        )
+        return strip_null(str)
+
+    elseif type_of_property == PROPERTY_VECTOR3D
+
+        result = Float64[0, 0, 0]
+        check(
+            lib.chfl_property_get_vector3d(property.handle, result)
+        )
+        return result
+
+    else
+        throw( ChemfilesError("Invalid kind of property property $type_of_property") )
+    end
+
 end
 
 """
