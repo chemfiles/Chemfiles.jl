@@ -20,6 +20,7 @@ install:
               "C:\projects\julia-installer.exe"
         )
   - C:\projects\julia-installer.exe /S /D=C:\projects\julia
+  - C:\projects\julia\bin\julia -e "Pkg.add(\"Conda\"); using Conda; Conda.list(); Conda.update()"
 
 build_script:
   - IF EXIST .git\shallow (git fetch --unshallow)
