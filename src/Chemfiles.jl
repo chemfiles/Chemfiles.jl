@@ -125,7 +125,7 @@ module Chemfiles
     """
     A ``Selection`` allow to select a group of atoms. Examples of selections are
     "name H" and "(x < 45 and name O) or name C". See the `full documentation
-    <http://chemfiles.readthedocs.io/en/latest/selections.html>`_ for more
+    <http://chemfiles.org/chemfiles/latest/selections.html>`_ for more
     information about the selection language.
     """
     mutable struct Selection
