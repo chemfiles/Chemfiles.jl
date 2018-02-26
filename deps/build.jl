@@ -19,7 +19,7 @@ function unpack(file, directory)
         run(`tar xjf $file --directory=$directory`)
     elseif is_windows()
         exe7z = joinpath(_HOME, "7z.exe")
-        pipeline(`$exe7z x $file -y -so`, `$exe7z x -si -y -ttar -o$directory`)
+        run(pipeline(`$exe7z x $file -y -so`, `$exe7z x -si -y -ttar -o$directory`))
     end
 end
 
@@ -59,7 +59,7 @@ unpack(LOCAL_ARCHIVE, joinpath(@__DIR__, "usr"))
 
 LIBPATH = joinpath(@__DIR__, "usr", unpacked_file)
 
-DEPS_JL = """
+write(joinpath(@__DIR__, "deps.jl"), """
 # This is an auto-generated file; do not edit
 
 # Macro to load a library
@@ -69,7 +69,5 @@ macro checked_lib(libname, path)
 end
 
 # Load dependencies
-@checked_lib libchemfiles "$LIBPATH"
-"""
-
-write(joinpath(@__DIR__, "deps.jl"), DEPS_JL)
+@checked_lib libchemfiles "$(escape_string(LIBPATH))"
+""")
