@@ -1,1 +1,3 @@
 deps.jl
+*.tar.bz2
+usr/

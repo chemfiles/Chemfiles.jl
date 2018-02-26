@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 export mass, set_mass!, charge, set_charge!, name, set_name!, fullname, vdw_radius,
-covalent_radius, atomic_number, atom_type, set_atom_type!, AtomType
+covalent_radius, atomic_number, atom_type, set_atom_type!, set_property!, property, AtomType
 
 """
 Create an atom with the given ``name`` and set the atom ``type`` to be the same
@@ -169,14 +169,34 @@ end
 """
 Get the atomic number of an ``atom`` from the atom type.
 
-If the atomic number can not be found, returns -1.
+If the atomic number can not be found, returns 0.
 """
 function atomic_number(atom::Atom)
-    number = Ref{Int64}(0)
+    number = Ref{UInt64}(0)
     check(
         lib.chfl_atom_atomic_number(atom.handle, number)
     )
     return number[]
+end
+
+"""
+Set a named property for the given atom.
+"""
+function set_property!(atom::Atom, name::String, property)
+
+    prop = Property(property)
+
+    check(
+        lib.chfl_atom_set_property(atom.handle, pointer(name), prop.handle)
+    )
+    return nothing
+end
+
+"""
+Get a named property for the given atom.
+"""
+function property(atom::Atom, name::String)
+    get(Property(lib.chfl_atom_get_property(atom.handle, pointer(name))))
 end
 
 """

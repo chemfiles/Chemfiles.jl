@@ -7,11 +7,18 @@
 export name, id, add_atom!, residue_for_atom
 
 """
-Create a new residue with the given ``name`` and an optional residue identifier
-``resid``.
+Create a new residue with the given ``name``
 """
-function Residue(name::String, resid::Integer=typemax(UInt64))
-    handle = lib.chfl_residue(pointer(name), UInt64(resid))
+function Residue(name::String)
+    handle = lib.chfl_residue(pointer(name))
+    return Residue(handle)
+end
+
+"""
+Create a new residue with the given ``name`` and residue identifier ``resid``.
+"""
+function Residue(name::String, resid::Integer)
+    handle = lib.chfl_residue_with_id(pointer(name), UInt64(resid))
     return Residue(handle)
 end
 

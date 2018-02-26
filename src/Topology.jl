@@ -4,8 +4,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-export remove!, isbond, isangle, isdihedral, bonds_count, angles_count, dihedrals_count,
-    bonds, angles, dihedrals, add_bond!, remove_bond!, add_residue!, residues,
+export remove!, bonds_count, angles_count, dihedrals_count, impropers_count,
+    bonds, angles, dihedrals, impropers, add_bond!, remove_bond!, add_residue!, residues,
     are_linked, count_residues
 
 """
@@ -58,39 +58,6 @@ function remove!(topology::Topology, index::Integer)
 end
 
 """
-Check if the atoms ``i`` and ``j`` are bonded together.
-"""
-function isbond(topology::Topology, i::Integer, j::Integer)
-    result = Ref{UInt8}(0)
-    check(
-        lib.chfl_topology_isbond(topology.handle, UInt64(i), UInt64(j), result)
-    )
-    return convert(Bool, result[])
-end
-
-"""
-Check if the atoms ``i``, ``j`` and ``k`` constitues an angle.
-"""
-function isangle(topology::Topology, i::Integer, j::Integer, k::Integer)
-    result = Ref{UInt8}(0)
-    check(
-        lib.chfl_topology_isangle(topology.handle, UInt64(i), UInt64(j), UInt64(k), result)
-    )
-    return convert(Bool, result[])
-end
-
-"""
-Check if the atoms ``i``, ``j``, ``k`` and ``m`` constitues a dihedral angle.
-"""
-function isdihedral(topology::Topology, i::Integer, j::Integer, k::Integer, m::Integer)
-    result = Ref{UInt8}(0)
-    check(
-        lib.chfl_topology_isdihedral(topology.handle, UInt64(i), UInt64(j), UInt64(k), UInt64(m), result)
-    )
-    return convert(Bool, result[])
-end
-
-"""
 Get the number of bonds in the ``topology``.
 """
 function bonds_count(topology::Topology)
@@ -119,6 +86,17 @@ function dihedrals_count(topology::Topology)
     n = Ref{UInt64}(0)
     check(
         lib.chfl_topology_dihedrals_count(topology.handle, n)
+    )
+    return n[]
+end
+
+"""
+Get the number of improper angles in the ``topology``.
+"""
+function impropers_count(topology::Topology)
+    n = Ref{UInt64}(0)
+    check(
+        lib.chfl_topology_impropers_count(topology.handle, n)
     )
     return n[]
 end
@@ -156,6 +134,19 @@ function dihedrals(topology::Topology)
     result = Array{UInt64}(4, count)
     check(
         lib.chfl_topology_dihedrals(topology.handle, pointer(result), count)
+    )
+    return result
+end
+
+"""
+Get the improper angles in the ``topology``, in a ``4 x impropers_count(topology)``
+array.
+"""
+function impropers(topology::Topology)
+    count = impropers_count(topology)
+    result = Array{UInt64}(4, count)
+    check(
+        lib.chfl_topology_impropers(topology.handle, pointer(result), count)
     )
     return result
 end

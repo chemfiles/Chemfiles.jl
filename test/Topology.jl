@@ -21,13 +21,6 @@
     @test angles_count(topology) == 2
     @test dihedrals_count(topology) == 1
 
-    @test isbond(topology, 0, 1) == true
-    @test isbond(topology, 0, 3) == false
-    @test isangle(topology, 0, 1, 2) == true
-    @test isangle(topology, 0, 1, 3) == false
-    @test isdihedral(topology, 0, 1, 2, 3) == true
-    @test isdihedral(topology, 0, 1, 3, 2) == false
-
     top_bonds = reshape(UInt64[0, 1,   1, 2,   2, 3], (2, 3))
 
     @test bonds(topology) == top_bonds
@@ -81,5 +74,20 @@
 
         add_bond!(topology, 6, 9)
         @test are_linked(topology, first, second) == true
+    end
+
+    @testset "Impropers" begin
+        topology = Topology()
+        add_atom!(topology, Atom("N"))
+        add_atom!(topology, Atom("H"))
+        add_atom!(topology, Atom("H"))
+        add_atom!(topology, Atom("H"))
+
+        add_bond!(topology, 0, 1)
+        add_bond!(topology, 0, 2)
+        add_bond!(topology, 0, 3)
+
+        @test impropers_count(topology) == 1
+        @test impropers(topology) == reshape(UInt64[1, 0, 2, 3], (4,1))
     end
 end

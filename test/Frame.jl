@@ -1,4 +1,4 @@
-@testset "Frame Type" begin
+@testset "Frame type" begin
     frame = Frame()
     @test size(frame) == 0
 
@@ -58,4 +58,62 @@
     resize!(copy, 10)
     @test size(copy) == 10
     @test size(frame) == 4
+
+    @testset "Geometry tests" begin
+        distance_frame = Frame()
+        add_atom!(distance_frame, Atom(""), [0.0,0.0,0.0])
+        add_atom!(distance_frame, Atom(""), [1.0,2.0,3.0])
+        @test distance(distance_frame, 0, 1) ≈ sqrt(14.0) atol=1e-10
+
+        angle_frame = Frame()
+        add_atom!(angle_frame, Atom(""), [1.0,0.0,0.0])
+        add_atom!(angle_frame, Atom(""), [0.0,0.0,0.0])
+        add_atom!(angle_frame, Atom(""), [0.0,1.0,0.0])
+        @test angle(angle_frame, 0, 1, 2) ≈ pi/2 atol=1e-10
+
+        dihedral_frame = Frame()
+        add_atom!(dihedral_frame, Atom(""), [1.0,0.0,0.0])
+        add_atom!(dihedral_frame, Atom(""), [0.0,0.0,0.0])
+        add_atom!(dihedral_frame, Atom(""), [0.0,1.0,0.0])
+        add_atom!(dihedral_frame, Atom(""), [0.0,1.0,1.0])
+        @test dihedral(dihedral_frame, 0, 1, 2, 3) ≈ pi/2 atol=1e-10
+
+        oop_frame = Frame()
+        add_atom!(oop_frame, Atom(""), [0.0,0.0,0.0])
+        add_atom!(oop_frame, Atom(""), [0.0,0.0,2.0])
+        add_atom!(oop_frame, Atom(""), [1.0,0.0,0.0])
+        add_atom!(oop_frame, Atom(""), [0.0,1.0,0.0])
+        @test out_of_plane(oop_frame, 0, 1, 2, 3) ≈ 2 atol=1e-10
+    end
+
+    @testset "Frame add/remove bonds" begin
+        frame = Frame();
+        add_atom!(frame, Atom("H"), [1.0, 0.0, 0.0])
+        add_atom!(frame, Atom("O"), [0.0, 0.0, 0.0])
+        add_atom!(frame, Atom("H"), [0.0, 1.0, 0.0])
+
+        add_bond!(frame, 0, 1)
+        add_bond!(frame, 1, 2)
+
+        # the bonds are actually stored inside the topology
+        @test bonds(Topology(frame)) == reshape(UInt64[0,1, 1,2], (2,2))
+        # angles are automaticaly computed too
+        @test angles(Topology(frame)) == reshape(UInt64[0, 1, 2], (3,1))
+
+        remove_bond!(frame, 1, 0)
+        @test bonds(Topology(frame)) == reshape(UInt64[1,2], (2,1))
+    end
+
+    @testset "Frame add residues" begin
+        frame = Frame()
+        add_atom!(frame, Atom("Zn"), [0.0, 0.0, 0.0])
+        add_atom!(frame, Atom("Fe"), [1.0, 2.0, 3.0])
+
+        residue = Residue("first")
+        add_atom!(residue,0)
+        add_residue!(frame,residue)
+
+        # residues are actually stored in the topology
+        @test count_residues(Topology(frame)) == 1
+    end
 end

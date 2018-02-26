@@ -74,10 +74,6 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
                               X 4 5 6
                               """
 
-        @static if is_windows()
-            EXPECTED_CONTENT = replace(EXPECTED_CONTENT, "\n", "\r\n")
-        end
-
         frame = Frame()
         resize!(frame, 4)
         pos = positions(frame)
@@ -110,9 +106,7 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
         close(trajectory)
         @test isopen(trajectory) == false
 
-        open("test-tmp.xyz") do fd
-            @test readstring(fd) == EXPECTED_CONTENT
-        end
+        @test readstring("test-tmp.xyz") == EXPECTED_CONTENT
 
         rm("test-tmp.xyz")
     end
