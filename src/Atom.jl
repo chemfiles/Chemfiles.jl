@@ -1,8 +1,9 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export mass, set_mass!, charge, set_charge!, name, set_name!, fullname, vdw_radius,
-covalent_radius, atomic_number, atom_type, set_atom_type!, set_property!, property, AtomType
+export mass, set_mass!, charge, set_charge!, name, set_name!, fullname,
+vdw_radius, covalent_radius, atomic_number, atom_type, set_atom_type!,
+set_property!, property, AtomType
 
 """
 Create an atom with the given ``name`` and set the atom ``type`` to be the same

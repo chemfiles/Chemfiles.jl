@@ -29,11 +29,11 @@ These functions are not exported, and should be called by there fully qualified 
     Chemfiles.last_error()
     Chemfiles.set_warning_callback(my_callback)
 
-.. jl:autofunction:: src/errors.jl last_error
+.. jl:autofunction:: src/utils.jl last_error
 
-.. jl:autofunction:: src/errors.jl clear_errors
+.. jl:autofunction:: src/utils.jl clear_errors
 
-.. jl:autofunction:: src/errors.jl set_warning_callback
+.. jl:autofunction:: src/utils.jl set_warning_callback
 
 .. _Trajectory:
 
@@ -101,6 +101,24 @@ These functions are not exported, and should be called by there fully qualified 
 
 .. jl:autofunction:: src/Frame.jl guess_bonds!
 
+.. jl:autofunction:: src/Frame.jl add_bond!
+
+.. jl:autofunction:: src/Frame.jl remove_bond!
+
+.. jl:autofunction:: src/Frame.jl add_residue!
+
+.. jl:autofunction:: src/Frame.jl distance
+
+.. jl:autofunction:: src/Frame.jl angle
+
+.. jl:autofunction:: src/Frame.jl dihedral
+
+.. jl:autofunction:: src/Frame.jl out_of_plane
+
+.. jl:autofunction:: src/Frame.jl property
+
+.. jl:autofunction:: src/Frame.jl set_property!
+
 .. _UnitCell:
 
 ``UnitCell`` type and associated function
@@ -148,23 +166,21 @@ These functions are not exported, and should be called by there fully qualified 
 
 .. jl:autofunction:: src/Topology.jl remove!
 
-.. jl:autofunction:: src/Topology.jl isbond
-
-.. jl:autofunction:: src/Topology.jl isangle
-
-.. jl:autofunction:: src/Topology.jl isdihedral
-
 .. jl:autofunction:: src/Topology.jl bonds_count
 
 .. jl:autofunction:: src/Topology.jl angles_count
 
 .. jl:autofunction:: src/Topology.jl dihedrals_count
 
+.. jl:autofunction:: src/Topology.jl impropers_count
+
 .. jl:autofunction:: src/Topology.jl bonds
 
 .. jl:autofunction:: src/Topology.jl angles
 
 .. jl:autofunction:: src/Topology.jl dihedrals
+
+.. jl:autofunction:: src/Topology.jl impropers
 
 .. jl:autofunction:: src/Topology.jl add_bond!
 
@@ -212,6 +228,10 @@ These functions are not exported, and should be called by there fully qualified 
 .. jl:autofunction:: src/Atom.jl atom_type
 
 .. jl:autofunction:: src/Atom.jl set_atom_type!
+
+.. jl:autofunction:: src/Atom.jl property
+
+.. jl:autofunction:: src/Atom.jl set_property!
 
 .. _Residue:
 

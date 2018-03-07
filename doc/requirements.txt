@@ -1,4 +1,3 @@
 sphinx>=1.5
 sphinx_bootstrap_theme
-https://github.com/bastikr/sphinx-julia/archive/b7cf091974822cbecbd99c8452339bff44676006.zip
-https://github.com/JuliaPy/pyjulia/archive/d01b42bc097fab5272e7d68cac8fbb340c710689.zip
+https://github.com/bastikr/sphinx-julia/archive/19882420253df9d5de09bc29d1b8dbf32afd1097.zip

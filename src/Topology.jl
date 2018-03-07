@@ -2,8 +2,8 @@
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
 export remove!, bonds_count, angles_count, dihedrals_count, impropers_count,
-    bonds, angles, dihedrals, impropers, add_bond!, remove_bond!, add_residue!, residues,
-    are_linked, count_residues
+bonds, angles, dihedrals, impropers, add_bond!, remove_bond!, add_residue!,
+residues, are_linked, count_residues
 
 """
 Create an empty ``Topology``.

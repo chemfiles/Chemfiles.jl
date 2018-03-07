@@ -1,8 +1,9 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export positions, velocities, add_atom!, remove_atom!, add_velocities!, has_velocities, set_cell!,
-set_topology!, set_step!, guess_bonds!, distance, dihedral, out_of_plane, add_bond!, remove_bond!, add_residue!
+export positions, velocities, add_atom!, remove_atom!, add_velocities!,
+has_velocities, set_cell!, set_topology!, set_step!, guess_bonds!, distance,
+dihedral, out_of_plane, add_bond!, remove_bond!, add_residue!
 
 """
 Create a new empty ``Frame``.
