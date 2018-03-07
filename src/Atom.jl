@@ -89,11 +89,9 @@ end
 Get the name of an ``atom``
 """
 function name(atom::Atom)
-    str = " " ^ 10
-    check(
-        lib.chfl_atom_name(atom.handle, pointer(str), UInt64(length(str)))
+    return _call_with_growing_buffer(
+        (buffer, size) -> check(lib.chfl_atom_name(atom.handle, buffer, size))
     )
-    return strip_null(str)
 end
 
 """
@@ -110,11 +108,9 @@ end
 Get the type of an ``atom``.
 """
 function atom_type(atom::Atom)
-    str = " " ^ 10
-    check(
-        lib.chfl_atom_type(atom.handle, pointer(str), UInt64(length(str)))
+    return _call_with_growing_buffer(
+        (buffer, size) -> check(lib.chfl_atom_type(atom.handle, buffer, size))
     )
-    return strip_null(str)
 end
 
 """
@@ -133,11 +129,9 @@ Get the full name of an ``atom`` from the atom type.
 For example, the full name of an atom with type "He" is "Helium".
 """
 function Base.fullname(atom::Atom)
-    str = " " ^ 96
-    check(
-        lib.chfl_atom_full_name(atom.handle, pointer(str), UInt64(length(str)))
+    return _call_with_growing_buffer(
+        (buffer, size) -> check(lib.chfl_atom_full_name(atom.handle, buffer, size))
     )
-    return strip_null(str)
 end
 
 """

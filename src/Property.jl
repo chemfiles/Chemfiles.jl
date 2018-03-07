@@ -74,45 +74,32 @@ end
 """
 Obtain the value stored by a property.
 """
-function Base.get(property::Property; buffersize::Integer = 100 )
-
-    type_of_property = kind(property)
-
-    if type_of_property == PROPERTY_BOOL
-
+function Base.get(property::Property)
+    property_kind = kind(property)
+    if property_kind == PROPERTY_BOOL
         result = Ref{UInt8}(0)
         check(
             lib.chfl_property_get_bool(property.handle, result)
         )
         return convert(Bool, result[])
-
-    elseif type_of_property == PROPERTY_DOUBLE
-
+    elseif property_kind == PROPERTY_DOUBLE
         result = Ref{Cdouble}(0)
         check(
             lib.chfl_property_get_double(property.handle, result)
         )
         return result[]
-
-    elseif type_of_property == PROPERTY_STRING
-
-        buffersize = UInt64(buffersize)
-        str = " " ^ buffersize
-        check(
-            lib.chfl_property_get_string(property.handle, pointer(str), buffersize)
+    elseif property_kind == PROPERTY_STRING
+        return _call_with_growing_buffer(
+            (buffer, size) -> check(lib.chfl_property_get_string(property.handle, buffer, size))
         )
-        return strip_null(str)
-
-    elseif type_of_property == PROPERTY_VECTOR3D
-
+    elseif property_kind == PROPERTY_VECTOR3D
         result = Float64[0, 0, 0]
         check(
             lib.chfl_property_get_vector3d(property.handle, result)
         )
         return result
-
     else
-        throw( ChemfilesError("Invalid kind of property property $type_of_property") )
+        throw( ChemfilesError("Invalid kind of property property $property_kind") )
     end
 
 end

@@ -17,21 +17,12 @@ module Chemfiles
         include("generated/cdef.jl")
     end
 
-    include("errors.jl")
+    include("utils.jl")
 
     export Trajectory, Topology, Atom, UnitCell, Frame, Selection, Residue
 
     function version()
         unsafe_string(lib.chfl_version())
-    end
-
-    function strip_null(string)
-        for i in 1:length(string)
-            if string[i] == '\0'
-                return string[1:i-1]
-            end
-        end
-        throw(ChemfilesError("A C string is not NULL terminated"))
     end
 
     """

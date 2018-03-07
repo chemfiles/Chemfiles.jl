@@ -6,7 +6,7 @@
 export evaluate, selection_string
 
 """
-Create a ``Selection`` from a selection string 
+Create a ``Selection`` from a selection string
 """
 function Selection(selection::AbstractString)
     handle = lib.chfl_selection(pointer(selection))
@@ -17,11 +17,9 @@ end
 Get the selection string used to create a given ``selection``.
 """
 function selection_string(selection::Selection)
-    result = " " ^ 64
-    check(
-        lib.chfl_selection_string(selection.handle, pointer(result), UInt64(length(result)))
+    return _call_with_growing_buffer(
+        (buffer, size) -> check(lib.chfl_selection_string(selection.handle, buffer, size))
     )
-    return strip_null(result)
 end
 
 """

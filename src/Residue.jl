@@ -57,11 +57,9 @@ end
 Get the name of a ``residue``.
 """
 function name(residue::Residue)
-    str = " " ^ 10
-    check(
-        lib.chfl_residue_name(residue.handle, pointer(str), UInt64(length(str)))
+    return _call_with_growing_buffer(
+        (buffer, size) -> check(lib.chfl_residue_name(residue.handle, buffer, size))
     )
-    return strip_null(str)
 end
 
 """

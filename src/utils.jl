@@ -60,3 +60,36 @@ function set_warning_callback(callback::Function)
 end
 
 set_warning_callback(warning_callback)
+
+
+function _strip_null(string)
+    for i in 1:length(string)
+        if string[i] == '\0'
+            return string[1:i-1]
+        end
+    end
+    throw(ChemfilesError("A C string is not NULL terminated"))
+end
+
+function _call_with_growing_buffer(callback::Function, initial_size=64)
+    function buffer_was_big_enough(buffer)
+        if length(buffer) < 2
+            return false
+        else
+            return buffer[end-2] == '\0'
+        end
+    end
+
+    size = initial_size
+    buffer = repeat("\0", size)
+
+    callback(pointer(buffer), UInt64(size))
+    while !buffer_was_big_enough(buffer)
+        # Grow the buffer and retry
+        size *= 2
+        buffer = repeat("\0", size)
+        callback(pointer(buffer), UInt64(size))
+    end
+
+    return _strip_null(buffer)
+end
