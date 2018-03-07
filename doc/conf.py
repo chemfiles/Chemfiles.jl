@@ -24,7 +24,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Julia interface to chemfiles'
-copyright = u'2015, Guillaume Fraux — MPLv2 licence'
+copyright = u'2015-2018, Guillaume Fraux & contributors — BSD licence'
 
 version = "0.6"
 release = "0.6.0"

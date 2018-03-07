@@ -1,8 +1,5 @@
-# Copyright (c) Guillaume Fraux 2015
-#
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+# Chemfiles.jl, a modern library for chemistry file reading and writing
+# Copyright (C) Guillaume Fraux and contributors -- BSD license
 
 export mass, set_mass!, charge, set_charge!, name, set_name!, fullname, vdw_radius,
 covalent_radius, atomic_number, atom_type, set_atom_type!, set_property!, property, AtomType

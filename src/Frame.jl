@@ -1,8 +1,5 @@
-# Copyright (c) Guillaume Fraux 2015
-#
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+# Chemfiles.jl, a modern library for chemistry file reading and writing
+# Copyright (C) Guillaume Fraux and contributors -- BSD license
 
 export positions, velocities, add_atom!, remove_atom!, add_velocities!, has_velocities, set_cell!,
 set_topology!, set_step!, guess_bonds!, distance, dihedral, out_of_plane, add_bond!, remove_bond!, add_residue!
