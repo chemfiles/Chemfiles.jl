@@ -19,7 +19,7 @@ script:
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" && "${TRAVIS_JULIA_VERSION}" == "0.6" ]]; then
         julia -e 'cd(Pkg.dir("Chemfiles")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
-        ./build-docs.sh
+        ./scripts/build-docs.sh
         cd ${TRAVIS_BUILD_DIR}
     fi
 
