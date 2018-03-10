@@ -60,6 +60,22 @@ end
 set_warning_callback(warning_callback)
 
 
+"""
+Read configuration data from the file at `path`.
+
+By default, chemfiles reads configuration from any file name `.chemfilesrc`
+in the current directory or any parent directory. This function can be used
+to add data from another configuration file.
+
+This function will fail if there is no file at `path`, or if the file is
+incorectly formatted. Data from the new configuration file will overwrite
+any existing data.
+"""
+function add_configuration(path)
+    lib.chfl_add_configuration(pointer(path))
+end
+
+
 function _strip_null(string)
     for i in 1:length(string)
         if string[i] == '\0'

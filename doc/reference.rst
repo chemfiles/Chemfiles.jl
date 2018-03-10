@@ -19,8 +19,8 @@ built around the main types of chemfiles: `Trajectory`_, `Frame`_, `UnitCell`_,
    This may change in future release to use 1-based indexing, which is more familiar
    to Julia developers.
 
-Error and logging functions
----------------------------
+Miscelaneous functions
+----------------------
 
 These functions are not exported, and should be called by there fully qualified name:
 
@@ -34,6 +34,10 @@ These functions are not exported, and should be called by there fully qualified 
 .. jl:autofunction:: src/utils.jl clear_errors
 
 .. jl:autofunction:: src/utils.jl set_warning_callback
+
+.. jl:autofunction:: src/utils.jl add_configuration
+
+.. jl:autofunction:: src/Chemfiles.jl version
 
 .. _Trajectory:
 

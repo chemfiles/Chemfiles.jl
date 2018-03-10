@@ -1,5 +1,5 @@
 
-const DATAPATH = joinpath(dirname(@__FILE__), "data")
+const DATAPATH = joinpath(@__DIR__, "data")
 
 @testset "Trajectory type" begin
     @testset "Errors handling" begin

@@ -23,3 +23,14 @@ end
     @test_throws ChemfilesError Residue(Topology(), 3)
     @test TEST_CALLBACK == true
 end
+
+@testset "Configuration files" begin
+    config = joinpath(@__DIR__, "data", "config.toml")
+    Chemfiles.add_configuration(config)
+
+    trajectory = joinpath(@__DIR__, "data", "water.xyz")
+    frame = read(Trajectory(trajectory))
+
+    @test name(Atom(frame, 9)) == "Oz"
+    @test atom_type(Atom(frame, 9)) == "F"
+end
