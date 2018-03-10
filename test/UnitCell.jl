@@ -36,4 +36,8 @@
     set_lengths!(copy, 10, 10, 10)
     @test lengths(copy) == [10.0, 10.0, 10.0]
     @test lengths(cell) == [10.0, 20.0, 30.0]
+
+
+    cell = UnitCell(10, 20, 30)
+    @test wrap!(cell, [12.0, 22.0, -5.0]) == [2.0, 2.0, -5.0]
 end

@@ -2,7 +2,7 @@
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
 export lengths, set_lengths!, angles, set_angles!, cell_matrix, shape,
-set_shape!, volume, CellShape
+set_shape!, volume, CellShape, wrap!
 
 """
 The possible shape for an unit cell are:
@@ -155,6 +155,16 @@ function set_shape!(cell::UnitCell, shape::CellShape)
         lib.chfl_cell_set_shape(cell.handle, shape.value)
     )
     return nothing
+end
+
+"""
+Wrap a `vector` in the unit `cell`.
+"""
+function wrap!(cell::UnitCell, vector::Vector{Float64})
+    check(
+        lib.chfl_cell_wrap(cell.handle, vector)
+    )
+    return vector
 end
 
 """
