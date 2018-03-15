@@ -14,6 +14,7 @@ sys.path.append(DOC_ROOT)
 extensions = [
     'sphinxjulia.juliadomain',
     'sphinxjulia.juliaautodoc',
+    'htmlhidden',
 ]
 
 # The suffix of source filenames.

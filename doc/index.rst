@@ -31,5 +31,5 @@ interface reference for all the types and functions in chemfiles.
 .. toctree::
    :maxdepth: 2
 
-   examples
+   tutorials
    reference
