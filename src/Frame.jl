@@ -273,3 +273,8 @@ function Base.deepcopy(frame::Frame)
     handle = lib.chfl_frame_copy(frame.handle)
     return Frame(handle)
 end
+
+# Iteration support
+Base.start(frame::Frame) = 0
+Base.done(frame::Frame, index) = (index == size(frame))
+Base.next(frame::Frame, index) = (Atom(frame, index), index + 1)
