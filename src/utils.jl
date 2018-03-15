@@ -41,7 +41,7 @@ function clear_errors()
     check(lib.chfl_clear_errors())
 end
 
-function warning_callback(message::String)
+function _warning_callback(message::String)
     warn("[chemfiles] ", message)
 end
 
@@ -52,12 +52,18 @@ Set the global warning ``callback`` to be used for each warning event.
 The ``callback`` function must take a ``String`` and return nothing.
 """
 function set_warning_callback(callback::Function)
-    cb_adaptor = (x) -> callback(unsafe_string(x))
+    function cb_adaptor(message)
+        try
+            callback(unsafe_string(message))
+        catch error
+            warn("caught $error in warning callback")
+        end
+    end
     cb = cfunction(cb_adaptor, Void, (Ptr{UInt8},))
     check(lib.chfl_set_warning_callback(cb))
 end
 
-set_warning_callback(warning_callback)
+set_warning_callback(_warning_callback)
 
 
 """

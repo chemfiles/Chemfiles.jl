@@ -1,6 +1,6 @@
 function warning_callback(message::String)
     global TEST_CALLBACK = true
-    nothing
+    error("checking that error are supported")
 end
 
 @testset "Error Functions" begin
@@ -22,6 +22,8 @@ end
     Chemfiles.set_warning_callback(warning_callback)
     @test_throws ChemfilesError Residue(Topology(), 3)
     @test TEST_CALLBACK == true
+
+    Chemfiles.set_warning_callback(Chemfiles._warning_callback)
 end
 
 @testset "Configuration files" begin
