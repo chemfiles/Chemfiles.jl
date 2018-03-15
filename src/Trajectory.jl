@@ -49,7 +49,6 @@ function read_step!(trajectory::Trajectory, step::Integer, frame::Frame)
     return frame
 end
 
-
 """
 Read the given ``step`` of the ``trajectory``, and return the corresponding
 ``Frame``.
@@ -138,3 +137,8 @@ Check is the ``trajectory`` is open
 function Base.isopen(trajectory::Trajectory)
     return trajectory.handle != Ptr{lib.CHFL_TRAJECTORY}(0)
 end
+
+# Iteration support
+Base.start(trajectory::Trajectory) = 0
+Base.done(trajectory::Trajectory, index) = (index == nsteps(trajectory))
+Base.next(trajectory::Trajectory, index) = (read_step(trajectory, index), index + 1)

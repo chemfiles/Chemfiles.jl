@@ -57,6 +57,17 @@ const DATAPATH = joinpath(@__DIR__, "data")
         @test name(Atom(frame, 100)) == "Rd"
     end
 
+    @testset "Iteration" begin
+        trajectory = Trajectory(joinpath(DATAPATH, "water.xyz"))
+
+        count = 0
+        for frame in trajectory
+            count += 1
+        end
+
+        @test count == nsteps(trajectory)
+    end
+
     @testset "Write frames" begin
         EXPECTED_CONTENT = """4
                               Written by the chemfiles library
