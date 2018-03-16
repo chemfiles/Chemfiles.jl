@@ -1,11 +1,9 @@
-# Copyright (c) Guillaume Fraux 2015
-#
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+# Chemfiles.jl, a modern library for chemistry file reading and writing
+# Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export mass, set_mass!, charge, set_charge!, name, set_name!, fullname, vdw_radius,
-covalent_radius, atomic_number, atom_type, set_atom_type!, set_property!, property, AtomType
+export mass, set_mass!, charge, set_charge!, name, set_name!, fullname,
+vdw_radius, covalent_radius, atomic_number, atom_type, set_atom_type!,
+set_property!, property, AtomType
 
 """
 Create an atom with the given ``name`` and set the atom ``type`` to be the same
@@ -89,11 +87,9 @@ end
 Get the name of an ``atom``
 """
 function name(atom::Atom)
-    str = " " ^ 10
-    check(
-        lib.chfl_atom_name(atom.handle, pointer(str), UInt64(length(str)))
+    return _call_with_growing_buffer(
+        (buffer, size) -> check(lib.chfl_atom_name(atom.handle, buffer, size))
     )
-    return strip_null(str)
 end
 
 """
@@ -110,11 +106,9 @@ end
 Get the type of an ``atom``.
 """
 function atom_type(atom::Atom)
-    str = " " ^ 10
-    check(
-        lib.chfl_atom_type(atom.handle, pointer(str), UInt64(length(str)))
+    return _call_with_growing_buffer(
+        (buffer, size) -> check(lib.chfl_atom_type(atom.handle, buffer, size))
     )
-    return strip_null(str)
 end
 
 """
@@ -133,11 +127,9 @@ Get the full name of an ``atom`` from the atom type.
 For example, the full name of an atom with type "He" is "Helium".
 """
 function Base.fullname(atom::Atom)
-    str = " " ^ 96
-    check(
-        lib.chfl_atom_full_name(atom.handle, pointer(str), UInt64(length(str)))
+    return _call_with_growing_buffer(
+        (buffer, size) -> check(lib.chfl_atom_full_name(atom.handle, buffer, size))
     )
-    return strip_null(str)
 end
 
 """

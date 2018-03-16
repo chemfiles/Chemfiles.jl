@@ -2,7 +2,7 @@ using Chemfiles
 using Base.Test
 
 TESTS = [
-    "errors.jl", "Atom.jl", "Topology.jl", "UnitCell.jl", "Frame.jl",
+    "utils.jl", "Atom.jl", "Topology.jl", "UnitCell.jl", "Frame.jl",
     "Trajectory.jl", "Selection.jl", "Residue.jl", "Property.jl"
 ]
 

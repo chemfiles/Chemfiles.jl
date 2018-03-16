@@ -1,8 +1,5 @@
-# Copyright (c) Guillaume Fraux 2015
-#
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+# Chemfiles.jl, a modern library for chemistry file reading and writing
+# Copyright (C) Guillaume Fraux and contributors -- BSD license
 
 export name, id, add_atom!, residue_for_atom
 
@@ -57,11 +54,9 @@ end
 Get the name of a ``residue``.
 """
 function name(residue::Residue)
-    str = " " ^ 10
-    check(
-        lib.chfl_residue_name(residue.handle, pointer(str), UInt64(length(str)))
+    return _call_with_growing_buffer(
+        (buffer, size) -> check(lib.chfl_residue_name(residue.handle, buffer, size))
     )
-    return strip_null(str)
 end
 
 """

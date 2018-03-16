@@ -1,6 +1,6 @@
 function warning_callback(message::String)
     global TEST_CALLBACK = true
-    nothing
+    error("checking that error are supported")
 end
 
 @testset "Error Functions" begin
@@ -22,4 +22,17 @@ end
     Chemfiles.set_warning_callback(warning_callback)
     @test_throws ChemfilesError Residue(Topology(), 3)
     @test TEST_CALLBACK == true
+
+    Chemfiles.set_warning_callback(Chemfiles._warning_callback)
+end
+
+@testset "Configuration files" begin
+    config = joinpath(@__DIR__, "data", "config.toml")
+    Chemfiles.add_configuration(config)
+
+    trajectory = joinpath(@__DIR__, "data", "water.xyz")
+    frame = read(Trajectory(trajectory))
+
+    @test name(Atom(frame, 9)) == "Oz"
+    @test atom_type(Atom(frame, 9)) == "F"
 end

@@ -54,7 +54,9 @@ end
 URL = "https://anaconda.org/conda-forge/chemfiles-lib/$version/download/$platform/chemfiles-lib-$version-$build_id.tar.bz2"
 LOCAL_ARCHIVE = joinpath(@__DIR__, basename(URL))
 
+info("Downloading pre-build library ...")
 download(URL, LOCAL_ARCHIVE)
+info("Unpacking library ...")
 unpack(LOCAL_ARCHIVE, joinpath(@__DIR__, "usr"))
 
 LIBPATH = joinpath(@__DIR__, "usr", unpacked_file)
@@ -71,3 +73,5 @@ end
 # Load dependencies
 @checked_lib libchemfiles "$(escape_string(LIBPATH))"
 """)
+
+info("Done")

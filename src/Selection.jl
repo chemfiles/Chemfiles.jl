@@ -1,12 +1,9 @@
-# Copyright (c) Guillaume Fraux 2015
-#
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+# Chemfiles.jl, a modern library for chemistry file reading and writing
+# Copyright (C) Guillaume Fraux and contributors -- BSD license
 export evaluate, selection_string
 
 """
-Create a ``Selection`` from a selection string 
+Create a ``Selection`` from a selection string
 """
 function Selection(selection::AbstractString)
     handle = lib.chfl_selection(pointer(selection))
@@ -17,11 +14,9 @@ end
 Get the selection string used to create a given ``selection``.
 """
 function selection_string(selection::Selection)
-    result = " " ^ 64
-    check(
-        lib.chfl_selection_string(selection.handle, pointer(result), UInt64(length(result)))
+    return _call_with_growing_buffer(
+        (buffer, size) -> check(lib.chfl_selection_string(selection.handle, buffer, size))
     )
-    return strip_null(result)
 end
 
 """

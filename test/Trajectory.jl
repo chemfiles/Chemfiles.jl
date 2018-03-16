@@ -1,5 +1,5 @@
 
-const DATAPATH = joinpath(dirname(@__FILE__), "data")
+const DATAPATH = joinpath(@__DIR__, "data")
 
 @testset "Trajectory type" begin
     @testset "Errors handling" begin
@@ -55,6 +55,17 @@ const DATAPATH = joinpath(dirname(@__FILE__), "data")
         set_topology!(trajectory, joinpath(DATAPATH, "topology.xyz"))
         frame = read(trajectory)
         @test name(Atom(frame, 100)) == "Rd"
+    end
+
+    @testset "Iteration" begin
+        trajectory = Trajectory(joinpath(DATAPATH, "water.xyz"))
+
+        count = 0
+        for frame in trajectory
+            count += 1
+        end
+
+        @test count == nsteps(trajectory)
     end
 
     @testset "Write frames" begin

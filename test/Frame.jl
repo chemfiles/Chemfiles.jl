@@ -60,30 +60,30 @@
     @test size(frame) == 4
 
     @testset "Geometry tests" begin
-        distance_frame = Frame()
-        add_atom!(distance_frame, Atom(""), [0.0,0.0,0.0])
-        add_atom!(distance_frame, Atom(""), [1.0,2.0,3.0])
-        @test distance(distance_frame, 0, 1) ≈ sqrt(14.0) atol=1e-10
+        frame = Frame()
+        add_atom!(frame, Atom(""), [0.0, 0.0, 0.0])
+        add_atom!(frame, Atom(""), [1.0, 2.0, 3.0])
+        @test distance(frame, 0, 1) ≈ sqrt(14.0) atol=1e-10
 
-        angle_frame = Frame()
-        add_atom!(angle_frame, Atom(""), [1.0,0.0,0.0])
-        add_atom!(angle_frame, Atom(""), [0.0,0.0,0.0])
-        add_atom!(angle_frame, Atom(""), [0.0,1.0,0.0])
-        @test angle(angle_frame, 0, 1, 2) ≈ pi/2 atol=1e-10
+        frame = Frame()
+        add_atom!(frame, Atom(""), [1.0, 0.0, 0.0])
+        add_atom!(frame, Atom(""), [0.0, 0.0, 0.0])
+        add_atom!(frame, Atom(""), [0.0, 1.0, 0.0])
+        @test angle(frame, 0, 1, 2) ≈ pi/2 atol=1e-10
 
-        dihedral_frame = Frame()
-        add_atom!(dihedral_frame, Atom(""), [1.0,0.0,0.0])
-        add_atom!(dihedral_frame, Atom(""), [0.0,0.0,0.0])
-        add_atom!(dihedral_frame, Atom(""), [0.0,1.0,0.0])
-        add_atom!(dihedral_frame, Atom(""), [0.0,1.0,1.0])
-        @test dihedral(dihedral_frame, 0, 1, 2, 3) ≈ pi/2 atol=1e-10
+        frame = Frame()
+        add_atom!(frame, Atom(""), [1.0, 0.0, 0.0])
+        add_atom!(frame, Atom(""), [0.0, 0.0, 0.0])
+        add_atom!(frame, Atom(""), [0.0, 1.0, 0.0])
+        add_atom!(frame, Atom(""), [0.0, 1.0, 1.0])
+        @test dihedral(frame, 0, 1, 2, 3) ≈ pi/2 atol=1e-10
 
-        oop_frame = Frame()
-        add_atom!(oop_frame, Atom(""), [0.0,0.0,0.0])
-        add_atom!(oop_frame, Atom(""), [0.0,0.0,2.0])
-        add_atom!(oop_frame, Atom(""), [1.0,0.0,0.0])
-        add_atom!(oop_frame, Atom(""), [0.0,1.0,0.0])
-        @test out_of_plane(oop_frame, 0, 1, 2, 3) ≈ 2 atol=1e-10
+        frame = Frame()
+        add_atom!(frame, Atom(""), [0.0, 0.0, 0.0])
+        add_atom!(frame, Atom(""), [0.0, 0.0, 2.0])
+        add_atom!(frame, Atom(""), [1.0, 0.0, 0.0])
+        add_atom!(frame, Atom(""), [0.0, 1.0, 0.0])
+        @test out_of_plane(frame, 0, 1, 2, 3) ≈ 2 atol=1e-10
     end
 
     @testset "Frame add/remove bonds" begin
@@ -115,5 +115,20 @@
 
         # residues are actually stored in the topology
         @test count_residues(Topology(frame)) == 1
+    end
+
+    @testset "Frame iteration" begin
+        frame = Frame()
+        add_atom!(frame, Atom(""), [0.0, 0.0, 0.0])
+        add_atom!(frame, Atom(""), [0.0, 0.0, 0.0])
+        add_atom!(frame, Atom(""), [0.0, 0.0, 0.0])
+        add_atom!(frame, Atom(""), [0.0, 0.0, 0.0])
+
+        count = 0
+        for atom in frame
+            count += 1
+        end
+
+        @test count == 4
     end
 end

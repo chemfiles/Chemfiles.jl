@@ -1,8 +1,5 @@
-# Copyright (c) Guillaume Fraux 2015
-#
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+# Chemfiles.jl, a modern library for chemistry file reading and writing
+# Copyright (C) Guillaume Fraux and contributors -- BSD license
 
 module Chemfiles
     module lib
@@ -17,21 +14,12 @@ module Chemfiles
         include("generated/cdef.jl")
     end
 
-    include("errors.jl")
+    include("utils.jl")
 
     export Trajectory, Topology, Atom, UnitCell, Frame, Selection, Residue
 
     function version()
         unsafe_string(lib.chfl_version())
-    end
-
-    function strip_null(string)
-        for i in 1:length(string)
-            if string[i] == '\0'
-                return string[1:i-1]
-            end
-        end
-        throw(ChemfilesError("A C string is not NULL terminated"))
     end
 
     """

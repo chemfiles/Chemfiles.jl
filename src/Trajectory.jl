@@ -1,8 +1,5 @@
-# Copyright (c) Guillaume Fraux 2015
-#
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+# Chemfiles.jl, a modern library for chemistry file reading and writing
+# Copyright (C) Guillaume Fraux and contributors -- BSD license
 
 export read_step, read_step!, set_topology!, set_cell!, nsteps
 
@@ -51,7 +48,6 @@ function read_step!(trajectory::Trajectory, step::Integer, frame::Frame)
     )
     return frame
 end
-
 
 """
 Read the given ``step`` of the ``trajectory``, and return the corresponding
@@ -141,3 +137,8 @@ Check is the ``trajectory`` is open
 function Base.isopen(trajectory::Trajectory)
     return trajectory.handle != Ptr{lib.CHFL_TRAJECTORY}(0)
 end
+
+# Iteration support
+Base.start(trajectory::Trajectory) = 0
+Base.done(trajectory::Trajectory, index) = (index == nsteps(trajectory))
+Base.next(trajectory::Trajectory, index) = (read_step(trajectory, index), index + 1)
