@@ -14,5 +14,5 @@ for frame in trajectory
     for i in reverse(sort(to_remove))
         remove!(frame, i)
     end
-    write!(output, frame)
+    write(output, frame)
 end
