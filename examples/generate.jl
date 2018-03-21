@@ -30,4 +30,4 @@ add_bond!(frame, 4, 5)
 set_cell!(frame, UnitCell(10, 10, 10))
 
 trajectory = Trajectory("water-co2.pdb", 'w')
-write!(trajectory, frame)
+write(trajectory, frame)
