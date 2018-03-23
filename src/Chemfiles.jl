@@ -22,6 +22,13 @@ module Chemfiles
         unsafe_string(lib.chfl_version())
     end
 
+    if !startswith(version(), "0.8")
+        error(
+            """Chemfiles.jl requires the 0.8 version of libchemfiles, but $(version()) is installed.
+            You can try to run Pkg.build(\"Chemfiles\") to update libchemfiles."""
+        )
+    end
+
     """
     A ``Trajectory`` represents a simulation file on the hard drive. It can read
     or write one or many ``Frame`` to this file. The file format can be
