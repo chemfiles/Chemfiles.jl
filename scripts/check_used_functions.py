@@ -1,24 +1,21 @@
 #!/usr/bin/env python
 """
-Check that all the functions defined in the C API are effectivelly used
+Check that all the functions defined in the C API are being used.
 """
 import os
 import sys
 
+from generated_functions import all_functions
+
+
 IGNORED = ["chfl_trajectory_open"]
-ROOT = os.path.dirname(os.path.dirname(__file__))
 ERROR = False
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath((__file__))))
 
-
-def functions_list():
-    functions = []
-    with open(os.path.join(ROOT, "src", "generated", "cdef.jl")) as fd:
-        for line in fd:
-            line = line.strip()
-            if line.startswith("# Function"):
-                name = line.split("'")[1]
-                functions.append(name)
-    return functions
+def error(message):
+    print(message)
+    global ERROR
+    ERROR = True
 
 
 def read_all_source():
@@ -34,14 +31,13 @@ def read_all_source():
 def check_functions(functions, source):
     for function in functions:
         if function not in source and function not in IGNORED:
-            print("Missing: " + function)
-            global ERROR
-            ERROR = True
+            error("Missing: " + function)
 
 
 if __name__ == '__main__':
-    functions = functions_list()
+    functions = all_functions()
     source = read_all_source()
     check_functions(functions, source)
-    if ERROR:
-        sys.exit(1)
+
+if ERROR:
+    sys.exit(1)
