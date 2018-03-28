@@ -15,7 +15,7 @@ Get the selection string used to create a given ``selection``.
 """
 function selection_string(selection::Selection)
     return _call_with_growing_buffer(
-        (buffer, size) -> check(lib.chfl_selection_string(selection.handle, buffer, size))
+        (buffer, size) -> _check(lib.chfl_selection_string(selection.handle, buffer, size))
     )
 end
 
@@ -25,7 +25,7 @@ together.
 """
 function Base.size(selection::Selection)
     result = Ref{UInt64}(0)
-    check(
+    _check(
         lib.chfl_selection_size(selection.handle, result)
     )
     return result[]
@@ -37,12 +37,12 @@ indexes or tuples of indexes of atoms in the frame matching the selection.
 """
 function evaluate(selection::Selection, frame::Frame)
     matching = Ref{UInt64}(0)
-    check(
+    _check(
         lib.chfl_selection_evaluate(selection.handle, frame.handle, matching)
     )
     matching = matching[]
     matches = Array{lib.chfl_match}(matching)
-    check(
+    _check(
         lib.chfl_selection_matches(selection.handle, pointer(matches), matching)
     )
     result = []
@@ -62,7 +62,10 @@ function evaluate(selection::Selection, frame::Frame)
     return result
 end
 
-function free(selection::Selection)
+"""
+Free the allocated memory for the ``Selection`` object.
+"""
+function _free(selection::Selection)
     lib.chfl_selection_free(selection.handle)
 end
 

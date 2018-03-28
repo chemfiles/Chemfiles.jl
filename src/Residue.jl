@@ -45,8 +45,10 @@ function residue_for_atom(topology::Topology, index::Integer)
     end
 end
 
-
-function free(residue::Residue)
+"""
+Free the allocated memory for the ``Residue`` object.
+"""
+function _free(residue::Residue)
     lib.chfl_residue_free(residue.handle)
 end
 
@@ -55,7 +57,7 @@ Get the name of a ``residue``.
 """
 function name(residue::Residue)
     return _call_with_growing_buffer(
-        (buffer, size) -> check(lib.chfl_residue_name(residue.handle, buffer, size))
+        (buffer, size) -> _check(lib.chfl_residue_name(residue.handle, buffer, size))
     )
 end
 
@@ -64,7 +66,7 @@ Get the identifier of a ``residue`` in the initial topology.
 """
 function id(residue::Residue)
     resid = Ref{UInt64}(0)
-    check(
+    _check(
         lib.chfl_residue_id(residue.handle, resid)
     )
     return resid[]
@@ -75,7 +77,7 @@ Get the number of atoms in a ``residue``.
 """
 function Base.size(residue::Residue)
     atoms = Ref{UInt64}(0)
-    check(
+    _check(
         lib.chfl_residue_atoms_count(residue.handle, atoms)
     )
     return atoms[]
@@ -85,7 +87,7 @@ end
 Add the atom at the given ``index`` in the ``residue``.
 """
 function add_atom!(residue::Residue, index::Integer)
-    check(
+    _check(
         lib.chfl_residue_add_atom(residue.handle, UInt64(index))
     )
     return nothing
@@ -96,7 +98,7 @@ Check if the atom at the given ``index`` is in the ``residue``.
 """
 function Base.contains(residue::Residue, index::Integer)
     result = Ref{UInt8}(0)
-    check(
+    _check(
         lib.chfl_residue_contains(residue.handle, UInt64(index), result)
     )
     return convert(Bool, result[])

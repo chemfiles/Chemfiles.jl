@@ -19,7 +19,10 @@ function Topology(frame::Frame)
     return Topology(lib.chfl_topology_from_frame(frame.handle))
 end
 
-function free(topology::Topology)
+"""
+Free the allocated memory for the ``Topology`` object.
+"""
+function _free(topology::Topology)
     lib.chfl_topology_free(topology.handle)
 end
 
@@ -28,7 +31,7 @@ Get the ``Topology`` size, i.e. the current number of atoms.
 """
 function Base.size(topology::Topology)
     n = Ref{UInt64}(0)
-    check(
+    _check(
         lib.chfl_topology_atoms_count(topology.handle, n)
     )
     return n[]
@@ -38,7 +41,7 @@ end
 Add an ``atom`` at the end of a ``topology``.
 """
 function add_atom!(topology::Topology, atom::Atom)
-    check(
+    _check(
         lib.chfl_topology_add_atom(topology.handle, atom.handle)
     )
     return nothing
@@ -48,7 +51,7 @@ end
 Remove the atom at the given ``index`` from a ``topology``.
 """
 function remove!(topology::Topology, index::Integer)
-    check(
+    _check(
         lib.chfl_topology_remove(topology.handle, UInt64(index))
     )
     return nothing
@@ -59,7 +62,7 @@ Get the number of bonds in the ``topology``.
 """
 function bonds_count(topology::Topology)
     n = Ref{UInt64}(0)
-    check(
+    _check(
         lib.chfl_topology_bonds_count(topology.handle, n)
     )
     return n[]
@@ -70,7 +73,7 @@ Get the number of angles in the ``topology``.
 """
 function angles_count(topology::Topology)
     n = Ref{UInt64}(0)
-    check(
+    _check(
         lib.chfl_topology_angles_count(topology.handle, n)
     )
     return n[]
@@ -81,7 +84,7 @@ Get the number of dihedral angles in the ``topology``.
 """
 function dihedrals_count(topology::Topology)
     n = Ref{UInt64}(0)
-    check(
+    _check(
         lib.chfl_topology_dihedrals_count(topology.handle, n)
     )
     return n[]
@@ -92,7 +95,7 @@ Get the number of improper angles in the ``topology``.
 """
 function impropers_count(topology::Topology)
     n = Ref{UInt64}(0)
-    check(
+    _check(
         lib.chfl_topology_impropers_count(topology.handle, n)
     )
     return n[]
@@ -104,7 +107,7 @@ Get the bonds in the ``topology``, in a ``2 x bonds_count(topology)`` array.
 function bonds(topology::Topology)
     count = bonds_count(topology)
     result = Array{UInt64}(2, count)
-    check(
+    _check(
         lib.chfl_topology_bonds(topology.handle, pointer(result), count)
     )
     return result
@@ -116,7 +119,7 @@ Get the angles in the ``topology``, in a ``3 x angles_count(topology)`` array.
 function angles(topology::Topology)
     count = angles_count(topology)
     result = Array{UInt64}(3, count)
-    check(
+    _check(
         lib.chfl_topology_angles(topology.handle, pointer(result), count)
     )
     return result
@@ -129,7 +132,7 @@ array.
 function dihedrals(topology::Topology)
     count = dihedrals_count(topology)
     result = Array{UInt64}(4, count)
-    check(
+    _check(
         lib.chfl_topology_dihedrals(topology.handle, pointer(result), count)
     )
     return result
@@ -142,7 +145,7 @@ array.
 function impropers(topology::Topology)
     count = impropers_count(topology)
     result = Array{UInt64}(4, count)
-    check(
+    _check(
         lib.chfl_topology_impropers(topology.handle, pointer(result), count)
     )
     return result
@@ -152,7 +155,7 @@ end
 Add a bond between the atoms ``i`` and ``j`` in the ``topology``.
 """
 function add_bond!(topology::Topology, i::Integer, j::Integer)
-    check(
+    _check(
         lib.chfl_topology_add_bond(topology.handle, UInt64(i), UInt64(j))
     )
     return nothing
@@ -162,7 +165,7 @@ end
 Remove any existing bond between the atoms ``i`` and ``j`` in the ``topology``.
 """
 function remove_bond!(topology::Topology, i::Integer, j::Integer)
-    check(
+    _check(
         lib.chfl_topology_remove_bond(topology.handle, UInt64(i), UInt64(j))
     )
     return nothing
@@ -175,7 +178,7 @@ The residue id must not already be in the topology, and the residue must
 contain only atoms that are not already in another residue.
 """
 function add_residue!(topology::Topology, residue::Residue)
-    check(
+    _check(
         lib.chfl_topology_add_residue(topology.handle, residue.handle)
     )
     return nothing
@@ -186,7 +189,7 @@ Get the number of residues in the ``topology``.
 """
 function count_residues(topology::Topology)
     nresidues = Ref{UInt64}(0)
-    check(
+    _check(
         lib.chfl_topology_residues_count(topology.handle, nresidues)
     )
     return nresidues[]
@@ -199,7 +202,7 @@ residue and one atom in the second one.
 """
 function are_linked(topology::Topology, first::Residue, second::Residue)
     result = Ref{UInt8}(0)
-    check(
+    _check(
         lib.chfl_topology_residues_linked(topology.handle, first.handle, second.handle, result)
     )
     return convert(Bool, result[])
@@ -214,7 +217,7 @@ If it is lower than the current number of atoms, the last atoms will be removed,
 together with the associated bonds, angles and dihedrals.
 """
 function Base.resize!(topology::Topology, size::Integer)
-    check(
+    _check(
         lib.chfl_topology_resize(topology.handle, UInt64(size))
     )
 end

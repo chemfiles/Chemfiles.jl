@@ -5,6 +5,8 @@
 
 .. jl:autofunction:: src/UnitCell.jl UnitCell
 
+.. jl:autofunction:: src/UnitCell.jl CellShape
+
 .. jl:autofunction:: src/UnitCell.jl deepcopy
 
 .. jl:autofunction:: src/UnitCell.jl volume
@@ -22,5 +24,7 @@
 .. jl:autofunction:: src/UnitCell.jl shape
 
 .. jl:autofunction:: src/UnitCell.jl set_shape!
+
+.. jl:autofunction:: src/UnitCell.jl wrap!
 
 .. jl:autotype:: src/UnitCell.jl CellShape

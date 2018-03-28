@@ -5,9 +5,6 @@ Check that all the functions defined in the C API are being used.
 import os
 import sys
 
-from generated_functions import all_functions
-
-
 IGNORED = ["chfl_trajectory_open"]
 ERROR = False
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath((__file__))))
@@ -17,6 +14,15 @@ def error(message):
     global ERROR
     ERROR = True
 
+def all_functions():
+    functions = []
+    with open(os.path.join(ROOT, "src", "generated", "cdef.jl")) as fd:
+        for line in fd:
+            line = line.strip()
+            if line.startswith("# Function"):
+                name = line.split("'")[1]
+                functions.append(name)
+    return functions
 
 def read_all_source():
     source = ""
@@ -38,6 +44,5 @@ if __name__ == '__main__':
     functions = all_functions()
     source = read_all_source()
     check_functions(functions, source)
-
-if ERROR:
-    sys.exit(1)
+    if ERROR:
+        sys.exit(1)
