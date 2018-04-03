@@ -4,6 +4,9 @@
 export lengths, set_lengths!, angles, set_angles!, cell_matrix, shape,
 set_shape!, volume, CellShape, wrap!
 
+type CellShape
+    value::lib.chfl_cellshape
+
 """
 The possible shape for an unit cell are:
 
@@ -11,9 +14,6 @@ The possible shape for an unit cell are:
 - ``Chemfiles.TRICLINIC`` for unit cell where the three angles may not be 90°
 - ``Chemfiles.INFINITE`` for unit cells without boundaries
 """
-type CellShape
-    value::lib.chfl_cellshape
-
     function CellShape(value)
         value = lib.chfl_cellshape(value)
         if value in [lib.CHFL_CELL_INFINITE, lib.CHFL_CELL_ORTHORHOMBIC, lib.CHFL_CELL_TRICLINIC]
@@ -55,8 +55,11 @@ function UnitCell(frame::Frame)
     return UnitCell(handle)
 end
 
-function free(cell::UnitCell)
-    check(
+"""
+Free the allocated memory for the ``Cell`` object.
+"""
+function _free(cell::UnitCell)
+    _check(
         lib.chfl_cell_free(cell.handle)
     )
     return nothing
@@ -68,7 +71,7 @@ Get the unit ``cell`` volume
 """
 function volume(cell::UnitCell)
     result = Ref{Float64}(0)
-    check(
+    _check(
         lib.chfl_cell_volume(cell.handle, result)
     )
     return result[]
@@ -79,7 +82,7 @@ Get the three ``cell`` lenghts (a, b and c) in angstroms.
 """
 function lengths(cell::UnitCell)
     result = Float64[0, 0, 0]
-    check(
+    _check(
         lib.chfl_cell_lengths(cell.handle, result)
     )
     return result
@@ -91,7 +94,7 @@ Set the ``cell`` lenghts to ``a``, ``b`` and ``c``.
 ``a``, ``b`` and ``c`` should be in angstroms.
 """
 function set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
-    check(
+    _check(
         lib.chfl_cell_set_lengths(cell.handle, Float64[a, b, c])
     )
     return nothing
@@ -102,7 +105,7 @@ Get the three ``cell`` angles (alpha, beta and gamma) in degrees.
 """
 function angles(cell::UnitCell)
     result = Float64[0, 0, 0]
-    check(
+    _check(
         lib.chfl_cell_angles(cell.handle, result)
     )
     return result
@@ -114,7 +117,7 @@ Set the `cell` angles to ``α``, ``β`` and ``γ``.
 ``α``, ``β`` and ``γ`` should be in degrees.
 """
 function set_angles!(cell::UnitCell, α::Real, β::Real, γ::Real)
-    check(
+    _check(
         lib.chfl_cell_set_angles(cell.handle, Float64[α, β, γ])
     )
     return nothing
@@ -130,7 +133,7 @@ three base vectors as::
 """
 function cell_matrix(cell::UnitCell)
     matrix = Array{Float64}(3, 3)
-    check(
+    _check(
         lib.chfl_cell_matrix(cell.handle, pointer(matrix))
     )
     return Array{Float64,2}(matrix)
@@ -141,7 +144,7 @@ Get the ``cell`` shape, as a ``CellShape`` value
 """
 function shape(cell::UnitCell)
     result = Ref{lib.chfl_cellshape}(0)
-    check(
+    _check(
         lib.chfl_cell_shape(cell.handle, result)
     )
     return CellShape(result[])
@@ -151,7 +154,7 @@ end
 Set the ``cell`` shape to the given ``shape``.
 """
 function set_shape!(cell::UnitCell, shape::CellShape)
-    check(
+    _check(
         lib.chfl_cell_set_shape(cell.handle, shape.value)
     )
     return nothing
@@ -161,7 +164,7 @@ end
 Wrap a `vector` in the unit `cell`.
 """
 function wrap!(cell::UnitCell, vector::Vector{Float64})
-    check(
+    _check(
         lib.chfl_cell_wrap(cell.handle, vector)
     )
     return vector

@@ -16,14 +16,17 @@ function Trajectory(path::AbstractString, mode::Char='r', format::AbstractString
     return Trajectory(handle)
 end
 
-free(trajectory::Trajectory) = close(trajectory)
+"""
+Free the allocated memory for the ``Trajectory`` object.
+"""
+_free(trajectory::Trajectory) = close(trajectory)
 
 """
 Read the next step of the ``trajectory`` in the given ``frame``.
 """
 function Base.read!(trajectory::Trajectory, frame::Frame)
     assert(isopen(trajectory))
-    check(
+    _check(
         lib.chfl_trajectory_read(trajectory.handle, frame.handle)
     )
     return frame
@@ -43,7 +46,7 @@ Read the given ``step`` of the ``trajectory`` in the given ``frame``.
 """
 function read_step!(trajectory::Trajectory, step::Integer, frame::Frame)
     assert(isopen(trajectory))
-    check(
+    _check(
         lib.chfl_trajectory_read_step(trajectory.handle, UInt64(step), frame.handle)
     )
     return frame
@@ -64,7 +67,7 @@ Write the given ``frame`` to the ``trajectory``.
 """
 function Base.write(trajectory::Trajectory, frame::Frame)
     assert(isopen(trajectory))
-    check(
+    _check(
         lib.chfl_trajectory_write(trajectory.handle, frame.handle)
     )
     return nothing
@@ -76,7 +79,7 @@ used when reading and writing the files, replacing any topology in the file.
 """
 function set_topology!(trajectory::Trajectory, topology::Topology)
     assert(isopen(trajectory))
-    check(
+    _check(
         lib.chfl_trajectory_set_topology(trajectory.handle, topology.handle)
     )
     return nothing
@@ -89,7 +92,7 @@ of the file at ``path``; and extracting the topology of this frame. The optional
 """
 function set_topology!(trajectory::Trajectory, path::AbstractString, format::AbstractString = "")
     assert(isopen(trajectory))
-    check(
+    _check(
         lib.chfl_trajectory_topology_file(trajectory.handle, pointer(path), pointer(format))
     )
     return nothing
@@ -101,7 +104,7 @@ reading and writing the files, replacing any unit cell in the file.
 """
 function set_cell!(trajectory::Trajectory, cell::UnitCell)
     assert(isopen(trajectory))
-    check(
+    _check(
         lib.chfl_trajectory_set_cell(trajectory.handle, cell.handle)
     )
     return nothing
@@ -113,7 +116,7 @@ Get the number of steps (the number of frames) in a ``trajectory``.
 function nsteps(trajectory::Trajectory)
     assert(isopen(trajectory))
     result = Ref{UInt64}(0)
-    check(
+    _check(
         lib.chfl_trajectory_nsteps(trajectory.handle, result)
     )
     return result[]
@@ -124,7 +127,7 @@ Close a ``trajectory``, flushing any buffer content to the hard drive, and
 freeing the associated memory.
 """
 function Base.close(trajectory::Trajectory)
-    check(
+    _check(
         lib.chfl_trajectory_close(trajectory.handle)
     )
     trajectory.handle = Ptr{lib.CHFL_TRAJECTORY}(0)

@@ -37,9 +37,9 @@ module Chemfiles
     mutable struct Trajectory
         handle :: Ptr{lib.CHFL_TRAJECTORY}
         function Trajectory(ptr::Ptr{lib.CHFL_TRAJECTORY})
-            check(ptr)
+            _check(ptr)
             this = new(ptr)
-            finalizer(this, free)
+            finalizer(this, _free)
             return this
         end
     end
@@ -53,9 +53,9 @@ module Chemfiles
     mutable struct Topology
         handle :: Ptr{lib.CHFL_TOPOLOGY}
         function Topology(ptr::Ptr{lib.CHFL_TOPOLOGY})
-            check(ptr)
+            _check(ptr)
             this = new(ptr)
-            finalizer(this, free)
+            finalizer(this, _free)
             return this
         end
     end
@@ -75,9 +75,9 @@ module Chemfiles
     mutable struct Atom
         handle :: Ptr{lib.CHFL_ATOM}
         function Atom(ptr::Ptr{lib.CHFL_ATOM})
-            check(ptr)
+            _check(ptr)
             this = new(ptr)
-            finalizer(this, free)
+            finalizer(this, _free)
             return this
         end
     end
@@ -90,9 +90,9 @@ module Chemfiles
     mutable struct UnitCell
         handle :: Ptr{lib.CHFL_CELL}
         function UnitCell(ptr::Ptr{lib.CHFL_CELL})
-            check(ptr)
+            _check(ptr)
             this = new(ptr)
-            finalizer(this, free)
+            finalizer(this, _free)
             return this
         end
     end
@@ -110,9 +110,9 @@ module Chemfiles
     mutable struct Frame
         handle :: Ptr{lib.CHFL_FRAME}
         function Frame(ptr::Ptr{lib.CHFL_FRAME})
-            check(ptr)
+            _check(ptr)
             this = new(ptr)
-            finalizer(this, free)
+            finalizer(this, _free)
             return this
         end
     end
@@ -126,9 +126,9 @@ module Chemfiles
     mutable struct Selection
         handle :: Ptr{lib.CHFL_SELECTION}
         function Selection(ptr::Ptr{lib.CHFL_SELECTION})
-            check(ptr)
+            _check(ptr)
             this = new(ptr)
-            finalizer(this, free)
+            finalizer(this, _free)
             return this
         end
     end
@@ -141,9 +141,9 @@ module Chemfiles
     mutable struct Residue
         handle :: Ptr{lib.CHFL_RESIDUE}
         function Residue(ptr::Ptr{lib.CHFL_RESIDUE})
-            check(ptr)
+            _check(ptr)
             this = new(ptr)
-            finalizer(this, free)
+            finalizer(this, _free)
             return this
         end
     end
@@ -155,9 +155,9 @@ module Chemfiles
     mutable struct Property
         handle :: Ptr{lib.CHFL_PROPERTY}
         function Property(ptr::Ptr{lib.CHFL_PROPERTY})
-            check(ptr)
+            _check(ptr)
             this = new(ptr)
-            finalizer(this, free)
+            finalizer(this, _free)
             return this
         end
     end

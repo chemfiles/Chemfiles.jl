@@ -22,6 +22,9 @@ script:
         ./scripts/build-docs.sh
         cd ${TRAVIS_BUILD_DIR}
     fi
+  - cd ${TRAVIS_BUILD_DIR}
+  - ./scripts/check_used_functions.py
+  - ./scripts/check_docs.py
 
 deploy:
   - provider: pages
