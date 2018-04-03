@@ -113,11 +113,13 @@ Finally, we can set the :jl:type:`UnitCell` associated with this frame.
    :lines: 30
 
 Now that our frame is constructed, it is time to write it to a file. For that,
-we open a trajectory in write (``'w'``) mode, and write to it.
+we open a trajectory in write (``'w'``) mode, and write to it. You only need
+to close the file if you are on the REPL and need to use the written trajectory
+right awaty.
 
 .. literalinclude:: ../examples/generate.jl
    :language: julia
-   :lines: 32-33
+   :lines: 32-36
 
 .. htmlhidden::
     :toggle: Click here to see the whole program
@@ -172,6 +174,14 @@ iteration.
 .. literalinclude:: ../examples/select.jl
    :language: julia
    :lines: 17
+
+Remember to close the file if you are on the REPL and need to use the written
+trajectory right away.
+
+.. literalinclude:: ../examples/select.jl
+   :language: julia
+      :lines: 21
+
 
 .. htmlhidden::
     :toggle: Click here to see the whole program

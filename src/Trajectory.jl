@@ -124,7 +124,8 @@ end
 
 """
 Close a ``trajectory``, flushing any buffer content to the hard drive, and
-freeing the associated memory.
+freeing the associated memory. Necessary when running on the REPL to finish 
+writing.
 """
 function Base.close(trajectory::Trajectory)
     _check(
