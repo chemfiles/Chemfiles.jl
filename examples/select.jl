@@ -16,3 +16,6 @@ for frame in trajectory
     end
     write(output, frame)
 end
+# When running on the REPL, remember to close the trajectory or else it won't
+# end writing.
+close(trajectory) 
