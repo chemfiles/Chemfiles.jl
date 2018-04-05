@@ -33,6 +33,9 @@ module Chemfiles
     A ``Trajectory`` represents a simulation file on the hard drive. It can read
     or write one or many ``Frame`` to this file. The file format can be
     automatically determined from the extention, or manually specified.
+    Writing to a ``Trajectory`` is buffered, which means that one needs to
+    ``close()`` the trajectory and flush the buffer before being able to read the
+    file again.
     """
     mutable struct Trajectory
         handle :: Ptr{lib.CHFL_TRAJECTORY}
