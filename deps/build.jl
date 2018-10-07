@@ -30,21 +30,21 @@ if Sys.iswindows()
     if is_64_bits()
         platform = "win-64"
     else
-        assert(Int == Int32)
+        @assert Int == Int32
         platform = "win-32"
     end
 elseif Sys.islinux()
     build_id = linux_build_id
     unpacked_file = joinpath("lib", "libchemfiles.so.$version")
     if !is_64_bits()
-        error("There is no prebuilt chemfiles library for 32bit Linux")
+        @error "There is no prebuilt chemfiles library for 32bit Linux"
     end
     platform = "linux-64"
 elseif Sys.isapple()
     build_id = macos_build_id
     unpacked_file = joinpath("lib", "libchemfiles.$version.dylib")
     if !is_64_bits()
-        error("There is no prebuilt chemfiles library for 32bit macOS")
+        @error "There is no prebuilt chemfiles library for 32bit macOS"
     end
     platform = "osx-64"
 else
