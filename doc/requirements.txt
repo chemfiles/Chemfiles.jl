@@ -1,3 +1,3 @@
-sphinx>=1.5
+sphinx==1.7.9
 sphinx_bootstrap_theme
 https://github.com/bastikr/sphinx-julia/archive/19882420253df9d5de09bc29d1b8dbf32afd1097.zip

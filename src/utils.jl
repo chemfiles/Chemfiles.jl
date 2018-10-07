@@ -3,7 +3,7 @@
 
 export ChemfilesError
 
-type ChemfilesError <: Exception
+struct ChemfilesError <: Exception
     message::AbstractString
 end
 
@@ -18,6 +18,8 @@ function _check(result::Integer, message = "Unknown error")
         str = message
         try
             str = last_error()
+        catch error
+            @warn "$error in obtaining an error message"
         end
         throw(ChemfilesError(str))
     end
@@ -52,9 +54,8 @@ end
 Define the warning callback.
 """
 function _warning_callback(message::String)
-    warn("[chemfiles] ", message)
+    @warn "[chemfiles] ", message
 end
-
 
 """
 Set the global warning ``callback`` to be used for each warning event.
@@ -66,10 +67,11 @@ function set_warning_callback(callback::Function)
         try
             callback(unsafe_string(message))
         catch error
-            warn("caught $error in warning callback")
+            @warn "caught $error in warning callback"
         end
     end
-    cb = cfunction(_cb_adaptor, Void, (Ptr{UInt8},))
+
+    cb = @cfunction($_cb_adaptor, Cvoid, (Ptr{UInt8},))
     _check(lib.chfl_set_warning_callback(cb))
 end
 
@@ -93,10 +95,10 @@ end
 
 """
 """
-function _strip_null(string)
-    for i in 1:length(string)
-        if string[i] == '\0'
-            return string[1:i-1]
+function _strip_null(s)
+    for i in 1:length(s)
+        if s[i] == '\0'
+            return s[1:i-1]
         end
     end
     throw(ChemfilesError("A C string is not NULL terminated"))

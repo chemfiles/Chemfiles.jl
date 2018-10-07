@@ -56,7 +56,7 @@ function positions(frame::Frame)
     _check(
         lib.chfl_frame_positions(frame.handle, ptr, natoms)
     )
-    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])), false)
+    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])); own=false)
 end
 
 
@@ -74,7 +74,7 @@ function velocities(frame::Frame)
     _check(
         lib.chfl_frame_velocities(frame.handle, ptr, natoms)
     )
-    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])), false)
+    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])); own=false)
 end
 
 
@@ -278,6 +278,7 @@ function Base.deepcopy(frame::Frame)
 end
 
 # Iteration support
-Base.start(frame::Frame) = 0
-Base.done(frame::Frame, index) = (index == size(frame))
-Base.next(frame::Frame, index) = (Atom(frame, index), index + 1)
+Base.first(frame::Frame) = 0
+Base.last(frame::Frame) = (size(frame) - 1)
+Base.step(frame::Frame, index) = (Atom(frame, index), index + 1)
+Base.iterate(frame::Frame, state=0) = state >= size(frame) ? nothing : (Atom(frame, state), state+1)

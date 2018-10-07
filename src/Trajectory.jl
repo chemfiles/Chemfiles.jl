@@ -25,7 +25,7 @@ _free(trajectory::Trajectory) = close(trajectory)
 Read the next step of the ``trajectory`` in the given ``frame``.
 """
 function Base.read!(trajectory::Trajectory, frame::Frame)
-    assert(isopen(trajectory))
+    @assert isopen(trajectory)
     _check(
         lib.chfl_trajectory_read(trajectory.handle, frame.handle)
     )
@@ -36,7 +36,7 @@ end
 Read the next step of the ``trajectory``, and return the corresponding ``Frame``.
 """
 function Base.read(trajectory::Trajectory)
-    assert(isopen(trajectory))
+    @assert isopen(trajectory)
     frame = Frame()
     return read!(trajectory, frame)
 end
@@ -45,7 +45,7 @@ end
 Read the given ``step`` of the ``trajectory`` in the given ``frame``.
 """
 function read_step!(trajectory::Trajectory, step::Integer, frame::Frame)
-    assert(isopen(trajectory))
+    @assert isopen(trajectory)
     _check(
         lib.chfl_trajectory_read_step(trajectory.handle, UInt64(step), frame.handle)
     )
@@ -57,7 +57,7 @@ Read the given ``step`` of the ``trajectory``, and return the corresponding
 ``Frame``.
 """
 function read_step(trajectory::Trajectory, step::Integer)
-    assert(isopen(trajectory))
+    @assert isopen(trajectory)
     frame = Frame()
     return read_step!(trajectory, step, frame)
 end
@@ -66,7 +66,7 @@ end
 Write the given ``frame`` to the ``trajectory``.
 """
 function Base.write(trajectory::Trajectory, frame::Frame)
-    assert(isopen(trajectory))
+    @assert isopen(trajectory)
     _check(
         lib.chfl_trajectory_write(trajectory.handle, frame.handle)
     )
@@ -78,7 +78,7 @@ Set the ``Topology`` associated with a ``trajectory``. This topology will be
 used when reading and writing the files, replacing any topology in the file.
 """
 function set_topology!(trajectory::Trajectory, topology::Topology)
-    assert(isopen(trajectory))
+    @assert isopen(trajectory)
     _check(
         lib.chfl_trajectory_set_topology(trajectory.handle, topology.handle)
     )
@@ -91,7 +91,7 @@ of the file at ``path``; and extracting the topology of this frame. The optional
 ``format`` parameter can be used to specify the file format.
 """
 function set_topology!(trajectory::Trajectory, path::AbstractString, format::AbstractString = "")
-    assert(isopen(trajectory))
+    @assert isopen(trajectory)
     _check(
         lib.chfl_trajectory_topology_file(trajectory.handle, pointer(path), pointer(format))
     )
@@ -103,7 +103,7 @@ Set the ``cell`` associated with a ``trajectory``. This cell will be used when
 reading and writing the files, replacing any unit cell in the file.
 """
 function set_cell!(trajectory::Trajectory, cell::UnitCell)
-    assert(isopen(trajectory))
+    @assert isopen(trajectory)
     _check(
         lib.chfl_trajectory_set_cell(trajectory.handle, cell.handle)
     )
@@ -114,7 +114,7 @@ end
 Get the number of steps (the number of frames) in a ``trajectory``.
 """
 function nsteps(trajectory::Trajectory)
-    assert(isopen(trajectory))
+    @assert isopen(trajectory)
     result = Ref{UInt64}(0)
     _check(
         lib.chfl_trajectory_nsteps(trajectory.handle, result)
@@ -143,6 +143,7 @@ function Base.isopen(trajectory::Trajectory)
 end
 
 # Iteration support
-Base.start(trajectory::Trajectory) = 0
-Base.done(trajectory::Trajectory, index) = (index == nsteps(trajectory))
-Base.next(trajectory::Trajectory, index) = (read_step(trajectory, index), index + 1)
+Base.first(trajectory::Trajectory) = 0
+Base.last(trajectory::Trajectory) = (nsteps(trajectory) - 1)
+Base.step(trajectory::Trajectory, index) = (read_step(trajectory, index), index + 1)
+Base.iterate(trajectory::Trajectory, state=0) = state >= nsteps(trajectory) ? nothing : (read_step(trajectory, state), state+1)

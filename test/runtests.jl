@@ -1,5 +1,5 @@
 using Chemfiles
-using Base.Test
+using Test
 
 TESTS = [
     "utils.jl", "Atom.jl", "Topology.jl", "UnitCell.jl", "Frame.jl",

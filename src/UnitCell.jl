@@ -4,7 +4,7 @@
 export lengths, set_lengths!, angles, set_angles!, cell_matrix, shape,
 set_shape!, volume, CellShape, wrap!
 
-type CellShape
+struct CellShape
     value::lib.chfl_cellshape
 
 """
@@ -132,11 +132,11 @@ three base vectors as::
         |  0     0    c_z |
 """
 function cell_matrix(cell::UnitCell)
-    matrix = Array{Float64}(3, 3)
+    matrix = Array{Float64}(undef, 3, 3)
     _check(
         lib.chfl_cell_matrix(cell.handle, pointer(matrix))
     )
-    return Array{Float64,2}(matrix)
+    return matrix
 end
 
 """

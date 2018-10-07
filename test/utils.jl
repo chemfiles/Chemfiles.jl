@@ -5,9 +5,9 @@ end
 
 @testset "Error Functions" begin
     err = ChemfilesError("oops")
-    iobuf = IOBuffer(19 + length(err.message))
+    iobuf = IOBuffer()
     show(iobuf, err)
-    @test String(iobuf.data) == "\"Chemfiles error: oops\""
+    @test String(iobuf.data[1:(19 + length(err.message))]) == "\"Chemfiles error: oops\""
 
     @test Chemfiles.last_error() == ""
 

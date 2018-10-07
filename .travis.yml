@@ -1,23 +1,16 @@
 language: julia
+sudo: false
 os:
   - linux
   - osx
 julia:
-  - 0.6
+  - 1.0
   - nightly
-matrix:
-  allow_failures:
-    - julia: nightly
-
-install:
-  - git fetch --unshallow
-  - julia -e 'Pkg.clone(pwd())'
-  - julia -e 'Pkg.build("Chemfiles")'
 
 script:
-  - julia --check-bounds=yes --inline=no -e 'Pkg.test("Chemfiles"; coverage=true)'
+  - julia --check-bounds=yes --inline=no -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("Chemfiles"); Pkg.test("Chemfiles"; coverage=true)'
   - |
-    if [[ "${TRAVIS_OS_NAME}" == "linux" && "${TRAVIS_JULIA_VERSION}" == "0.6" ]]; then
+    if [[ "${TRAVIS_OS_NAME}" == "linux" && "${TRAVIS_JULIA_VERSION}" == "0.7" ]]; then
         julia -e 'cd(Pkg.dir("Chemfiles")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
         ./scripts/build-docs.sh
         cd ${TRAVIS_BUILD_DIR}
@@ -33,11 +26,11 @@ deploy:
     local_dir: gh-pages
     on:
         branch: master
-        condition: "${TRAVIS_OS_NAME} == linux && ${TRAVIS_JULIA_VERSION} == 0.6"
+        condition: "${TRAVIS_OS_NAME} == linux && ${TRAVIS_JULIA_VERSION} == 0.7"
   - provider: pages
     skip_cleanup: true
     github_token: $GH_TOKEN
     local_dir: gh-pages
     on:
         tags: true
-        condition: "${TRAVIS_OS_NAME} == linux && ${TRAVIS_JULIA_VERSION} == 0.6"
+        condition: "${TRAVIS_OS_NAME} == linux && ${TRAVIS_JULIA_VERSION} == 0.7"
