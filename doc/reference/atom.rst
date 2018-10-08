@@ -1,3 +1,5 @@
+.. _Atom:
+
 ``Atom`` type and associated function
 -------------------------------------
 

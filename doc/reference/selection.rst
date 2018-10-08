@@ -1,3 +1,5 @@
+.. _Selection:
+
 ``Selection`` type and associated function
 ------------------------------------------
 

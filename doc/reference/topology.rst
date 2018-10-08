@@ -1,3 +1,5 @@
+.. _Topology:
+
 ``Topology`` type and associated function
 -----------------------------------------
 

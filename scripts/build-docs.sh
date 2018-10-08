@@ -2,11 +2,10 @@
 
 # Install doc dependencies
 cd $TRAVIS_BUILD_DIR
-pip install --user -r doc/requirements.txt
-julia -e 'Pkg.add("PyCall")'
+pip install --upgrade --user -r doc/requirements.txt
 
 # Get previous documentation
-git clone https://github.com/$TRAVIS_REPO_SLUG --branch gh-pages gh-pages
+git clone https://github.com/chemfiles/Chemfiles.jl --branch gh-pages gh-pages
 rm -rf gh-pages/.git
 
 # Build documentation

@@ -1,3 +1,5 @@
+.. _UnitCell:
+
 ``UnitCell`` type and associated function
 -----------------------------------------
 

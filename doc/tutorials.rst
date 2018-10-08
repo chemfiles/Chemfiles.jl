@@ -179,8 +179,8 @@ Remember to close the file if you are on the REPL and need to use the written
 trajectory right away.
 
 .. literalinclude:: ../examples/select.jl
-   :language: julia
-      :lines: 21
+    :language: julia
+    :lines: 21
 
 
 .. htmlhidden::

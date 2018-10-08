@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
+import toml
 import sphinx_bootstrap_theme
 
 DOC_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -23,12 +24,19 @@ source_suffix = '.rst'
 # The master toctree document.
 master_doc = 'index'
 
+
+def version():
+    parsed = toml.loads(open(os.path.join("..", "Project.toml")).read())
+    release = parsed["version"]
+    version = ".".join(release.split(".")[:2])
+    return version, release
+
+
 # General information about the project.
 project = u'Julia interface to chemfiles'
-copyright = u'2015-2018, Guillaume Fraux & contributors — BSD licence'
-
-version = "0.6"
-release = "0.6.0"
+copyright = u'2015-2018, Guillaume Fraux & contributors — BSD license'
+version, release = version()
+print(version, release)
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

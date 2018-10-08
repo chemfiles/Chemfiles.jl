@@ -1,3 +1,5 @@
+.. _Frame:
+
 ``Frame`` type and associated functions
 ---------------------------------------
 
