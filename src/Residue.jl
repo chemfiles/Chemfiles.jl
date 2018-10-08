@@ -1,7 +1,7 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export name, id, add_atom!, residue_for_atom
+export name, id, add_atom!, residue_for_atom, contains
 
 """
 Create a new residue with the given ``name``
@@ -96,7 +96,7 @@ end
 """
 Check if the atom at the given ``index`` is in the ``residue``.
 """
-function Base.contains(residue::Residue, index::Integer)
+function contains(residue::Residue, index::Integer)
     result = Ref{UInt8}(0)
     _check(
         lib.chfl_residue_contains(residue.handle, UInt64(index), result)

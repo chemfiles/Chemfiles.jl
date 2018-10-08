@@ -1,7 +1,7 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-type PropertyKind
+struct PropertyKind
     value::lib.chfl_property_kind
 
 """

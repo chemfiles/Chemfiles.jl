@@ -41,14 +41,14 @@ function evaluate(selection::Selection, frame::Frame)
         lib.chfl_selection_evaluate(selection.handle, frame.handle, matching)
     )
     matching = matching[]
-    matches = Array{lib.chfl_match}(matching)
+    matches = Array{lib.chfl_match}(undef, matching)
     _check(
         lib.chfl_selection_matches(selection.handle, pointer(matches), matching)
     )
     result = []
     selection_size = size(selection)
     for match in matches
-        assert(match.size == selection_size)
+        @assert match.size == selection_size
         if selection_size == 1
             push!(result, match.atoms_1)
         elseif selection_size == 2

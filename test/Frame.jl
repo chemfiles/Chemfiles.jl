@@ -6,7 +6,7 @@
     @test size(frame) == 4
 
     pos = positions(frame)
-    expected = Array{Float64}(3, 4)
+    expected = Array{Float64}(undef, 3, 4)
     for i=1:3, j=1:4
         pos[i, j] = i*j
         expected[i, j] = i*j

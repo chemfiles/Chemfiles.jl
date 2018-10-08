@@ -23,8 +23,8 @@ function chfl_clear_errors()
 end
 
 # Function 'chfl_set_warning_callback' at misc.h:38
-function chfl_set_warning_callback(callback::Ptr{Void})
-    ccall((:chfl_set_warning_callback, libchemfiles), chfl_status, (Ptr{Void},), callback)
+function chfl_set_warning_callback(callback::Base.CFunction)
+    ccall((:chfl_set_warning_callback, libchemfiles), chfl_status, (Ptr{Cvoid},), callback)
 end
 
 # Function 'chfl_add_configuration' at misc.h:53

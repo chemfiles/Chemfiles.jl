@@ -42,7 +42,7 @@ module Chemfiles
         function Trajectory(ptr::Ptr{lib.CHFL_TRAJECTORY})
             _check(ptr)
             this = new(ptr)
-            finalizer(this, _free)
+            finalizer(_free, this)
             return this
         end
     end
@@ -58,7 +58,7 @@ module Chemfiles
         function Topology(ptr::Ptr{lib.CHFL_TOPOLOGY})
             _check(ptr)
             this = new(ptr)
-            finalizer(this, _free)
+            finalizer(_free, this)
             return this
         end
     end
@@ -80,7 +80,7 @@ module Chemfiles
         function Atom(ptr::Ptr{lib.CHFL_ATOM})
             _check(ptr)
             this = new(ptr)
-            finalizer(this, _free)
+            finalizer(_free, this)
             return this
         end
     end
@@ -95,7 +95,7 @@ module Chemfiles
         function UnitCell(ptr::Ptr{lib.CHFL_CELL})
             _check(ptr)
             this = new(ptr)
-            finalizer(this, _free)
+            finalizer(_free, this)
             return this
         end
     end
@@ -115,7 +115,7 @@ module Chemfiles
         function Frame(ptr::Ptr{lib.CHFL_FRAME})
             _check(ptr)
             this = new(ptr)
-            finalizer(this, _free)
+            finalizer(_free, this)
             return this
         end
     end
@@ -131,7 +131,7 @@ module Chemfiles
         function Selection(ptr::Ptr{lib.CHFL_SELECTION})
             _check(ptr)
             this = new(ptr)
-            finalizer(this, _free)
+            finalizer(_free, this)
             return this
         end
     end
@@ -146,7 +146,7 @@ module Chemfiles
         function Residue(ptr::Ptr{lib.CHFL_RESIDUE})
             _check(ptr)
             this = new(ptr)
-            finalizer(this, _free)
+            finalizer(_free, this)
             return this
         end
     end
@@ -160,7 +160,7 @@ module Chemfiles
         function Property(ptr::Ptr{lib.CHFL_PROPERTY})
             _check(ptr)
             this = new(ptr)
-            finalizer(this, _free)
+            finalizer(_free, this)
             return this
         end
     end

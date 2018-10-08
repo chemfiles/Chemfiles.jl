@@ -106,7 +106,7 @@ Get the bonds in the ``topology``, in a ``2 x bonds_count(topology)`` array.
 """
 function bonds(topology::Topology)
     count = bonds_count(topology)
-    result = Array{UInt64}(2, count)
+    result = Array{UInt64}(undef, 2, count)
     _check(
         lib.chfl_topology_bonds(topology.handle, pointer(result), count)
     )
@@ -118,7 +118,7 @@ Get the angles in the ``topology``, in a ``3 x angles_count(topology)`` array.
 """
 function angles(topology::Topology)
     count = angles_count(topology)
-    result = Array{UInt64}(3, count)
+    result = Array{UInt64}(undef, 3, count)
     _check(
         lib.chfl_topology_angles(topology.handle, pointer(result), count)
     )
@@ -131,7 +131,7 @@ array.
 """
 function dihedrals(topology::Topology)
     count = dihedrals_count(topology)
-    result = Array{UInt64}(4, count)
+    result = Array{UInt64}(undef, 4, count)
     _check(
         lib.chfl_topology_dihedrals(topology.handle, pointer(result), count)
     )
@@ -144,7 +144,7 @@ array.
 """
 function impropers(topology::Topology)
     count = impropers_count(topology)
-    result = Array{UInt64}(4, count)
+    result = Array{UInt64}(undef, 4, count)
     _check(
         lib.chfl_topology_impropers(topology.handle, pointer(result), count)
     )

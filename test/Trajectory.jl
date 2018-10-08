@@ -117,7 +117,11 @@ const DATAPATH = joinpath(@__DIR__, "data")
         close(trajectory)
         @test isopen(trajectory) == false
 
-        @test readstring("test-tmp.xyz") == EXPECTED_CONTENT
+        s = open("test-tmp.xyz") do file
+            read(file, String)
+        end
+
+        @test s == EXPECTED_CONTENT
 
         rm("test-tmp.xyz")
     end
