@@ -1,3 +1,5 @@
+.. _Residue:
+
 ``Residue`` type and associated function
 ------------------------------------------
 

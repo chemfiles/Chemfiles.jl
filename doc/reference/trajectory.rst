@@ -1,3 +1,5 @@
+.. _Trajectory:
+
 ``Trajectory`` type and associated functions
 --------------------------------------------
 

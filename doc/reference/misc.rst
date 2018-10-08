@@ -1,16 +1,16 @@
 Miscellaneous functions
 =======================
 
-
-None of the miscellaneous functions are exported, and should be called by their fully qualified name:
+None of the miscellaneous functions are exported, and should be called by their
+fully qualified name:
 
 .. code-block:: julia
 
     # Get the last error message from the chemfiles runtime.
     Chemfiles.last_error()
 
-    # Set the global warning ``callback`` to be used for each warning event.
-    # The ``callback`` function must take a ``String`` and return nothing.
+    # Set the global warning `callback` to be used for each warning event.
+    # The `callback` function must take a `String` and return nothing.
     Chemfiles.set_warning_callback(my_callback)
 
 
