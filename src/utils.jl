@@ -54,7 +54,7 @@ end
 Define the warning callback.
 """
 function _warning_callback(message::String)
-    @warn "[chemfiles] ", message
+    @warn "[chemfiles] $message"
 end
 
 """
