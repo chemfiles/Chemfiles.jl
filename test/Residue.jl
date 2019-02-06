@@ -5,7 +5,10 @@
 
     residue = Residue("GUA")
     @test name(residue) == "GUA"
-    @test_throws ChemfilesError id(residue)
+
+    remove_chemfiles_warning() do
+        @test_throws ChemfilesError id(residue)
+    end
 
     @test size(residue) == 0
     add_atom!(residue, 0);
@@ -20,7 +23,11 @@
 
     topology = Topology()
     @test count_residues(topology) == 0
-    @test_throws ChemfilesError Residue(topology, 3)
+
+    remove_chemfiles_warning() do
+        @test_throws ChemfilesError Residue(topology, 3)
+    end
+
     add_residue!(topology, residue)
     residue = Residue(topology, 0)
     @test size(residue) == 3
