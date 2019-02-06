@@ -14,8 +14,9 @@
     set_lengths!(cell, 10, 20, 30)
     @test lengths(cell) == [10.0, 20.0, 30.0]
 
-    # Can not set angles for ORTHORHOMBIC cell
-    @test_throws ChemfilesError set_angles!(cell, 80, 89, 100)
+    remove_chemfiles_warning() do
+        @test_throws ChemfilesError set_angles!(cell, 80, 89, 100)
+    end
 
     expected = reshape(Float64[10, 0, 0,
                                0, 20, 0,

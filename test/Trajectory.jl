@@ -3,8 +3,10 @@ const DATAPATH = joinpath(@__DIR__, "data")
 
 @testset "Trajectory type" begin
     @testset "Errors handling" begin
-        @test_throws ChemfilesError Trajectory(joinpath(DATAPATH, "not-here.xyz"))
-        @test_throws ChemfilesError Trajectory(joinpath(DATAPATH, "empty.unknown"))
+        remove_chemfiles_warning() do
+            @test_throws ChemfilesError Trajectory(joinpath(DATAPATH, "not-here.xyz"))
+            @test_throws ChemfilesError Trajectory(joinpath(DATAPATH, "empty.unknown"))
+        end
     end
 
     @testset "Read frames" begin

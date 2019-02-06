@@ -14,6 +14,7 @@ module Chemfiles
         include("generated/cdef.jl")
     end
 
+    include("misc.jl")
     include("utils.jl")
 
     export Trajectory, Topology, Atom, UnitCell, Frame, Selection, Residue
@@ -173,4 +174,6 @@ module Chemfiles
     include("Selection.jl")
     include("Residue.jl")
     include("Property.jl")
+
+    set_warning_callback(__default_warning_callback)
 end

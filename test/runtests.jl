@@ -2,9 +2,11 @@ using Chemfiles
 using Test
 
 TESTS = [
-    "utils.jl", "Atom.jl", "Topology.jl", "UnitCell.jl", "Frame.jl",
+    "misc.jl", "Atom.jl", "Topology.jl", "UnitCell.jl", "Frame.jl",
     "Trajectory.jl", "Selection.jl", "Residue.jl", "Property.jl"
 ]
+
+include("utils.jl")
 
 function main()
     @testset "Generics" begin

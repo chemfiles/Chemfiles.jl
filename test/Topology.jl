@@ -68,7 +68,9 @@
 
         @test first != nothing
         @test second != nothing
-        @test_throws ChemfilesError Residue(topology, 4)
+        remove_chemfiles_warning() do
+            @test_throws ChemfilesError Residue(topology, 4)
+        end
 
         @test are_linked(topology, first, second) == false
 
