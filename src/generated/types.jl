@@ -49,6 +49,17 @@ const CHFL_PROPERTY_ERROR = chfl_status(7)
 const CHFL_GENERIC_ERROR = chfl_status(254)
 const CHFL_CXX_ERROR = chfl_status(255)
 
+# enum chfl_bond_order
+const chfl_bond_order = UInt32
+const CHFL_BOND_UNKNOWN = chfl_bond_order(0)
+const CHFL_BOND_SINGLE = chfl_bond_order(1)
+const CHFL_BOND_DOUBLE = chfl_bond_order(2)
+const CHFL_BOND_TRIPLE = chfl_bond_order(3)
+const CHFL_BOND_QUADRUPLE = chfl_bond_order(4)
+const CHFL_BOND_QINTUPLET = chfl_bond_order(5)
+const CHFL_BOND_AMIDE = chfl_bond_order(254)
+const CHFL_BOND_AROMATIC = chfl_bond_order(255)
+
 # enum chfl_property_kind
 const chfl_property_kind = UInt32
 const CHFL_PROPERTY_BOOL = chfl_property_kind(0)

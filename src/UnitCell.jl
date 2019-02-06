@@ -56,17 +56,6 @@ function UnitCell(frame::Frame)
 end
 
 """
-Free the allocated memory for the ``Cell`` object.
-"""
-function _free(cell::UnitCell)
-    _check(
-        lib.chfl_cell_free(cell.handle)
-    )
-    return nothing
-end
-
-
-"""
 Get the unit ``cell`` volume.
 """
 function volume(cell::UnitCell)

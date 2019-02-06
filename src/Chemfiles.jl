@@ -23,11 +23,18 @@ module Chemfiles
         unsafe_string(lib.chfl_version())
     end
 
-    if !startswith(version(), "0.8")
+    if !startswith(version(), "0.9")
         error(
-            """Chemfiles.jl requires the 0.8 version of libchemfiles, but $(version()) is installed.
+            """Chemfiles.jl requires the 0.9 version of libchemfiles, but $(version()) is installed.
             You can try to run Pkg.build(\"Chemfiles\") to update libchemfiles."""
         )
+    end
+
+    """
+    Free the allocated memory for a chemfiles object.
+    """
+    function _free(object)
+        lib.chfl_free(Ptr{Cvoid}(object.handle))
     end
 
     """

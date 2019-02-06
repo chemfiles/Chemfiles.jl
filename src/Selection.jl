@@ -63,13 +63,6 @@ function evaluate(selection::Selection, frame::Frame)
 end
 
 """
-Free the allocated memory for the ``Selection`` object.
-"""
-function _free(selection::Selection)
-    lib.chfl_selection_free(selection.handle)
-end
-
-"""
 Make a deep copy of a ``selection``.
 """
 function Base.deepcopy(selection::Selection)

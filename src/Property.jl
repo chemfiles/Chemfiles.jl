@@ -100,10 +100,3 @@ function Base.get(property::Property)
     end
 
 end
-
-"""
-Free the allocated memory for the ``Property`` object.
-"""
-function _free(property::Property)
-    lib.chfl_property_free(property.handle)
-end

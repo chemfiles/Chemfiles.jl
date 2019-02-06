@@ -20,13 +20,6 @@ function Topology(frame::Frame)
 end
 
 """
-Free the allocated memory for the ``Topology`` object.
-"""
-function _free(topology::Topology)
-    lib.chfl_topology_free(topology.handle)
-end
-
-"""
 Get the ``Topology`` size, i.e. the current number of atoms.
 """
 function Base.size(topology::Topology)

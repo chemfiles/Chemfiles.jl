@@ -14,13 +14,6 @@ function Frame()
 end
 
 """
-Free the allocated memory for the ``Frame`` object.
-"""
-function _free(frame::Frame)
-    lib.chfl_frame_free(frame.handle)
-end
-
-"""
 Get the ``frame`` size, *i.e.* the current number of atoms.
 """
 function Base.size(frame::Frame)
@@ -147,7 +140,7 @@ end
 Guess the bonds, angles and dihedrals in the ``frame`` using a distance criteria.
 """
 function guess_bonds!(frame::Frame)
-    _check(lib.chfl_frame_guess_topology(frame.handle))
+    _check(lib.chfl_frame_guess_bonds(frame.handle))
     return nothing
 end
 
