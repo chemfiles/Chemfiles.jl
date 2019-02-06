@@ -30,13 +30,6 @@ function Atom(topology::Topology, index::Integer)
 end
 
 """
-Free the allocated memory for the ``Atom`` object.
-"""
-function _free(atom::Atom)
-    lib.chfl_atom_free(atom.handle)
-end
-
-"""
 Get the mass of an ``atom``.
 
 The mass is given in atomic mass units.

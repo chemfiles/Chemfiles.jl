@@ -17,11 +17,6 @@ function Trajectory(path::AbstractString, mode::Char='r', format::AbstractString
 end
 
 """
-Free the allocated memory for the ``Trajectory`` object.
-"""
-_free(trajectory::Trajectory) = close(trajectory)
-
-"""
 Read the next step of the ``trajectory`` in the given ``frame``.
 """
 function Base.read!(trajectory::Trajectory, frame::Frame)
@@ -123,14 +118,12 @@ function nsteps(trajectory::Trajectory)
 end
 
 """
-Close a ``trajectory``. It flushes any buffer content to the hard drive, and
-frees the associated memory. Necessary when running on the REPL to finish 
-writing.
+Close a ``trajectory``. This function flushes any buffer content to the hard
+drive, and frees the associated memory. Necessary when running on the REPL to
+finish  writing.
 """
 function Base.close(trajectory::Trajectory)
-    _check(
-        lib.chfl_trajectory_close(trajectory.handle)
-    )
+    lib.chfl_trajectory_close(trajectory.handle)
     trajectory.handle = Ptr{lib.CHFL_TRAJECTORY}(0)
     return nothing
 end

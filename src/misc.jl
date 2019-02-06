@@ -30,22 +30,28 @@ function __default_warning_callback(message::String)
     @warn "$message"
 end
 
+
+# Store the warning callback in a global to prevent garbage collection
+WARNING_CALLBACK = nothing
+
+function _warning_callback_adaptator(message)
+    try
+        WARNING_CALLBACK(unsafe_string(message))
+    catch error
+        @warn "caught $error in warning callback"
+    end
+end
+
 """
 Set the global warning ``callback`` to be used for each warning event.
 
 The ``callback`` function must take a ``String`` and return nothing.
 """
 function set_warning_callback(callback::Function)
-    function _cb_adaptor(message)
-        try
-            callback(unsafe_string(message))
-        catch error
-            @warn "caught $error in warning callback"
-        end
-    end
-
-    cb = @cfunction($_cb_adaptor, Cvoid, (Ptr{UInt8},))
-    _check(lib.chfl_set_warning_callback(cb))
+    global WARNING_CALLBACK
+    WARNING_CALLBACK = callback
+    ptr = @cfunction(_warning_callback_adaptator, Cvoid, (Ptr{UInt8},))
+    _check(lib.chfl_set_warning_callback(ptr))
 end
 
 """

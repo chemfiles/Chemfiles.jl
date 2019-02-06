@@ -46,13 +46,6 @@ function residue_for_atom(topology::Topology, index::Integer)
 end
 
 """
-Free the allocated memory for the ``Residue`` object.
-"""
-function _free(residue::Residue)
-    lib.chfl_residue_free(residue.handle)
-end
-
-"""
 Get the name of a ``residue``.
 """
 function name(residue::Residue)
