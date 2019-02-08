@@ -14,7 +14,7 @@ function Atom(name::String)
 end
 
 """
-Get a copy of the ``atom`` at the given ``index`` from a ``frame``
+Get a copy of the ``atom`` at the given ``index`` from a ``frame``.
 """
 function Atom(frame::Frame, index::Integer)
     handle = lib.chfl_atom_from_frame(frame.handle, UInt64(index))
@@ -22,7 +22,7 @@ function Atom(frame::Frame, index::Integer)
 end
 
 """
-Get a copy of the ``atom`` at a given ``index`` from a ``topology``
+Get a copy of the ``atom`` at a given ``index`` from a ``topology``.
 """
 function Atom(topology::Topology, index::Integer)
     handle = lib.chfl_atom_from_topology(topology.handle, UInt64(index))
@@ -87,7 +87,7 @@ function set_charge!(atom::Atom, charge)
 end
 
 """
-Get the name of an ``atom``
+Get the name of an ``atom``.
 """
 function name(atom::Atom)
     return _call_with_growing_buffer(
@@ -136,7 +136,7 @@ function Base.fullname(atom::Atom)
 end
 
 """
-Get the Van der Waals radius of an ``atom`` from the atom type.
+Get the van der Waals radius of an ``atom`` from the atom type.
 
 If the radius can not be found, this function returns -1.
 """

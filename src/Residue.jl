@@ -4,7 +4,7 @@
 export name, id, add_atom!, residue_for_atom, contains
 
 """
-Create a new residue with the given ``name``
+Create a new residue with the given ``name``.
 """
 function Residue(name::String)
     handle = lib.chfl_residue(pointer(name))

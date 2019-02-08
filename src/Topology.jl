@@ -197,7 +197,7 @@ end
 
 """
 Check if the two residues ``first`` and ``second`` from the ``topology`` are
-linked together. *i.e.* if there is a bond between one atom in the first
+linked together, *i.e.* if there is a bond between one atom in the first
 residue and one atom in the second one.
 """
 function are_linked(topology::Topology, first::Residue, second::Residue)

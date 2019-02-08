@@ -4,7 +4,7 @@
 export read_step, read_step!, set_topology!, set_cell!, nsteps
 
 """
-The ``Trajectory`` function open a trajectory file, using the file at the given
+The ``Trajectory`` function opens a trajectory file, using the file at the given
 ``path``. The opening ``mode`` can be ``'r'`` for read, ``'w'`` for write or
 ``'a'`` for append, and defaults to ``'r'``. The optional ``format`` parameter
 give a specific file format to use when opening the file.
@@ -75,7 +75,7 @@ end
 
 """
 Set the ``Topology`` associated with a ``trajectory``. This topology will be
-used when reading and writing the files, replacing any topology in the file.
+used when reading and writing the file, replacing any topology in the file.
 """
 function set_topology!(trajectory::Trajectory, topology::Topology)
     @assert isopen(trajectory)
@@ -100,7 +100,7 @@ end
 
 """
 Set the ``cell`` associated with a ``trajectory``. This cell will be used when
-reading and writing the files, replacing any unit cell in the file.
+reading and writing the file, replacing any unit cell in the file.
 """
 function set_cell!(trajectory::Trajectory, cell::UnitCell)
     @assert isopen(trajectory)
@@ -123,8 +123,8 @@ function nsteps(trajectory::Trajectory)
 end
 
 """
-Close a ``trajectory``, flushing any buffer content to the hard drive, and
-freeing the associated memory. Necessary when running on the REPL to finish 
+Close a ``trajectory``. It flushes any buffer content to the hard drive, and
+frees the associated memory. Necessary when running on the REPL to finish 
 writing.
 """
 function Base.close(trajectory::Trajectory)
@@ -136,7 +136,7 @@ function Base.close(trajectory::Trajectory)
 end
 
 """
-Check is the ``trajectory`` is open
+Check if the ``trajectory`` is open.
 """
 function Base.isopen(trajectory::Trajectory)
     return trajectory.handle != Ptr{lib.CHFL_TRAJECTORY}(0)

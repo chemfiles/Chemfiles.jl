@@ -33,7 +33,7 @@ end
 
 
 """
-Resize the positions and the velocities in a ``frame``, to make space for
+Resize the positions and the velocities in the ``frame``, to make space for
 ``natoms`` atoms. This function may invalidate any pointer to the positions or
 the velocities if the new size is bigger than the old one. In all the cases,
 previous data is conserved. This function conserve the presence or absence of
@@ -240,7 +240,7 @@ function property(frame::Frame, name::String)
 end
 
 """
-Add an additional bond to the ``Frames``'s ``Topology``.
+Add an additional bond to the ``Frame``'s ``Topology``.
 """
 function add_bond!(frame::Frame, i::Integer, j::Integer)
     _check(
@@ -250,7 +250,7 @@ function add_bond!(frame::Frame, i::Integer, j::Integer)
 end
 
 """
-Remove a bond from the ``Frames``'s ``Topology``.
+Remove a bond from the ``Frame``'s ``Topology``.
 """
 function remove_bond!(frame::Frame, i::Integer, j::Integer)
     _check(
@@ -260,7 +260,7 @@ function remove_bond!(frame::Frame, i::Integer, j::Integer)
 end
 
 """
-Add a residue to the ``Frames``'s ``Topology``.
+Add a residue to the ``Frame``'s ``Topology``.
 """
 function add_residue!(frame::Frame, residue::Residue)
     _check(
@@ -270,7 +270,7 @@ function add_residue!(frame::Frame, residue::Residue)
 end
 
 """
-Make a deep copy of a ``frame``.
+Make a deep copy of a ``Frame``.
 """
 function Base.deepcopy(frame::Frame)
     handle = lib.chfl_frame_copy(frame.handle)

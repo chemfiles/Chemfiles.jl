@@ -10,7 +10,7 @@ end
 Base.show(io::IO, e::ChemfilesError) = show(io, "Chemfiles error: $(e.message)")
 
 """
-If there was an error try to get it and throw a ChemfilesError with it.
+If there is an error try to get it and throw a ChemfilesError with it.
 Show \"Unknown error\" in case it can't get the last one.
 """
 function _check(result::Integer, message = "Unknown error")
@@ -27,7 +27,7 @@ function _check(result::Integer, message = "Unknown error")
 end
 
 """
-If there was an error try to get it and throw a ChemfilesError with it.
+If there is an error try to get it and throw a ChemfilesError with it.
 """
 function _check(result::Ptr)
     if Int(result) == 0
@@ -44,7 +44,7 @@ function last_error()
 end
 
 """
-Clear any error message stored by the chemfiles runtime.
+Clear any error messages stored by the chemfiles runtime.
 """
 function clear_errors()
     _check(lib.chfl_clear_errors())

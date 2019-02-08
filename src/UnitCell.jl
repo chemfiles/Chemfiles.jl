@@ -10,9 +10,9 @@ struct CellShape
 """
 The possible shape for an unit cell are:
 
-- ``Chemfiles.ORTHORHOMBIC`` for unit cell with the three angles are 90°
-- ``Chemfiles.TRICLINIC`` for unit cell where the three angles may not be 90°
-- ``Chemfiles.INFINITE`` for unit cells without boundaries
+- ``Chemfiles.ORTHORHOMBIC`` for unit cells with the three angles are 90°.
+- ``Chemfiles.TRICLINIC`` for unit cells where the three angles may not be 90°.
+- ``Chemfiles.INFINITE`` for unit cells without boundaries.
 """
     function CellShape(value)
         value = lib.chfl_cellshape(value)
@@ -67,7 +67,7 @@ end
 
 
 """
-Get the unit ``cell`` volume
+Get the unit ``cell`` volume.
 """
 function volume(cell::UnitCell)
     result = Ref{Float64}(0)
@@ -78,7 +78,7 @@ function volume(cell::UnitCell)
 end
 
 """
-Get the three ``cell`` lenghts (a, b and c) in angstroms.
+Get the three ``cell`` lengths (a, b and c) in angstroms.
 """
 function lengths(cell::UnitCell)
     result = Float64[0, 0, 0]
@@ -89,7 +89,7 @@ function lengths(cell::UnitCell)
 end
 
 """
-Set the ``cell`` lenghts to ``a``, ``b`` and ``c``.
+Set the ``cell`` lengths to ``a``, ``b`` and ``c``.
 
 ``a``, ``b`` and ``c`` should be in angstroms.
 """
@@ -140,7 +140,7 @@ function cell_matrix(cell::UnitCell)
 end
 
 """
-Get the ``cell`` shape, as a ``CellShape`` value
+Get the ``cell`` shape, as a ``CellShape`` value.
 """
 function shape(cell::UnitCell)
     result = Ref{lib.chfl_cellshape}(0)

@@ -3,7 +3,7 @@
 export evaluate, selection_string
 
 """
-Create a ``Selection`` from a selection string
+Create a ``Selection`` from a selection string.
 """
 function Selection(selection::AbstractString)
     handle = lib.chfl_selection(pointer(selection))
