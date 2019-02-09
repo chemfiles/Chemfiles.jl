@@ -23,13 +23,6 @@ module Chemfiles
         unsafe_string(lib.chfl_version())
     end
 
-    if !startswith(version(), "0.9")
-        error(
-            """Chemfiles.jl requires the 0.9 version of libchemfiles, but $(version()) is installed.
-            You can try to run Pkg.build(\"Chemfiles\") to update libchemfiles."""
-        )
-    end
-
     """
     Free the allocated memory for a chemfiles object.
     """
@@ -182,5 +175,14 @@ module Chemfiles
     include("Residue.jl")
     include("Property.jl")
 
-    set_warning_callback(__default_warning_callback)
+    function __init__()
+        if !startswith(version(), "0.9")
+            error(
+                """Chemfiles.jl requires the 0.9 version of libchemfiles,
+                but $(version()) is installed. You can try to run
+                Pkg.build(\"Chemfiles\") to update libchemfiles."""
+            )
+        end
+        set_warning_callback(__default_warning_callback)
+    end
 end
