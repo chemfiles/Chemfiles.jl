@@ -24,44 +24,11 @@ module Chemfiles
     end
 
     """
-    Free the allocated memory for a chemfiles object.
+    A ``Property`` is a generic container for various forms of metadata
+    stored for other structures.
     """
-    function _free(object)
-        lib.chfl_free(Ptr{Cvoid}(object.handle))
-    end
-
-    """
-    A ``Trajectory`` represents a simulation file on the hard drive. It can read
-    or write one or many ``Frame``s to this file. The file format can be
-    automatically determined from the extention, or manually specified.
-    Writing to a ``Trajectory`` is buffered, which means that one needs to
-    ``close()`` the trajectory and flush the buffer before being able to read the
-    file again.
-    """
-    mutable struct Trajectory
-        handle :: Ptr{lib.CHFL_TRAJECTORY}
-        function Trajectory(ptr::Ptr{lib.CHFL_TRAJECTORY})
-            _check(ptr)
-            this = new(ptr)
-            finalizer(_free, this)
-            return this
-        end
-    end
-
-    """
-    A ``Topology`` describes the organisation of the particles in the system:
-    what their names are, how they are bonded together, *etc.* A ``Topology``
-    is a list of ``Atom``s in the system, together with the list of bonds between
-    the atoms.
-    """
-    mutable struct Topology
-        handle :: Ptr{lib.CHFL_TOPOLOGY}
-        function Topology(ptr::Ptr{lib.CHFL_TOPOLOGY})
-            _check(ptr)
-            this = new(ptr)
-            finalizer(_free, this)
-            return this
-        end
+    struct Property
+        __handle :: CxxPointer{lib.CHFL_PROPERTY}
     end
 
     """
@@ -76,14 +43,27 @@ module Chemfiles
     The atom name is usually an unique identifier ("H1", "C_a") while the atom
     type will be shared among all particles of the same type: "H", "Ow", "CH3".
     """
-    mutable struct Atom
-        handle :: Ptr{lib.CHFL_ATOM}
-        function Atom(ptr::Ptr{lib.CHFL_ATOM})
-            _check(ptr)
-            this = new(ptr)
-            finalizer(_free, this)
-            return this
-        end
+    struct Atom
+        __handle :: CxxPointer{lib.CHFL_ATOM}
+    end
+
+    """
+    A ``Residue`` is a group of atoms belonging to the same logical unit. They
+    can be small molecules, amino-acids in a protein, monomers in polymers,
+    *etc.*
+    """
+    struct Residue
+        __handle :: CxxPointer{lib.CHFL_RESIDUE}
+    end
+
+    """
+    A ``Topology`` describes the organisation of the particles in the system:
+    what their names are, how they are bonded together, *etc.* A ``Topology``
+    is a list of ``Atom``s in the system, together with the list of bonds between
+    the atoms.
+    """
+    struct Topology
+        __handle :: CxxPointer{lib.CHFL_TOPOLOGY}
     end
 
     """
@@ -91,14 +71,8 @@ module Chemfiles
     three base vectors of lengths ``a``, ``b`` and ``c``; and the angles
     between these vectors are ``alpha``, ``beta`` and ``gamma``.
     """
-    mutable struct UnitCell
-        handle :: Ptr{lib.CHFL_CELL}
-        function UnitCell(ptr::Ptr{lib.CHFL_CELL})
-            _check(ptr)
-            this = new(ptr)
-            finalizer(_free, this)
-            return this
-        end
+    struct UnitCell
+        __handle :: CxxPointer{lib.CHFL_CELL}
     end
 
     """
@@ -111,14 +85,8 @@ module Chemfiles
     - The ``Topology`` of the system;
     - The ``UnitCell`` of the system.
     """
-    mutable struct Frame
-        handle :: Ptr{lib.CHFL_FRAME}
-        function Frame(ptr::Ptr{lib.CHFL_FRAME})
-            _check(ptr)
-            this = new(ptr)
-            finalizer(_free, this)
-            return this
-        end
+    struct Frame
+        __handle :: CxxPointer{lib.CHFL_FRAME}
     end
 
     """
@@ -127,53 +95,30 @@ module Chemfiles
     <http://chemfiles.org/chemfiles/latest/selections.html>`_ for more
     information about the selection language.
     """
-    mutable struct Selection
-        handle :: Ptr{lib.CHFL_SELECTION}
-        function Selection(ptr::Ptr{lib.CHFL_SELECTION})
-            _check(ptr)
-            this = new(ptr)
-            finalizer(_free, this)
-            return this
-        end
+    struct Selection
+        __handle :: CxxPointer{lib.CHFL_SELECTION}
     end
 
     """
-    A ``Residue`` is a group of atoms belonging to the same logical unit. They
-    can be small molecules, amino-acids in a protein, monomers in polymers,
-    *etc.*
+    A ``Trajectory`` represents a simulation file on the hard drive. It can read
+    or write one or many ``Frame``s to this file. The file format can be
+    automatically determined from the extention, or manually specified.
+    Writing to a ``Trajectory`` is buffered, which means that one needs to
+    ``close()`` the trajectory and flush the buffer before being able to read the
+    file again.
     """
-    mutable struct Residue
-        handle :: Ptr{lib.CHFL_RESIDUE}
-        function Residue(ptr::Ptr{lib.CHFL_RESIDUE})
-            _check(ptr)
-            this = new(ptr)
-            finalizer(_free, this)
-            return this
-        end
+    struct Trajectory
+        __handle :: CxxPointer{lib.CHFL_TRAJECTORY}
     end
 
-    """
-    A ``Property`` is a generic container for various forms of metadata
-    stored for other structures.
-    """
-    mutable struct Property
-        handle :: Ptr{lib.CHFL_PROPERTY}
-        function Property(ptr::Ptr{lib.CHFL_PROPERTY})
-            _check(ptr)
-            this = new(ptr)
-            finalizer(_free, this)
-            return this
-        end
-    end
-
-    include("Atom.jl")
-    include("Frame.jl")
-    include("Topology.jl")
-    include("Trajectory.jl")
-    include("UnitCell.jl")
-    include("Selection.jl")
-    include("Residue.jl")
     include("Property.jl")
+    include("Atom.jl")
+    include("Residue.jl")
+    include("Topology.jl")
+    include("UnitCell.jl")
+    include("Frame.jl")
+    include("Selection.jl")
+    include("Trajectory.jl")
 
     function __init__()
         if !startswith(version(), "0.9")

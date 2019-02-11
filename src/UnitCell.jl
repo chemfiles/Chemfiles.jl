@@ -1,58 +1,49 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export lengths, set_lengths!, angles, set_angles!, cell_matrix, shape,
-set_shape!, volume, CellShape, wrap!
+export lengths, set_lengths!, angles, set_angles!
+export shape, set_shape!, CellShape, volume, matrix, wrap!
 
-struct CellShape
-    value::lib.chfl_cellshape
+__ptr(cell::UnitCell) = __ptr(cell.__handle)
+__const_ptr(cell::UnitCell) = __const_ptr(cell.__handle)
 
 """
 The possible shape for an unit cell are:
 
-- ``Chemfiles.ORTHORHOMBIC`` for unit cells with the three angles are 90°.
-- ``Chemfiles.TRICLINIC`` for unit cells where the three angles may not be 90°.
-- ``Chemfiles.INFINITE`` for unit cells without boundaries.
+- ``Chemfiles.Orthorhombic`` for unit cells with the three angles are 90°.
+- ``Chemfiles.Triclinic`` for unit cells where the three angles may not be 90°.
+- ``Chemfiles.Infinite`` for unit cells without boundaries.
 """
-    function CellShape(value)
-        value = lib.chfl_cellshape(value)
-        if value in [lib.CHFL_CELL_INFINITE, lib.CHFL_CELL_ORTHORHOMBIC, lib.CHFL_CELL_TRICLINIC]
-            return new(value)
-        else
-            throw(ChemfilesError("Invalid value for conversion to CellShape: $value"))
-        end
-    end
+@enum CellShape begin
+    Infinite = lib.CHFL_CELL_INFINITE
+    Orthorhombic = lib.CHFL_CELL_ORTHORHOMBIC
+    Triclinic = lib.CHFL_CELL_TRICLINIC
 end
-
-Base.:(==)(x::CellShape, y::CellShape) = x.value == y.value
-
-const ORTHORHOMBIC = CellShape(lib.CHFL_CELL_ORTHORHOMBIC)
-const TRICLINIC = CellShape(lib.CHFL_CELL_TRICLINIC)
-const INFINITE = CellShape(lib.CHFL_CELL_INFINITE)
 
 """
 Create an ``UnitCell`` from the three lenghts, with all the angles equal to 90°.
 """
 function UnitCell(a::Number, b::Number, c::Number)
-    handle = lib.chfl_cell(Float64[a, b, c])
-    return UnitCell(handle)
+    ptr = lib.chfl_cell(Float64[a, b, c])
+    return UnitCell(CxxPointer(ptr, is_const=false))
 end
 
 """
 Create an ``UnitCell`` from the three lenghts and three angles.
 """
 function UnitCell(a::Number, b::Number, c::Number, α::Number, β::Number, γ::Number)
-    handle = lib.chfl_cell_triclinic(Float64[a, b, c], Float64[α, β, γ])
-    return UnitCell(handle)
+    ptr = lib.chfl_cell_triclinic(Float64[a, b, c], Float64[α, β, γ])
+    return UnitCell(CxxPointer(ptr, is_const=false))
 end
 
 
 """
-Get a copy of the ``UnitCell`` of a ``frame``.
+Get a reference to the ``UnitCell`` of a ``frame``. Any changes to the unit cell
+will be reflected in the frame
 """
 function UnitCell(frame::Frame)
-    handle = lib.chfl_cell_from_frame(frame.handle)
-    return UnitCell(handle)
+    ptr = lib.chfl_cell_from_frame(__const_ptr(frame))
+    return UnitCell(CxxPointer(ptr, is_const=false))
 end
 
 """
@@ -60,9 +51,7 @@ Get the unit ``cell`` volume.
 """
 function volume(cell::UnitCell)
     result = Ref{Float64}(0)
-    _check(
-        lib.chfl_cell_volume(cell.handle, result)
-    )
+    __check(lib.chfl_cell_volume(__const_ptr(cell), result))
     return result[]
 end
 
@@ -71,9 +60,7 @@ Get the three ``cell`` lengths (a, b and c) in angstroms.
 """
 function lengths(cell::UnitCell)
     result = Float64[0, 0, 0]
-    _check(
-        lib.chfl_cell_lengths(cell.handle, result)
-    )
+    __check(lib.chfl_cell_lengths(__const_ptr(cell), result))
     return result
 end
 
@@ -83,9 +70,7 @@ Set the ``cell`` lengths to ``a``, ``b`` and ``c``.
 ``a``, ``b`` and ``c`` should be in angstroms.
 """
 function set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
-    _check(
-        lib.chfl_cell_set_lengths(cell.handle, Float64[a, b, c])
-    )
+    __check(lib.chfl_cell_set_lengths(__ptr(cell), Float64[a, b, c]))
     return nothing
 end
 
@@ -94,9 +79,7 @@ Get the three ``cell`` angles (alpha, beta and gamma) in degrees.
 """
 function angles(cell::UnitCell)
     result = Float64[0, 0, 0]
-    _check(
-        lib.chfl_cell_angles(cell.handle, result)
-    )
+    __check(lib.chfl_cell_angles(__const_ptr(cell), result))
     return result
 end
 
@@ -106,9 +89,7 @@ Set the `cell` angles to ``α``, ``β`` and ``γ``.
 ``α``, ``β`` and ``γ`` should be in degrees.
 """
 function set_angles!(cell::UnitCell, α::Real, β::Real, γ::Real)
-    _check(
-        lib.chfl_cell_set_angles(cell.handle, Float64[α, β, γ])
-    )
+    __check(lib.chfl_cell_set_angles(__ptr(cell), Float64[α, β, γ]))
     return nothing
 end
 
@@ -120,12 +101,10 @@ three base vectors as::
         |  0    b_y   c_y |
         |  0     0    c_z |
 """
-function cell_matrix(cell::UnitCell)
-    matrix = Array{Float64}(undef, 3, 3)
-    _check(
-        lib.chfl_cell_matrix(cell.handle, pointer(matrix))
-    )
-    return matrix
+function matrix(cell::UnitCell)
+    result = Array{Float64}(undef, 3, 3)
+    __check(lib.chfl_cell_matrix(__const_ptr(cell), pointer(result)))
+    return result
 end
 
 """
@@ -133,9 +112,7 @@ Get the ``cell`` shape, as a ``CellShape`` value.
 """
 function shape(cell::UnitCell)
     result = Ref{lib.chfl_cellshape}(0)
-    _check(
-        lib.chfl_cell_shape(cell.handle, result)
-    )
+    __check(lib.chfl_cell_shape(__const_ptr(cell), result))
     return CellShape(result[])
 end
 
@@ -143,9 +120,7 @@ end
 Set the ``cell`` shape to the given ``shape``.
 """
 function set_shape!(cell::UnitCell, shape::CellShape)
-    _check(
-        lib.chfl_cell_set_shape(cell.handle, shape.value)
-    )
+    __check(lib.chfl_cell_set_shape(__ptr(cell), lib.chfl_cellshape(shape)))
     return nothing
 end
 
@@ -153,9 +128,10 @@ end
 Wrap a `vector` in the unit `cell`.
 """
 function wrap!(cell::UnitCell, vector::Vector{Float64})
-    _check(
-        lib.chfl_cell_wrap(cell.handle, vector)
-    )
+    if length(vector) != 3
+        throw(ChemfilesError("Can only wrap vectors containing 3 elements in an unit cell"))
+    end
+    __check(lib.chfl_cell_wrap(__const_ptr(cell), vector))
     return vector
 end
 
@@ -163,6 +139,6 @@ end
 Make a deep copy of a ``cell``.
 """
 function Base.deepcopy(cell::UnitCell)
-    handle = lib.chfl_cell_copy(cell.handle)
-    return UnitCell(handle)
+    ptr = lib.chfl_cell_copy(__ptr(cell))
+    return UnitCell(CxxPointer(ptr, is_const=false))
 end

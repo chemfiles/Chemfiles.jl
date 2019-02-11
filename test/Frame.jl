@@ -33,10 +33,9 @@
     add_atom!(topology, Atom("Zn"))
     add_atom!(topology, Atom("H"))
     set_topology!(frame, topology)
-    new_topology = Topology(frame)
 
-    @test name(Atom(new_topology, 0)) == "H"
-    @test name(Atom(new_topology, 2)) == "Zn"
+    @test name(Atom(frame, 0)) == "H"
+    @test name(Atom(frame, 2)) == "Zn"
 
     @test step(frame) == 0
     set_step!(frame, 42)

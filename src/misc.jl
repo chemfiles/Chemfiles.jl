@@ -20,7 +20,7 @@ end
 Clear any error messages stored by the chemfiles runtime.
 """
 function clear_errors()
-    _check(lib.chfl_clear_errors())
+    __check(lib.chfl_clear_errors())
 end
 
 """
@@ -51,7 +51,7 @@ function set_warning_callback(callback::Function)
     global WARNING_CALLBACK
     WARNING_CALLBACK = callback
     ptr = @cfunction(_warning_callback_adaptator, Cvoid, (Ptr{UInt8},))
-    _check(lib.chfl_set_warning_callback(ptr))
+    __check(lib.chfl_set_warning_callback(ptr))
 end
 
 """

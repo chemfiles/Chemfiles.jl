@@ -1,52 +1,57 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export remove!, bonds_count, angles_count, dihedrals_count, impropers_count,
-bonds, angles, dihedrals, impropers, add_bond!, remove_bond!, add_residue!,
-residues, are_linked, count_residues
+export bonds_count, angles_count, dihedrals_count, impropers_count
+export bonds, angles, dihedrals, impropers
+export add_bond!, remove_bond!
+export add_residue!, residues, are_linked, count_residues
+
+__ptr(topology::Topology) = __ptr(topology.__handle)
+__const_ptr(topology::Topology) = __const_ptr(topology.__handle)
 
 """
 Create an empty ``Topology``.
 """
 function Topology()
-    return Topology(lib.chfl_topology())
+    return Topology(CxxPointer(lib.chfl_topology(), is_const=false))
 end
 
 """
-Get a copy of the ``Topology`` of the given ``frame``.
+Get a read-only reference to the ``Topology`` of the given ``frame``.
 """
 function Topology(frame::Frame)
-    return Topology(lib.chfl_topology_from_frame(frame.handle))
+    ptr = lib.chfl_topology_from_frame(__const_ptr(frame))
+    return Topology(CxxPointer(ptr, is_const=true))
 end
 
 """
 Get the ``Topology`` size, i.e. the current number of atoms.
 """
 function Base.size(topology::Topology)
-    n = Ref{UInt64}(0)
-    _check(
-        lib.chfl_topology_atoms_count(topology.handle, n)
-    )
-    return n[]
+    count = Ref{UInt64}(0)
+    __check(lib.chfl_topology_atoms_count(
+        __const_ptr(topology), count
+    ))
+    return count[]
 end
 
 """
 Add an ``atom`` at the end of a ``topology``.
 """
 function add_atom!(topology::Topology, atom::Atom)
-    _check(
-        lib.chfl_topology_add_atom(topology.handle, atom.handle)
-    )
+    __check(lib.chfl_topology_add_atom(
+        __ptr(topology), __const_ptr(atom)
+    ))
     return nothing
 end
 
 """
 Remove the atom at the given ``index`` from a ``topology``.
 """
-function remove!(topology::Topology, index::Integer)
-    _check(
-        lib.chfl_topology_remove(topology.handle, UInt64(index))
-    )
+function remove_atom!(topology::Topology, index::Integer)
+    __check(lib.chfl_topology_remove(
+        __ptr(topology), UInt64(index)
+    ))
     return nothing
 end
 
@@ -54,44 +59,44 @@ end
 Get the number of bonds in the ``topology``.
 """
 function bonds_count(topology::Topology)
-    n = Ref{UInt64}(0)
-    _check(
-        lib.chfl_topology_bonds_count(topology.handle, n)
-    )
-    return n[]
+    count = Ref{UInt64}(0)
+    __check(lib.chfl_topology_bonds_count(
+        __const_ptr(topology), count
+    ))
+    return count[]
 end
 
 """
 Get the number of angles in the ``topology``.
 """
 function angles_count(topology::Topology)
-    n = Ref{UInt64}(0)
-    _check(
-        lib.chfl_topology_angles_count(topology.handle, n)
-    )
-    return n[]
+    count = Ref{UInt64}(0)
+    __check(lib.chfl_topology_angles_count(
+        __const_ptr(topology), count
+    ))
+    return count[]
 end
 
 """
 Get the number of dihedral angles in the ``topology``.
 """
 function dihedrals_count(topology::Topology)
-    n = Ref{UInt64}(0)
-    _check(
-        lib.chfl_topology_dihedrals_count(topology.handle, n)
-    )
-    return n[]
+    count = Ref{UInt64}(0)
+    __check(lib.chfl_topology_dihedrals_count(
+        __const_ptr(topology), count
+    ))
+    return count[]
 end
 
 """
 Get the number of improper angles in the ``topology``.
 """
 function impropers_count(topology::Topology)
-    n = Ref{UInt64}(0)
-    _check(
-        lib.chfl_topology_impropers_count(topology.handle, n)
-    )
-    return n[]
+    count = Ref{UInt64}(0)
+    __check(lib.chfl_topology_impropers_count(
+        __const_ptr(topology), count
+    ))
+    return count[]
 end
 
 """
@@ -100,9 +105,9 @@ Get the bonds in the ``topology``, in a ``2 x bonds_count(topology)`` array.
 function bonds(topology::Topology)
     count = bonds_count(topology)
     result = Array{UInt64}(undef, 2, count)
-    _check(
-        lib.chfl_topology_bonds(topology.handle, pointer(result), count)
-    )
+    __check(lib.chfl_topology_bonds(
+        __const_ptr(topology), pointer(result), count
+    ))
     return result
 end
 
@@ -112,9 +117,9 @@ Get the angles in the ``topology``, in a ``3 x angles_count(topology)`` array.
 function angles(topology::Topology)
     count = angles_count(topology)
     result = Array{UInt64}(undef, 3, count)
-    _check(
-        lib.chfl_topology_angles(topology.handle, pointer(result), count)
-    )
+    __check(lib.chfl_topology_angles(
+        __const_ptr(topology), pointer(result), count
+    ))
     return result
 end
 
@@ -125,9 +130,9 @@ array.
 function dihedrals(topology::Topology)
     count = dihedrals_count(topology)
     result = Array{UInt64}(undef, 4, count)
-    _check(
-        lib.chfl_topology_dihedrals(topology.handle, pointer(result), count)
-    )
+    __check(lib.chfl_topology_dihedrals(
+        __const_ptr(topology), pointer(result), count
+    ))
     return result
 end
 
@@ -138,9 +143,9 @@ array.
 function impropers(topology::Topology)
     count = impropers_count(topology)
     result = Array{UInt64}(undef, 4, count)
-    _check(
-        lib.chfl_topology_impropers(topology.handle, pointer(result), count)
-    )
+    __check(lib.chfl_topology_impropers(
+        __const_ptr(topology), pointer(result), count
+    ))
     return result
 end
 
@@ -148,9 +153,9 @@ end
 Add a bond between the atoms ``i`` and ``j`` in the ``topology``.
 """
 function add_bond!(topology::Topology, i::Integer, j::Integer)
-    _check(
-        lib.chfl_topology_add_bond(topology.handle, UInt64(i), UInt64(j))
-    )
+    __check(lib.chfl_topology_add_bond(
+        __ptr(topology), UInt64(i), UInt64(j)
+    ))
     return nothing
 end
 
@@ -158,9 +163,9 @@ end
 Remove any existing bond between the atoms ``i`` and ``j`` in the ``topology``.
 """
 function remove_bond!(topology::Topology, i::Integer, j::Integer)
-    _check(
-        lib.chfl_topology_remove_bond(topology.handle, UInt64(i), UInt64(j))
-    )
+    __check(lib.chfl_topology_remove_bond(
+        __ptr(topology), UInt64(i), UInt64(j)
+    ))
     return nothing
 end
 
@@ -171,9 +176,9 @@ The residue id must not already be in the topology, and the residue must
 contain only atoms that are not already in another residue.
 """
 function add_residue!(topology::Topology, residue::Residue)
-    _check(
-        lib.chfl_topology_add_residue(topology.handle, residue.handle)
-    )
+    __check(lib.chfl_topology_add_residue(
+        __ptr(topology), __const_ptr(residue)
+    ))
     return nothing
 end
 
@@ -181,11 +186,11 @@ end
 Get the number of residues in the ``topology``.
 """
 function count_residues(topology::Topology)
-    nresidues = Ref{UInt64}(0)
-    _check(
-        lib.chfl_topology_residues_count(topology.handle, nresidues)
-    )
-    return nresidues[]
+    count = Ref{UInt64}(0)
+    __check(lib.chfl_topology_residues_count(
+        __const_ptr(topology), count
+    ))
+    return count[]
 end
 
 """
@@ -195,9 +200,9 @@ residue and one atom in the second one.
 """
 function are_linked(topology::Topology, first::Residue, second::Residue)
     result = Ref{UInt8}(0)
-    _check(
-        lib.chfl_topology_residues_linked(topology.handle, first.handle, second.handle, result)
-    )
+    __check(lib.chfl_topology_residues_linked(
+        __const_ptr(topology), __const_ptr(first), __const_ptr(second), result
+    ))
     return convert(Bool, result[])
 end
 
@@ -210,15 +215,15 @@ If it is lower than the current number of atoms, the last atoms will be removed,
 together with the associated bonds, angles and dihedrals.
 """
 function Base.resize!(topology::Topology, size::Integer)
-    _check(
-        lib.chfl_topology_resize(topology.handle, UInt64(size))
-    )
+    __check(lib.chfl_topology_resize(
+        __ptr(topology), UInt64(size)
+    ))
 end
 
 """
 Make a deep copy of a ``topology``.
 """
 function Base.deepcopy(topology::Topology)
-    handle = lib.chfl_topology_copy(topology.handle)
-    return Topology(handle)
+    ptr = lib.chfl_topology_copy(__ptr(topology))
+    return Topology(CxxPointer(ptr, is_const=false))
 end

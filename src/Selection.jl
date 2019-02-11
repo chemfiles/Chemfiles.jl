@@ -1,21 +1,27 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
+
 export evaluate, selection_string
+
+__ptr(selection::Selection) = __ptr(selection.__handle)
+__const_ptr(selection::Selection) = __const_ptr(selection.__handle)
 
 """
 Create a ``Selection`` from a selection string.
 """
 function Selection(selection::AbstractString)
-    handle = lib.chfl_selection(pointer(selection))
-    return Selection(handle)
+    ptr = lib.chfl_selection(pointer(selection))
+    return Selection(CxxPointer(ptr, is_const=false))
 end
 
 """
 Get the selection string used to create a given ``selection``.
 """
 function selection_string(selection::Selection)
-    return _call_with_growing_buffer(
-        (buffer, size) -> _check(lib.chfl_selection_string(selection.handle, buffer, size))
+    return __call_with_growing_buffer(
+        (buffer, size) -> __check(lib.chfl_selection_string(
+            __const_ptr(selection), buffer, size
+        ))
     )
 end
 
@@ -25,9 +31,7 @@ together.
 """
 function Base.size(selection::Selection)
     result = Ref{UInt64}(0)
-    _check(
-        lib.chfl_selection_size(selection.handle, result)
-    )
+    __check(lib.chfl_selection_size(__const_ptr(selection), result))
     return result[]
 end
 
@@ -36,15 +40,14 @@ Evaluate a ``selection`` on a given ``frame``. This function return a list of
 indexes or tuples of indexes of atoms in the frame matching the selection.
 """
 function evaluate(selection::Selection, frame::Frame)
-    matching = Ref{UInt64}(0)
-    _check(
-        lib.chfl_selection_evaluate(selection.handle, frame.handle, matching)
-    )
-    matching = matching[]
-    matches = Array{lib.chfl_match}(undef, matching)
-    _check(
-        lib.chfl_selection_matches(selection.handle, pointer(matches), matching)
-    )
+    # Get the number of matching atoms
+    count = Ref{UInt64}(0)
+    __check(lib.chfl_selection_evaluate(__ptr(selection), __const_ptr(frame), count))
+    count = count[]
+    # Allocate memory and get matching atoms
+    matches = Array{lib.chfl_match}(undef, count)
+    __check(lib.chfl_selection_matches(__ptr(selection), pointer(matches), count))
+    # Return a clearer array of tuples
     result = []
     selection_size = size(selection)
     for match in matches
@@ -66,6 +69,6 @@ end
 Make a deep copy of a ``selection``.
 """
 function Base.deepcopy(selection::Selection)
-    handle = lib.chfl_selection_copy(selection.handle)
-    return Selection(handle)
+    ptr = lib.chfl_selection_copy(__ptr(selection))
+    return Selection(CxxPointer(ptr, is_const=false))
 end
