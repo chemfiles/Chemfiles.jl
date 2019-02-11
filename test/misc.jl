@@ -36,5 +36,5 @@ end
     frame = read(Trajectory(trajectory))
 
     @test name(Atom(frame, 9)) == "Oz"
-    @test atom_type(Atom(frame, 9)) == "F"
+    @test type(Atom(frame, 9)) == "F"
 end

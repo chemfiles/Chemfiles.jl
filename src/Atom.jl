@@ -1,45 +1,47 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export mass, set_mass!, charge, set_charge!, name, set_name!, fullname,
-vdw_radius, covalent_radius, atomic_number, atom_type, set_atom_type!,
-set_property!, property, AtomType
+export mass, set_mass!, charge, set_charge!, name, set_name!, type, set_type!
+export vdw_radius, covalent_radius, atomic_number
+export set_property!, property
+
+__ptr(atom::Atom) = __ptr(atom.__handle)
+__const_ptr(atom::Atom) = __const_ptr(atom.__handle)
 
 """
 Create an atom with the given ``name`` and set the atom ``type`` to be the same
 as ``name``.
 """
 function Atom(name::String)
-    return Atom(lib.chfl_atom(pointer(name)))
+    ptr = lib.chfl_atom(pointer(name))
+    return Atom(CxxPointer(ptr, is_const=false))
 end
 
 """
-Get a copy of the ``atom`` at the given ``index`` from a ``frame``.
+Get a reference to the ``atom`` at the given ``index`` from a ``frame``. Any
+change made to the atom will be reflected in the frame.
 """
 function Atom(frame::Frame, index::Integer)
-    handle = lib.chfl_atom_from_frame(frame.handle, UInt64(index))
-    return Atom(handle)
+    ptr = lib.chfl_atom_from_frame(__ptr(frame), UInt64(index))
+    return Atom(CxxPointer(ptr, is_const=false))
 end
 
 """
-Get a copy of the ``atom`` at a given ``index`` from a ``topology``.
+Get a reference to the ``atom`` at the given ``index`` from a ``topology``. Any
+change made to the atom will be reflected in the frame.
 """
 function Atom(topology::Topology, index::Integer)
-    handle = lib.chfl_atom_from_topology(topology.handle, UInt64(index))
-    return Atom(handle)
+    ptr = lib.chfl_atom_from_topology(__ptr(topology), UInt64(index))
+    return Atom(CxxPointer(ptr, is_const=false))
 end
 
 """
-Get the mass of an ``atom``.
-
-The mass is given in atomic mass units.
+Get the mass of an ``atom`` in atomic mass units.
 """
 function mass(atom::Atom)
-    m = Ref{Float64}(0)
-    _check(
-        lib.chfl_atom_mass(atom.handle, m)
-    )
-    return m[]
+    result = Ref{Float64}(0)
+    __check(lib.chfl_atom_mass(__const_ptr(atom), result))
+    return result[]
 end
 
 """
@@ -48,23 +50,17 @@ Set the mass of an ``atom`` to ``mass``.
 The mass must be in atomic mass units.
 """
 function set_mass!(atom::Atom, mass)
-    _check(
-        lib.chfl_atom_set_mass(atom.handle, Float64(mass))
-    )
+    __check(lib.chfl_atom_set_mass(__ptr(atom), Float64(mass)))
     return nothing
 end
 
 """
-Get the charge of an ``atom``.
-
-The charge is in number of the electron charge *e*.
+Get the charge of an ``atom`` in number of the electron charge *e*.
 """
 function charge(atom::Atom)
-    c = Ref{Float64}(0)
-    _check(
-        lib.chfl_atom_charge(atom.handle, c)
-    )
-    return c[]
+    result = Ref{Float64}(0)
+    __check(lib.chfl_atom_charge(__const_ptr(atom), result))
+    return result[]
 end
 
 """
@@ -73,9 +69,7 @@ Set the charge of an ``atom`` to ``charge``.
 The charge must be in number of the electron charge *e*.
 """
 function set_charge!(atom::Atom, charge)
-    _check(
-        lib.chfl_atom_set_charge(atom.handle, Float64(charge))
-    )
+    __check(lib.chfl_atom_set_charge(__ptr(atom), Float64(charge)))
     return nothing
 end
 
@@ -83,8 +77,8 @@ end
 Get the name of an ``atom``.
 """
 function name(atom::Atom)
-    return _call_with_growing_buffer(
-        (buffer, size) -> _check(lib.chfl_atom_name(atom.handle, buffer, size))
+    return __call_with_growing_buffer(
+        (buffer, size) -> __check(lib.chfl_atom_name(__const_ptr(atom), buffer, size))
     )
 end
 
@@ -92,28 +86,24 @@ end
 Set the name of an ``atom`` to ``name``.
 """
 function set_name!(atom::Atom, name::String)
-    _check(
-        lib.chfl_atom_set_name(atom.handle, pointer(name))
-    )
+    __check(lib.chfl_atom_set_name(__ptr(atom), pointer(name)))
     return nothing
 end
 
 """
 Get the type of an ``atom``.
 """
-function atom_type(atom::Atom)
-    return _call_with_growing_buffer(
-        (buffer, size) -> _check(lib.chfl_atom_type(atom.handle, buffer, size))
+function type(atom::Atom)
+    return __call_with_growing_buffer(
+        (buffer, size) -> __check(lib.chfl_atom_type(__const_ptr(atom), buffer, size))
     )
 end
 
 """
 Set the type of an ``atom`` to ``type``.
 """
-function set_atom_type!(atom::Atom, atom_type::String)
-    _check(
-        lib.chfl_atom_set_type(atom.handle, pointer(atom_type))
-    )
+function set_type!(atom::Atom, type::String)
+    __check(lib.chfl_atom_set_type(__ptr(atom), pointer(type)))
     return nothing
 end
 
@@ -123,34 +113,32 @@ Get the full name of an ``atom`` from the atom type.
 For example, the full name of an atom with type "He" is "Helium".
 """
 function Base.fullname(atom::Atom)
-    return _call_with_growing_buffer(
-        (buffer, size) -> _check(lib.chfl_atom_full_name(atom.handle, buffer, size))
+    return __call_with_growing_buffer(
+        (buffer, size) -> __check(lib.chfl_atom_full_name(
+            __const_ptr(atom), buffer, size)
+        )
     )
 end
 
 """
 Get the van der Waals radius of an ``atom`` from the atom type.
 
-If the radius can not be found, this function returns -1.
+If the radius can not be found, this function returns 0.
 """
 function vdw_radius(atom::Atom)
     radius = Ref{Float64}(0)
-    _check(
-        lib.chfl_atom_vdw_radius(atom.handle, radius)
-    )
+    __check(lib.chfl_atom_vdw_radius(__const_ptr(atom), radius))
     return radius[]
 end
 
 """
 Get the covalent radius of an ``atom`` from the atom type.
 
-If the radius can not be found, returns -1.
+If the radius can not be found, returns 0.
 """
 function covalent_radius(atom::Atom)
     radius = Ref{Float64}(0)
-    _check(
-        lib.chfl_atom_covalent_radius(atom.handle, radius)
-    )
+    __check(lib.chfl_atom_covalent_radius(__const_ptr(atom), radius))
     return radius[]
 end
 
@@ -161,22 +149,18 @@ If the atomic number can not be found, returns 0.
 """
 function atomic_number(atom::Atom)
     number = Ref{UInt64}(0)
-    _check(
-        lib.chfl_atom_atomic_number(atom.handle, number)
-    )
+    __check(lib.chfl_atom_atomic_number(__const_ptr(atom), number))
     return number[]
 end
 
 """
 Set a named property for the given atom.
 """
-function set_property!(atom::Atom, name::String, property)
-
-    prop = Property(property)
-
-    _check(
-        lib.chfl_atom_set_property(atom.handle, pointer(name), prop.handle)
-    )
+function set_property!(atom::Atom, name::String, value)
+    property = Property(value)
+    __check(lib.chfl_atom_set_property(
+        __ptr(atom), pointer(name), __const_ptr(property)
+    ))
     return nothing
 end
 
@@ -184,13 +168,14 @@ end
 Get a named property for the given atom.
 """
 function property(atom::Atom, name::String)
-    get(Property(lib.chfl_atom_get_property(atom.handle, pointer(name))))
+    ptr = lib.chfl_atom_get_property(__const_ptr(atom), pointer(name))
+    extract(Property(CxxPointer(ptr, is_const=false)))
 end
 
 """
 Make a deep copy of an ``atom``.
 """
 function Base.deepcopy(atom::Atom)
-    handle = lib.chfl_atom_copy(atom.handle)
-    return Atom(handle)
+    ptr = lib.chfl_atom_copy(__const_ptr(atom))
+    return Atom(CxxPointer(ptr, is_const=false))
 end

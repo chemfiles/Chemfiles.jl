@@ -3,6 +3,9 @@
 
 export read_step, read_step!, set_topology!, set_cell!, nsteps
 
+__ptr(trajectory::Trajectory) = __ptr(trajectory.__handle)
+__const_ptr(trajectory::Trajectory) = __const_ptr(trajectory.__handle)
+
 """
 The ``Trajectory`` function opens a trajectory file, using the file at the given
 ``path``. The opening ``mode`` can be ``'r'`` for read, ``'w'`` for write or
@@ -10,10 +13,10 @@ The ``Trajectory`` function opens a trajectory file, using the file at the given
 give a specific file format to use when opening the file.
 """
 function Trajectory(path::AbstractString, mode::Char='r', format::AbstractString="")
-    handle = lib.chfl_trajectory_with_format(
+    ptr = lib.chfl_trajectory_with_format(
         pointer(path), Int8(mode), pointer(format),
     )
-    return Trajectory(handle)
+    return Trajectory(CxxPointer(ptr, is_const=false))
 end
 
 """
@@ -21,9 +24,9 @@ Read the next step of the ``trajectory`` in the given ``frame``.
 """
 function Base.read!(trajectory::Trajectory, frame::Frame)
     @assert isopen(trajectory)
-    _check(
-        lib.chfl_trajectory_read(trajectory.handle, frame.handle)
-    )
+    __check(lib.chfl_trajectory_read(
+        __ptr(trajectory), __ptr(frame)
+    ))
     return frame
 end
 
@@ -41,9 +44,9 @@ Read the given ``step`` of the ``trajectory`` in the given ``frame``.
 """
 function read_step!(trajectory::Trajectory, step::Integer, frame::Frame)
     @assert isopen(trajectory)
-    _check(
-        lib.chfl_trajectory_read_step(trajectory.handle, UInt64(step), frame.handle)
-    )
+    __check(lib.chfl_trajectory_read_step(
+        __ptr(trajectory), UInt64(step), __ptr(frame)
+    ))
     return frame
 end
 
@@ -62,9 +65,9 @@ Write the given ``frame`` to the ``trajectory``.
 """
 function Base.write(trajectory::Trajectory, frame::Frame)
     @assert isopen(trajectory)
-    _check(
-        lib.chfl_trajectory_write(trajectory.handle, frame.handle)
-    )
+    __check(lib.chfl_trajectory_write(
+        __ptr(trajectory), __const_ptr(frame)
+    ))
     return nothing
 end
 
@@ -74,9 +77,9 @@ used when reading and writing the file, replacing any topology in the file.
 """
 function set_topology!(trajectory::Trajectory, topology::Topology)
     @assert isopen(trajectory)
-    _check(
-        lib.chfl_trajectory_set_topology(trajectory.handle, topology.handle)
-    )
+    __check(lib.chfl_trajectory_set_topology(
+        __ptr(trajectory), __const_ptr(topology)
+    ))
     return nothing
 end
 
@@ -87,9 +90,9 @@ of the file at ``path``; and extracting the topology of this frame. The optional
 """
 function set_topology!(trajectory::Trajectory, path::AbstractString, format::AbstractString = "")
     @assert isopen(trajectory)
-    _check(
-        lib.chfl_trajectory_topology_file(trajectory.handle, pointer(path), pointer(format))
-    )
+    __check(lib.chfl_trajectory_topology_file(
+        __ptr(trajectory), pointer(path), pointer(format)
+    ))
     return nothing
 end
 
@@ -99,9 +102,7 @@ reading and writing the file, replacing any unit cell in the file.
 """
 function set_cell!(trajectory::Trajectory, cell::UnitCell)
     @assert isopen(trajectory)
-    _check(
-        lib.chfl_trajectory_set_cell(trajectory.handle, cell.handle)
-    )
+    __check(lib.chfl_trajectory_set_cell(__ptr(trajectory), __const_ptr(cell)))
     return nothing
 end
 
@@ -111,9 +112,9 @@ Get the number of steps (the number of frames) in a ``trajectory``.
 function nsteps(trajectory::Trajectory)
     @assert isopen(trajectory)
     result = Ref{UInt64}(0)
-    _check(
-        lib.chfl_trajectory_nsteps(trajectory.handle, result)
-    )
+    __check(lib.chfl_trajectory_nsteps(
+        __const_ptr(trajectory), result
+    ))
     return result[]
 end
 
@@ -123,8 +124,9 @@ drive, and frees the associated memory. Necessary when running on the REPL to
 finish  writing.
 """
 function Base.close(trajectory::Trajectory)
-    lib.chfl_trajectory_close(trajectory.handle)
-    trajectory.handle = Ptr{lib.CHFL_TRAJECTORY}(0)
+    # Manually free and set the pointer to NULL
+    __free(trajectory.__handle)
+    trajectory.__handle.__ptr = 0
     return nothing
 end
 
@@ -132,7 +134,7 @@ end
 Check if the ``trajectory`` is open.
 """
 function Base.isopen(trajectory::Trajectory)
-    return trajectory.handle != Ptr{lib.CHFL_TRAJECTORY}(0)
+    return Int(trajectory.__handle.__ptr) != 0
 end
 
 # Iteration support

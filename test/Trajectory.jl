@@ -22,8 +22,8 @@ const DATAPATH = joinpath(@__DIR__, "data")
         @test pos[:, 125] == Float64[5.099554, -0.045104, 14.153846]
 
         topology = Topology(frame)
-        @test size(topology) == 297
-        @test name(Atom(topology, 0)) == "O"
+        @test size(frame) == 297
+        @test name(Atom(frame, 0)) == "O"
         @test name(Atom(frame, 1)) == "H"
 
         set_cell!(trajectory, UnitCell(30, 30, 30))

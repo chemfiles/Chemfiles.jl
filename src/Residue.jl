@@ -1,47 +1,48 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export name, id, add_atom!, residue_for_atom, contains
+export id, residue_for_atom, contains
+
+__ptr(residue::Residue) = __ptr(residue.__handle)
+__const_ptr(residue::Residue) = __const_ptr(residue.__handle)
 
 """
-Create a new residue with the given ``name``.
+Create a new residue with the given ``name`` and optional residue identifier
+``id``.
 """
-function Residue(name::String)
-    handle = lib.chfl_residue(pointer(name))
-    return Residue(handle)
+function Residue(name::String, id=nothing)
+    if id == nothing
+        ptr = lib.chfl_residue(pointer(name))
+    else
+        ptr = lib.chfl_residue_with_id(pointer(name), UInt64(id))
+    end
+    return Residue(CxxPointer(ptr, is_const=false))
 end
 
 """
-Create a new residue with the given ``name`` and residue identifier ``resid``.
-"""
-function Residue(name::String, resid::Integer)
-    handle = lib.chfl_residue_with_id(pointer(name), UInt64(resid))
-    return Residue(handle)
-end
-
-"""
-Get a copy of the residue at ``index`` from a ``topology``.
+Get a read-only reference to the residue at ``index`` from a ``topology``.
 
 The residue index in the topology is not always the same as the residue
 identifier.
 """
 function Residue(topology::Topology, index::Integer)
-    handle = lib.chfl_residue_from_topology(topology.handle, UInt64(index))
-    return Residue(handle)
+    ptr = lib.chfl_residue_from_topology(__ptr(topology), UInt64(index))
+    return Residue(CxxPointer(ptr, is_const=true))
 end
 
 """
-Get a copy of the residue containing the atom at ``index`` in the ``topology``.
+Get a read-only reference to the residue containing the atom at ``index`` in
+the ``topology``.
 
 This function will return ``nothing`` if the atom is not in a residue, or if
 the ``index`` is bigger than the number of atoms in the topology.
 """
 function residue_for_atom(topology::Topology, index::Integer)
-    handle = lib.chfl_residue_for_atom(topology.handle, UInt64(index))
-    if Int(handle) == 0
+    ptr = lib.chfl_residue_for_atom(__ptr(topology), UInt64(index))
+    if Int(ptr) == 0
         return nothing
     else
-        return Residue(handle)
+        return Residue(CxxPointer(ptr, is_const=true))
     end
 end
 
@@ -49,8 +50,10 @@ end
 Get the name of a ``residue``.
 """
 function name(residue::Residue)
-    return _call_with_growing_buffer(
-        (buffer, size) -> _check(lib.chfl_residue_name(residue.handle, buffer, size))
+    return __call_with_growing_buffer(
+        (buffer, size) -> __check(lib.chfl_residue_name(
+            __const_ptr(residue), buffer, size
+        ))
     )
 end
 
@@ -59,9 +62,7 @@ Get the identifier of a ``residue`` in the initial topology.
 """
 function id(residue::Residue)
     resid = Ref{UInt64}(0)
-    _check(
-        lib.chfl_residue_id(residue.handle, resid)
-    )
+    __check(lib.chfl_residue_id(__const_ptr(residue), resid))
     return resid[]
 end
 
@@ -69,20 +70,16 @@ end
 Get the number of atoms in a ``residue``.
 """
 function Base.size(residue::Residue)
-    atoms = Ref{UInt64}(0)
-    _check(
-        lib.chfl_residue_atoms_count(residue.handle, atoms)
-    )
-    return atoms[]
+    count = Ref{UInt64}(0)
+    __check(lib.chfl_residue_atoms_count(__const_ptr(residue), count))
+    return count[]
 end
 
 """
 Add the atom at the given ``index`` in the ``residue``.
 """
 function add_atom!(residue::Residue, index::Integer)
-    _check(
-        lib.chfl_residue_add_atom(residue.handle, UInt64(index))
-    )
+    __check(lib.chfl_residue_add_atom(__ptr(residue), UInt64(index)))
     return nothing
 end
 
@@ -91,9 +88,7 @@ Check if the atom at the given ``index`` is in the ``residue``.
 """
 function contains(residue::Residue, index::Integer)
     result = Ref{UInt8}(0)
-    _check(
-        lib.chfl_residue_contains(residue.handle, UInt64(index), result)
-    )
+    __check(lib.chfl_residue_contains(__const_ptr(residue), UInt64(index), result))
     return convert(Bool, result[])
 end
 
@@ -101,6 +96,6 @@ end
 Make a deep copy of a ``residue``.
 """
 function Base.deepcopy(residue::Residue)
-    handle = lib.chfl_residue_copy(residue.handle)
-    return Residue(handle)
+    ptr = lib.chfl_residue_copy(__const_ptr(residue))
+    return Residue(CxxPointer(ptr, is_const=false))
 end

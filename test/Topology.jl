@@ -32,7 +32,7 @@
     @test angles_count(topology) == 1
     @test dihedrals_count(topology) == 0
 
-    remove!(topology, 3)
+    remove_atom!(topology, 3)
     @test size(topology) == 3
 
     resize!(topology, 42)
