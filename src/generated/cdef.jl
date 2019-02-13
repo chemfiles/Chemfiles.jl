@@ -123,13 +123,13 @@ function chfl_atom_set_charge(atom::Ptr{CHFL_ATOM}, charge::Cdouble)
 end
 
 # Function 'chfl_atom_type' at atom.h:125
-function chfl_atom_type(atom::Ptr{CHFL_ATOM}, typ::Ptr{UInt8}, buffsize::UInt64)
-    ccall((:chfl_atom_type, libchemfiles), chfl_status, (Ptr{CHFL_ATOM}, Ptr{UInt8}, UInt64), atom, typ, buffsize)
+function chfl_atom_type(atom::Ptr{CHFL_ATOM}, type::Ptr{UInt8}, buffsize::UInt64)
+    ccall((:chfl_atom_type, libchemfiles), chfl_status, (Ptr{CHFL_ATOM}, Ptr{UInt8}, UInt64), atom, type, buffsize)
 end
 
 # Function 'chfl_atom_set_type' at atom.h:136
-function chfl_atom_set_type(atom::Ptr{CHFL_ATOM}, typ::Ptr{UInt8})
-    ccall((:chfl_atom_set_type, libchemfiles), chfl_status, (Ptr{CHFL_ATOM}, Ptr{UInt8}), atom, typ)
+function chfl_atom_set_type(atom::Ptr{CHFL_ATOM}, type::Ptr{UInt8})
+    ccall((:chfl_atom_set_type, libchemfiles), chfl_status, (Ptr{CHFL_ATOM}, Ptr{UInt8}), atom, type)
 end
 
 # Function 'chfl_atom_name' at atom.h:146
@@ -168,8 +168,8 @@ function chfl_atom_properties_count(atom::Ptr{CHFL_ATOM}, count::Ref{UInt64})
 end
 
 # Function 'chfl_atom_list_properties' at atom.h:222
-function chfl_atom_list_properties(atom::Ptr{CHFL_ATOM}, names::Ptr{Cchar}, count::UInt64)
-    ccall((:chfl_atom_list_properties, libchemfiles), chfl_status, (Ptr{CHFL_ATOM}, Ptr{Cchar}, UInt64), atom, names, count)
+function chfl_atom_list_properties(atom::Ptr{CHFL_ATOM}, names::Ptr{Ptr{UInt8}}, count::UInt64)
+    ccall((:chfl_atom_list_properties, libchemfiles), chfl_status, (Ptr{CHFL_ATOM}, Ptr{Ptr{UInt8}}, UInt64), atom, names, count)
 end
 
 # Function 'chfl_atom_set_property' at atom.h:234
@@ -243,8 +243,8 @@ function chfl_residue_properties_count(residue::Ptr{CHFL_RESIDUE}, count::Ref{UI
 end
 
 # Function 'chfl_residue_list_properties' at residue.h:175
-function chfl_residue_list_properties(residue::Ptr{CHFL_RESIDUE}, names::Ptr{Cchar}, count::UInt64)
-    ccall((:chfl_residue_list_properties, libchemfiles), chfl_status, (Ptr{CHFL_RESIDUE}, Ptr{Cchar}, UInt64), residue, names, count)
+function chfl_residue_list_properties(residue::Ptr{CHFL_RESIDUE}, names::Ptr{Ptr{UInt8}}, count::UInt64)
+    ccall((:chfl_residue_list_properties, libchemfiles), chfl_status, (Ptr{CHFL_RESIDUE}, Ptr{Ptr{UInt8}}, UInt64), residue, names, count)
 end
 
 # Function 'chfl_residue_set_property' at residue.h:187
@@ -538,8 +538,8 @@ function chfl_frame_properties_count(frame::Ptr{CHFL_FRAME}, count::Ref{UInt64})
 end
 
 # Function 'chfl_frame_list_properties' at frame.h:259
-function chfl_frame_list_properties(frame::Ptr{CHFL_FRAME}, names::Ptr{Cchar}, count::UInt64)
-    ccall((:chfl_frame_list_properties, libchemfiles), chfl_status, (Ptr{CHFL_FRAME}, Ptr{Cchar}, UInt64), frame, names, count)
+function chfl_frame_list_properties(frame::Ptr{CHFL_FRAME}, names::Ptr{Ptr{UInt8}}, count::UInt64)
+    ccall((:chfl_frame_list_properties, libchemfiles), chfl_status, (Ptr{CHFL_FRAME}, Ptr{Ptr{UInt8}}, UInt64), frame, names, count)
 end
 
 # Function 'chfl_frame_set_property' at frame.h:271
@@ -583,8 +583,8 @@ function chfl_trajectory_with_format(path::Ptr{UInt8}, mode::Cchar, format::Ptr{
 end
 
 # Function 'chfl_trajectory_path' at trajectory.h:52
-function chfl_trajectory_path(trajectory::Ptr{CHFL_TRAJECTORY}, path::Ref{Ptr{Cchar}})
-    ccall((:chfl_trajectory_path, libchemfiles), chfl_status, (Ptr{CHFL_TRAJECTORY}, Ref{Ptr{Cchar}}), trajectory, path)
+function chfl_trajectory_path(trajectory::Ptr{CHFL_TRAJECTORY}, path::Ptr{Ptr{UInt8}})
+    ccall((:chfl_trajectory_path, libchemfiles), chfl_status, (Ptr{CHFL_TRAJECTORY}, Ptr{Ptr{UInt8}}), trajectory, path)
 end
 
 # Function 'chfl_trajectory_read' at trajectory.h:64

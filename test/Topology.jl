@@ -15,11 +15,16 @@
 
     add_bond!(topology, 0, 1)
     add_bond!(topology, 1, 2)
-    add_bond!(topology, 2, 3)
+    add_bond!(topology, 2, 3, Chemfiles.AromaticBond)
 
     @test bonds_count(topology) == 3
     @test angles_count(topology) == 2
     @test dihedrals_count(topology) == 1
+
+    @test bond_order(topology, 1, 2) == Chemfiles.UnknownBond
+    @test bond_order(topology, 2, 3) == Chemfiles.AromaticBond
+
+    @test bond_orders(topology) == [Chemfiles.UnknownBond, Chemfiles.UnknownBond, Chemfiles.AromaticBond]
 
     top_bonds = reshape(UInt64[0, 1,   1, 2,   2, 3], (2, 3))
 

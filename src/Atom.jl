@@ -3,7 +3,7 @@
 
 export mass, set_mass!, charge, set_charge!, name, set_name!, type, set_type!
 export vdw_radius, covalent_radius, atomic_number
-export set_property!, property
+export set_property!, property, properties_count, list_properties
 
 __ptr(atom::Atom) = __ptr(atom.__handle)
 __const_ptr(atom::Atom) = __const_ptr(atom.__handle)
@@ -169,7 +169,26 @@ Get a named property for the given atom.
 """
 function property(atom::Atom, name::String)
     ptr = lib.chfl_atom_get_property(__const_ptr(atom), pointer(name))
-    extract(Property(CxxPointer(ptr, is_const=false)))
+    return extract(Property(CxxPointer(ptr, is_const=false)))
+end
+
+"""
+Get the number of properties associated with an atom.
+"""
+function properties_count(atom::Atom)
+    count = Ref{UInt64}(0)
+    __check(lib.chfl_atom_properties_count(__const_ptr(atom), count))
+    return count[]
+end
+
+"""
+Get the names of all properties associated with an atom.
+"""
+function list_properties(atom::Atom)
+    count = properties_count(atom)
+    names = Array{Ptr{UInt8}}(undef, count)
+    __check(lib.chfl_atom_list_properties(__const_ptr(atom), pointer(names), count))
+    return map(unsafe_string, names)
 end
 
 """

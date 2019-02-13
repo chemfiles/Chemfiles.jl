@@ -198,14 +198,41 @@ Get a named property for the given atom.
 """
 function property(frame::Frame, name::String)
     ptr = lib.chfl_frame_get_property(__const_ptr(frame), pointer(name))
-    extract(Property(CxxPointer(ptr, is_const=false)))
+    return extract(Property(CxxPointer(ptr, is_const=false)))
+end
+
+"""
+Get the number of properties associated with a frame.
+"""
+function properties_count(frame::Frame)
+    count = Ref{UInt64}(0)
+    __check(lib.chfl_frame_properties_count(__const_ptr(frame), count))
+    return count[]
+end
+
+"""
+Get the names of all properties associated with a frame.
+"""
+function list_properties(frame::Frame)
+    count = properties_count(frame)
+    names = Array{Ptr{UInt8}}(undef, count)
+    __check(lib.chfl_frame_list_properties(__const_ptr(frame), pointer(names), count))
+    return map(unsafe_string, names)
 end
 
 """
 Add an additional bond to the ``Frame``'s ``Topology``.
 """
-function add_bond!(frame::Frame, i::Integer, j::Integer)
-    __check(lib.chfl_frame_add_bond(__ptr(frame), UInt64(i), UInt64(j)))
+function add_bond!(frame::Frame, i::Integer, j::Integer, order=nothing)
+    if order == nothing
+        __check(lib.chfl_frame_add_bond(__ptr(frame), UInt64(i), UInt64(j)))
+    else
+        # Check that the order is a valid BondOrder
+        order = BondOrder(Integer(order))
+        __check(lib.chfl_frame_bond_with_order(
+            __ptr(frame), UInt64(i), UInt64(j), lib.chfl_bond_order(order)
+        ))
+    end
     return nothing
 end
 

@@ -3,11 +3,33 @@
 
 export bonds_count, angles_count, dihedrals_count, impropers_count
 export bonds, angles, dihedrals, impropers
-export add_bond!, remove_bond!
+export add_bond!, remove_bond!, bond_order, bond_orders
 export add_residue!, residues, are_linked, count_residues
 
 __ptr(topology::Topology) = __ptr(topology.__handle)
 __const_ptr(topology::Topology) = __const_ptr(topology.__handle)
+
+"""
+Possible bond orders in Chemfiles:
+    - ``Chemfiles.UnknownBond``: when the bond order is not specified
+    - ``Chemfiles.SingleBond``: for single bonds
+    - ``Chemfiles.DoubleBond``: for double bonds
+    - ``Chemfiles.TripleBond``: for triple bonds
+    - ``Chemfiles.QuadrupleBond``: for quadruple bonds (present in some metals)
+    - ``Chemfiles.QintupletBond``: for qintuplet bonds (present in some metals)
+    - ``Chemfiles.AmideBond``: for amide bonds
+    - ``Chemfiles.AromaticBond``: for aromatic bonds
+"""
+@enum BondOrder begin
+    UnknownBond = lib.CHFL_BOND_UNKNOWN
+    SingleBond = lib.CHFL_BOND_SINGLE
+    DoubleBond = lib.CHFL_BOND_DOUBLE
+    TripleBond = lib.CHFL_BOND_TRIPLE
+    QuadrupleBond = lib.CHFL_BOND_QUADRUPLE
+    QintupletBond = lib.CHFL_BOND_QINTUPLET
+    AmideBond = lib.CHFL_BOND_AMIDE
+    AromaticBond = lib.CHFL_BOND_AROMATIC
+end
 
 """
 Create an empty ``Topology``.
@@ -150,12 +172,19 @@ function impropers(topology::Topology)
 end
 
 """
-Add a bond between the atoms ``i`` and ``j`` in the ``topology``.
+Add a bond between the atoms ``i`` and ``j`` in the ``topology``, optionaly
+setting the bond ``order``.
 """
-function add_bond!(topology::Topology, i::Integer, j::Integer)
-    __check(lib.chfl_topology_add_bond(
-        __ptr(topology), UInt64(i), UInt64(j)
-    ))
+function add_bond!(topology::Topology, i::Integer, j::Integer, order=nothing)
+    if order == nothing
+        __check(lib.chfl_topology_add_bond(__ptr(topology), UInt64(i), UInt64(j)))
+    else
+        # Check that the order is a valid BondOrder
+        order = BondOrder(Integer(order))
+        __check(lib.chfl_topology_bond_with_order(
+            __ptr(topology), UInt64(i), UInt64(j), lib.chfl_bond_order(order)
+        ))
+    end
     return nothing
 end
 
@@ -167,6 +196,30 @@ function remove_bond!(topology::Topology, i::Integer, j::Integer)
         __ptr(topology), UInt64(i), UInt64(j)
     ))
     return nothing
+end
+
+"""
+Get the ``BondOrder`` for the bond between atoms ``i`` and ``j`` in the
+``topology``.
+"""
+function bond_order(topology::Topology, i::Integer, j::Integer)
+    order = Ref{lib.chfl_bond_order}(lib.CHFL_BOND_UNKNOWN)
+    __check(lib.chfl_topology_bond_order(
+        __const_ptr(topology), UInt64(i), UInt64(j), order
+    ))
+    return BondOrder(order[])
+end
+
+"""
+Get the ``BondOrder`` for all the bonds in the ``topology``.
+"""
+function bond_orders(topology::Topology)
+    count = bonds_count(topology)
+    result = Array{lib.chfl_bond_order}(undef, count)
+    __check(lib.chfl_topology_bond_orders(
+        __const_ptr(topology), pointer(result), count
+    ))
+    return map(BondOrder, result)
 end
 
 """

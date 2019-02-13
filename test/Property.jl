@@ -2,13 +2,22 @@
     atom = Atom("")
     set_property!(atom, "test", false)
     @test property(atom, "test") == false
+    set_property!(atom, "bar", 3.4)
+    @test properties_count(atom) == 2
+    @test list_properties(atom) == ["bar", "test"]
+
+    residue = Residue("")
+    set_property!(residue, "test", false)
+    @test property(residue, "test") == false
+    @test properties_count(residue) == 1
+    @test list_properties(residue) == ["test"]
 
     frame = Frame()
     set_property!(frame, "test", 1234.567)
     @test property(frame, "test") == 1234.567
 
-    set_property!(atom, "test2", "TESTINGTESTING")
-    @test property(atom, "test2") == "TESTINGTESTING"
+    set_property!(frame, "test2", "TESTINGTESTING")
+    @test property(frame, "test2") == "TESTINGTESTING"
 
     set_property!(frame, "test2", [1.0,2.0,3.0])
     @test property(frame, "test2") == [1.0,2.0,3.0]
@@ -24,6 +33,8 @@
     Magni incidunt enim nam. Nisi adipisci harum corrupti reprehenderit nihil.
     Voluptatem aut non labore et sint nesciunt qui. Perspiciatis atque laborum
     aut."
-    set_property!(atom, "very long", lipsum)
-    @test property(atom, "very long") == lipsum
+    set_property!(frame, "very long", lipsum)
+    @test property(frame, "very long") == lipsum
+    @test properties_count(frame) == 3
+    @test list_properties(frame) == ["very long", "test2", "test"]
 end
