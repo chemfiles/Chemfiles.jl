@@ -92,15 +92,19 @@
         add_atom!(frame, Atom("H"), [0.0, 1.0, 0.0])
 
         add_bond!(frame, 0, 1)
-        add_bond!(frame, 1, 2)
+        add_bond!(frame, 1, 2, Chemfiles.TripleBond)
 
         # the bonds are actually stored inside the topology
-        @test bonds(Topology(frame)) == reshape(UInt64[0,1, 1,2], (2,2))
-        # angles are automaticaly computed too
-        @test angles(Topology(frame)) == reshape(UInt64[0, 1, 2], (3,1))
+        topology = Topology(frame)
+
+        @test bonds(topology) == reshape(UInt64[0,1, 1,2], (2,2))
+        @test angles(topology) == reshape(UInt64[0, 1, 2], (3,1))
+
+        @test bond_order(topology, 0, 1) == Chemfiles.UnknownBond
+        @test bond_order(topology, 1, 2) == Chemfiles.TripleBond
 
         remove_bond!(frame, 1, 0)
-        @test bonds(Topology(frame)) == reshape(UInt64[1,2], (2,1))
+        @test bonds(topology) == reshape(UInt64[1,2], (2,1))
     end
 
     @testset "Frame add residues" begin

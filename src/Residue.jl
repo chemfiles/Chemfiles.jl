@@ -93,6 +93,44 @@ function contains(residue::Residue, index::Integer)
 end
 
 """
+Set a named property for the given residue.
+"""
+function set_property!(residue::Residue, name::String, value)
+    property = Property(value)
+    __check(lib.chfl_residue_set_property(
+        __ptr(residue), pointer(name), __const_ptr(property)
+    ))
+    return nothing
+end
+
+"""
+Get a named property for the given residue.
+"""
+function property(residue::Residue, name::String)
+    ptr = lib.chfl_residue_get_property(__const_ptr(residue), pointer(name))
+    return extract(Property(CxxPointer(ptr, is_const=false)))
+end
+
+"""
+Get the number of properties associated with a residue.
+"""
+function properties_count(residue::Residue)
+    count = Ref{UInt64}(0)
+    __check(lib.chfl_residue_properties_count(__const_ptr(residue), count))
+    return count[]
+end
+
+"""
+Get the names of all properties associated with a residue.
+"""
+function list_properties(residue::Residue)
+    count = properties_count(residue)
+    names = Array{Ptr{UInt8}}(undef, count)
+    __check(lib.chfl_residue_list_properties(__const_ptr(residue), pointer(names), count))
+    return map(unsafe_string, names)
+end
+
+"""
 Make a deep copy of a ``residue``.
 """
 function Base.deepcopy(residue::Residue)

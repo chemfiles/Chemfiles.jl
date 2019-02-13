@@ -1,7 +1,7 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export read_step, read_step!, set_topology!, set_cell!, nsteps
+export read_step, read_step!, set_topology!, set_cell!, nsteps, path
 
 __ptr(trajectory::Trajectory) = __ptr(trajectory.__handle)
 __const_ptr(trajectory::Trajectory) = __const_ptr(trajectory.__handle)
@@ -119,13 +119,26 @@ function nsteps(trajectory::Trajectory)
 end
 
 """
+Get the path used to open a ``trajectory``.
+"""
+function path(trajectory::Trajectory)
+    @assert isopen(trajectory)
+    result = Ref{Ptr{UInt8}}(0)
+    Base.cconvert(Ptr{Ptr{UInt8}}, result)
+    __check(
+        lib.chfl_trajectory_path(__const_ptr(trajectory), Base.unsafe_convert(Ptr{Ptr{UInt8}}, result))
+    )
+    return unsafe_string(result[])
+end
+
+"""
 Close a ``trajectory``. This function flushes any buffer content to the hard
 drive, and frees the associated memory. Necessary when running on the REPL to
 finish  writing.
 """
 function Base.close(trajectory::Trajectory)
     # Manually free and set the pointer to NULL
-    __free(trajectory.__handle)
+    lib.chfl_trajectory_close(trajectory.__handle.__ptr)
     trajectory.__handle.__ptr = 0
     return nothing
 end
