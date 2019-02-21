@@ -4,7 +4,7 @@
     @test property(atom, "test") == false
     set_property!(atom, "bar", 3.4)
     @test properties_count(atom) == 2
-    @test list_properties(atom) == ["bar", "test"]
+    @test Set(list_properties(atom)) == Set(["bar", "test"])
 
     residue = Residue("")
     set_property!(residue, "test", false)
@@ -36,5 +36,5 @@
     set_property!(frame, "very long", lipsum)
     @test property(frame, "very long") == lipsum
     @test properties_count(frame) == 3
-    @test list_properties(frame) == ["very long", "test2", "test"]
+    @test Set(list_properties(frame)) == Set(["very long", "test2", "test"])
 end
