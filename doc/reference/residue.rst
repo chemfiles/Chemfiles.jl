@@ -22,3 +22,11 @@
 .. jl:autofunction:: src/Residue.jl contains
 
 .. jl:autofunction:: src/Residue.jl deepcopy
+
+.. jl:autofunction:: src/Residue.jl property
+
+.. jl:autofunction:: src/Residue.jl set_property!
+
+.. jl:autofunction:: src/Residue.jl properties_count
+
+.. jl:autofunction:: src/Residue.jl list_properties

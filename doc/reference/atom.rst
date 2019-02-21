@@ -29,10 +29,14 @@
 
 .. jl:autofunction:: src/Atom.jl atomic_number
 
-.. jl:autofunction:: src/Atom.jl atom_type
+.. jl:autofunction:: src/Atom.jl type
 
-.. jl:autofunction:: src/Atom.jl set_atom_type!
+.. jl:autofunction:: src/Atom.jl set_type!
 
 .. jl:autofunction:: src/Atom.jl property
 
 .. jl:autofunction:: src/Atom.jl set_property!
+
+.. jl:autofunction:: src/Atom.jl properties_count
+
+.. jl:autofunction:: src/Atom.jl list_properties

@@ -7,6 +7,8 @@
 
 .. jl:autofunction:: src/Trajectory.jl Trajectory
 
+.. jl:autofunction:: src/Trajectory.jl path
+
 .. jl:autofunction:: src/Trajectory.jl read
 
 .. jl:autofunction:: src/Trajectory.jl read!

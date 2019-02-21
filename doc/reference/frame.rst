@@ -52,3 +52,7 @@
 .. jl:autofunction:: src/Frame.jl property
 
 .. jl:autofunction:: src/Frame.jl set_property!
+
+.. jl:autofunction:: src/Frame.jl properties_count
+
+.. jl:autofunction:: src/Frame.jl list_properties

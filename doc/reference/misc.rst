@@ -19,17 +19,17 @@ fully qualified name:
 Error handling
 --------------
 
-.. jl:autofunction:: src/utils.jl last_error
+.. jl:autofunction:: src/misc.jl last_error
 
-.. jl:autofunction:: src/utils.jl clear_errors
+.. jl:autofunction:: src/misc.jl clear_errors
 
 Warnings
 --------
 
-.. jl:autofunction:: src/utils.jl set_warning_callback
+.. jl:autofunction:: src/misc.jl set_warning_callback
 
 
 Configuration files
 -------------------
 
-.. jl:autofunction:: src/utils.jl add_configuration
+.. jl:autofunction:: src/misc.jl add_configuration
