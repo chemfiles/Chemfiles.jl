@@ -13,7 +13,7 @@
 
 .. jl:autofunction:: src/Topology.jl add_atom!
 
-.. jl:autofunction:: src/Topology.jl remove!
+.. jl:autofunction:: src/Topology.jl remove_atom!
 
 .. jl:autofunction:: src/Topology.jl bonds_count
 
@@ -34,6 +34,10 @@
 .. jl:autofunction:: src/Topology.jl add_bond!
 
 .. jl:autofunction:: src/Topology.jl remove_bond!
+
+.. jl:autofunction:: src/Topology.jl bond_order
+
+.. jl:autofunction:: src/Topology.jl bond_orders
 
 .. jl:autofunction:: src/Topology.jl add_residue!
 

@@ -1,7 +1,7 @@
 name = "Chemfiles"
 uuid = "b6293618-cad8-11e8-2259-85924205ccb0"
 authors = ["Guillaume Fraux <guillaume.fraux@chimie-paristech.fr>"]
-version = "0.8.1"
+version = "0.9.0"
 
 [compat]
 julia = "1.0"

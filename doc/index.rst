@@ -56,5 +56,4 @@ interface reference for all the types and functions in chemfiles.
    reference/topology
    reference/residue
    reference/atom
-   reference/property
    reference/selection

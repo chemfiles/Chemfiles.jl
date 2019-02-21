@@ -8,18 +8,19 @@ import sys
 ERROR = False
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath((__file__))))
 
+
 def error(message):
     print(message)
     global ERROR
     ERROR = True
 
+
 def all_functions():
     functions = []
     for (root, _, pathes) in os.walk(os.path.join(ROOT, "src")):
         for path in pathes:
-            # if path == "utils.jl":
-            #     print(path)
-            #     continue
+            if path in ["Property.jl", "utils.jl"]:
+                continue
             with open(os.path.join(root, path)) as fd:
                 for line in fd:
                     line = line.lstrip()
@@ -34,6 +35,7 @@ def all_functions():
 
         return functions
 
+
 def usage_in_doc():
     usages = []
     for (root, _, pathes) in os.walk(os.path.join(ROOT, "doc", "reference")):
@@ -44,7 +46,7 @@ def usage_in_doc():
                 for line in fd:
                     if line.startswith(".."):
                         func = line.split()[-1]
-                        if line.split(":")[1] == "autofunction" :
+                        if line.split(":")[1] == "autofunction":
                             usages.append(func)
     return usages
 

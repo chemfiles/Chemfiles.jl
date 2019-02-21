@@ -36,7 +36,6 @@ def version():
 project = u'Julia interface to chemfiles'
 copyright = u'2015-2018, Guillaume Fraux & contributors — BSD license'
 version, release = version()
-print(version, release)
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
