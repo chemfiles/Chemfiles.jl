@@ -1,16 +1,10 @@
-version = "0.8.0"
-linux_build_id = "1"
-macos_build_id = "1"
-windows_build_id = "vc14_1"
+version = "0.9.0"
+linux_build_id = "hf484d3e_0"
+macos_build_id = "h0a44026_0"
+windows_build_id = "he025d50_0"
 
 function is_64_bits()
     return Int == Int64
-end
-
-if VERSION >= v"0.7.0-DEV.3073"
-    const _HOME = Sys.BINDIR
-else
-    const _HOME = JULIA_HOME
 end
 
 function unpack(file, directory)
