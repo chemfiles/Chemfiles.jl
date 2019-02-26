@@ -12,7 +12,7 @@ function unpack(file, directory)
         run(`mkdir -p $directory`)
         run(`tar xjf $file --directory=$directory`)
     elseif Sys.iswindows()
-        exe7z = joinpath(_HOME, "7z.exe")
+        exe7z = joinpath(Sys.BINDIR, "7z.exe")
         run(pipeline(`$exe7z x $file -y -so`, `$exe7z x -si -y -ttar -o$directory`))
     end
 end
@@ -21,24 +21,22 @@ end
 if Sys.iswindows()
     build_id = windows_build_id
     unpacked_file = joinpath("Library", "bin", "chemfiles.dll")
-    if is_64_bits()
-        platform = "win-64"
-    else
-        @assert Int == Int32
-        platform = "win-32"
+    if !is_64_bits()
+        @error "There is no prebuilt chemfiles library for 32-bit windows"
     end
+    platform = "win-64"
 elseif Sys.islinux()
     build_id = linux_build_id
     unpacked_file = joinpath("lib", "libchemfiles.so.$version")
     if !is_64_bits()
-        @error "There is no prebuilt chemfiles library for 32bit Linux"
+        @error "There is no prebuilt chemfiles library for 32-bit Linux"
     end
     platform = "linux-64"
 elseif Sys.isapple()
     build_id = macos_build_id
     unpacked_file = joinpath("lib", "libchemfiles.$version.dylib")
     if !is_64_bits()
-        @error "There is no prebuilt chemfiles library for 32bit macOS"
+        @error "There is no prebuilt chemfiles library for 32-bit macOS"
     end
     platform = "osx-64"
 else
