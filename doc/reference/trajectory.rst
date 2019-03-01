@@ -11,11 +11,7 @@
 
 .. jl:autofunction:: src/Trajectory.jl read
 
-.. jl:autofunction:: src/Trajectory.jl read!
-
 .. jl:autofunction:: src/Trajectory.jl read_step
-
-.. jl:autofunction:: src/Trajectory.jl read_step!
 
 .. jl:autofunction:: src/Trajectory.jl write
 
