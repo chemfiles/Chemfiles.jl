@@ -1,7 +1,7 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export read_step, read_step!, set_topology!, set_cell!, nsteps, path
+export read_step, set_topology!, set_cell!, nsteps, path
 
 __ptr(trajectory::Trajectory) = __ptr(trajectory.__handle)
 __const_ptr(trajectory::Trajectory) = __const_ptr(trajectory.__handle)
@@ -20,32 +20,13 @@ function Trajectory(path::AbstractString, mode::Char='r', format::AbstractString
 end
 
 """
-Read the next step of the ``trajectory`` in the given ``frame``.
-"""
-function Base.read!(trajectory::Trajectory, frame::Frame)
-    @assert isopen(trajectory)
-    __check(lib.chfl_trajectory_read(
-        __ptr(trajectory), __ptr(frame)
-    ))
-    return frame
-end
-
-"""
 Read the next step of the ``trajectory``, and return the corresponding ``Frame``.
 """
 function Base.read(trajectory::Trajectory)
     @assert isopen(trajectory)
     frame = Frame()
-    return read!(trajectory, frame)
-end
-
-"""
-Read the given ``step`` of the ``trajectory`` in the given ``frame``.
-"""
-function read_step!(trajectory::Trajectory, step::Integer, frame::Frame)
-    @assert isopen(trajectory)
-    __check(lib.chfl_trajectory_read_step(
-        __ptr(trajectory), UInt64(step), __ptr(frame)
+    __check(lib.chfl_trajectory_read(
+        __ptr(trajectory), __ptr(frame)
     ))
     return frame
 end
@@ -57,7 +38,10 @@ Read the given ``step`` of the ``trajectory``, and return the corresponding
 function read_step(trajectory::Trajectory, step::Integer)
     @assert isopen(trajectory)
     frame = Frame()
-    return read_step!(trajectory, step, frame)
+    __check(lib.chfl_trajectory_read_step(
+        __ptr(trajectory), UInt64(step), __ptr(frame)
+    ))
+    return frame
 end
 
 """
