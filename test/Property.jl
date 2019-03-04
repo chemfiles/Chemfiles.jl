@@ -1,4 +1,4 @@
-@testset "Property type" begin
+@testset "Property" begin
     atom = Atom("")
     set_property!(atom, "test", false)
     @test property(atom, "test") == false

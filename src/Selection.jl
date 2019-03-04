@@ -69,6 +69,6 @@ end
 Make a deep copy of a ``selection``.
 """
 function Base.deepcopy(selection::Selection)
-    ptr = lib.chfl_selection_copy(__ptr(selection))
+    ptr = lib.chfl_selection_copy(__const_ptr(selection))
     return Selection(CxxPointer(ptr, is_const=false))
 end

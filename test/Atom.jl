@@ -1,4 +1,4 @@
-@testset "Atom Type" begin
+@testset "Atom" begin
     atom = Atom("He")
 
     @test mass(atom) ≈ 4.002602 atol=1e-6

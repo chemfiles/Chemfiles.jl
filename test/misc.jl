@@ -3,7 +3,7 @@ function warning_callback(message::String)
     error("checking that error are supported")
 end
 
-@testset "Error Functions" begin
+@testset "Errors" begin
     err = ChemfilesError("oops")
     iobuf = IOBuffer()
     show(iobuf, err)
@@ -29,7 +29,7 @@ end
     Chemfiles.set_warning_callback(Chemfiles.__default_warning_callback)
 end
 
-@testset "Configuration files" begin
+@testset "Configuration" begin
     config = joinpath(@__DIR__, "data", "config.toml")
     Chemfiles.add_configuration(config)
 

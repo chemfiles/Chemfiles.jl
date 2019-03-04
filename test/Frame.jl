@@ -1,5 +1,5 @@
-@testset "Frame type" begin
-    @testset "Basic frame usage" begin
+@testset "Frame" begin
+    @testset "Basic usage" begin
         frame = Frame()
         @test size(frame) == 0
 
@@ -114,7 +114,7 @@
         @test bond_order(topology, 1, 2) == Chemfiles.TripleBond
 
         remove_bond!(frame, 1, 0)
-        @test bonds(topology) == reshape(UInt64[1,2], (2,1))
+        @test bonds(Topology(frame)) == reshape(UInt64[1,2], (2,1))
     end
 
     @testset "Frame add residues" begin

@@ -1,4 +1,4 @@
-@testset "UnitCell type" begin
+@testset "UnitCell" begin
     cell = UnitCell(5, 3, 1, 110, 120, 80)
 
     @test lengths(cell) == [5.0, 3.0, 1.0]

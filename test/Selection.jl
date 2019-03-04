@@ -16,7 +16,7 @@ function testing_frame()
     return frame
 end
 
-@testset "Selection type" begin
+@testset "Selection" begin
     frame = testing_frame()
     selection = Selection("name O")
     @test size(selection) == 1

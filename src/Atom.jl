@@ -18,21 +18,25 @@ function Atom(name::String)
 end
 
 """
-Get a reference to the ``atom`` at the given ``index`` from a ``frame``. Any
-change made to the atom will be reflected in the frame.
+Get a copy of the ``atom`` at the given ``index`` from a ``frame``.
 """
 function Atom(frame::Frame, index::Integer)
     ptr = lib.chfl_atom_from_frame(__ptr(frame), UInt64(index))
-    return Atom(CxxPointer(ptr, is_const=false))
+    atom = Atom(CxxPointer(ptr, is_const=false))
+    copy = deepcopy(atom)
+    finalize(atom)
+    return copy
 end
 
 """
-Get a reference to the ``atom`` at the given ``index`` from a ``topology``. Any
-change made to the atom will be reflected in the frame.
+Get a copy of the ``atom`` at the given ``index`` from a ``topology``.
 """
 function Atom(topology::Topology, index::Integer)
     ptr = lib.chfl_atom_from_topology(__ptr(topology), UInt64(index))
-    return Atom(CxxPointer(ptr, is_const=false))
+    atom = Atom(CxxPointer(ptr, is_const=false))
+    copy = deepcopy(atom)
+    finalize(atom)
+    return copy
 end
 
 """

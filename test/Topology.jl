@@ -1,4 +1,4 @@
-@testset "Topology type" begin
+@testset "Topology" begin
     topology = Topology()
     @test size(topology) == 0
 

@@ -38,12 +38,14 @@ end
 
 
 """
-Get a reference to the ``UnitCell`` of a ``frame``. Any changes to the unit cell
-will be reflected in the frame
+Get a copy of the ``UnitCell`` of a ``frame``.
 """
 function UnitCell(frame::Frame)
     ptr = lib.chfl_cell_from_frame(__const_ptr(frame))
-    return UnitCell(CxxPointer(ptr, is_const=false))
+    cell = UnitCell(CxxPointer(ptr, is_const=false))
+    copy = deepcopy(cell)
+    finalize(cell)
+    return copy
 end
 
 """
@@ -139,6 +141,6 @@ end
 Make a deep copy of a ``cell``.
 """
 function Base.deepcopy(cell::UnitCell)
-    ptr = lib.chfl_cell_copy(__ptr(cell))
+    ptr = lib.chfl_cell_copy(__const_ptr(cell))
     return UnitCell(CxxPointer(ptr, is_const=false))
 end

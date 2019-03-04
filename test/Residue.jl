@@ -1,4 +1,4 @@
-@testset "Residue type" begin
+@testset "Residue" begin
     residue = Residue("ALA", 4)
     @test name(residue) == "ALA"
     @test id(residue) == 4
