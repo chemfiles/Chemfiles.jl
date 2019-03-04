@@ -2,8 +2,15 @@ using Chemfiles
 using Test
 
 TESTS = [
-    "misc.jl", "Atom.jl", "Topology.jl", "UnitCell.jl", "Frame.jl",
-    "Trajectory.jl", "Selection.jl", "Residue.jl", "Property.jl"
+    "Atom.jl",
+    "Residue.jl",
+    "Topology.jl",
+    "UnitCell.jl",
+    "Frame.jl",
+    "Property.jl",
+    "Trajectory.jl",
+    "Selection.jl",
+    "misc.jl",
 ]
 
 include("utils.jl")
