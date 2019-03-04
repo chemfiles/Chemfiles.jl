@@ -9,6 +9,7 @@ end
     show(iobuf, err)
     @test String(iobuf.data[1:(19 + length(err.message))]) == "\"Chemfiles error: oops\""
 
+    Chemfiles.clear_errors()
     @test Chemfiles.last_error() == ""
 
     remove_chemfiles_warning() do
