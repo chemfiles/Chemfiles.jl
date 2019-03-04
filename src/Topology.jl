@@ -39,11 +39,14 @@ function Topology()
 end
 
 """
-Get a read-only reference to the ``Topology`` of the given ``frame``.
+Get a copy of the ``Topology`` of the given ``frame``.
 """
 function Topology(frame::Frame)
     ptr = lib.chfl_topology_from_frame(__const_ptr(frame))
-    return Topology(CxxPointer(ptr, is_const=true))
+    topology = Topology(CxxPointer(ptr, is_const=true))
+    copy = deepcopy(topology)
+    finalize(topology)
+    return copy
 end
 
 """
@@ -61,9 +64,7 @@ end
 Add an ``atom`` at the end of a ``topology``.
 """
 function add_atom!(topology::Topology, atom::Atom)
-    __check(lib.chfl_topology_add_atom(
-        __ptr(topology), __const_ptr(atom)
-    ))
+    __check(lib.chfl_topology_add_atom(__ptr(topology), __const_ptr(atom)))
     return nothing
 end
 
@@ -71,9 +72,7 @@ end
 Remove the atom at the given ``index`` from a ``topology``.
 """
 function remove_atom!(topology::Topology, index::Integer)
-    __check(lib.chfl_topology_remove(
-        __ptr(topology), UInt64(index)
-    ))
+    __check(lib.chfl_topology_remove(__ptr(topology), UInt64(index)))
     return nothing
 end
 
@@ -82,9 +81,7 @@ Get the number of bonds in the ``topology``.
 """
 function bonds_count(topology::Topology)
     count = Ref{UInt64}(0)
-    __check(lib.chfl_topology_bonds_count(
-        __const_ptr(topology), count
-    ))
+    __check(lib.chfl_topology_bonds_count(__const_ptr(topology), count))
     return count[]
 end
 
@@ -93,9 +90,7 @@ Get the number of angles in the ``topology``.
 """
 function angles_count(topology::Topology)
     count = Ref{UInt64}(0)
-    __check(lib.chfl_topology_angles_count(
-        __const_ptr(topology), count
-    ))
+    __check(lib.chfl_topology_angles_count(__const_ptr(topology), count))
     return count[]
 end
 
@@ -104,9 +99,7 @@ Get the number of dihedral angles in the ``topology``.
 """
 function dihedrals_count(topology::Topology)
     count = Ref{UInt64}(0)
-    __check(lib.chfl_topology_dihedrals_count(
-        __const_ptr(topology), count
-    ))
+    __check(lib.chfl_topology_dihedrals_count(__const_ptr(topology), count))
     return count[]
 end
 
@@ -115,9 +108,7 @@ Get the number of improper angles in the ``topology``.
 """
 function impropers_count(topology::Topology)
     count = Ref{UInt64}(0)
-    __check(lib.chfl_topology_impropers_count(
-        __const_ptr(topology), count
-    ))
+    __check(lib.chfl_topology_impropers_count(__const_ptr(topology), count))
     return count[]
 end
 
@@ -127,9 +118,7 @@ Get the bonds in the ``topology``, in a ``2 x bonds_count(topology)`` array.
 function bonds(topology::Topology)
     count = bonds_count(topology)
     result = Array{UInt64}(undef, 2, count)
-    __check(lib.chfl_topology_bonds(
-        __const_ptr(topology), pointer(result), count
-    ))
+    __check(lib.chfl_topology_bonds(__const_ptr(topology), pointer(result), count))
     return result
 end
 
@@ -139,9 +128,7 @@ Get the angles in the ``topology``, in a ``3 x angles_count(topology)`` array.
 function angles(topology::Topology)
     count = angles_count(topology)
     result = Array{UInt64}(undef, 3, count)
-    __check(lib.chfl_topology_angles(
-        __const_ptr(topology), pointer(result), count
-    ))
+    __check(lib.chfl_topology_angles(__const_ptr(topology), pointer(result), count))
     return result
 end
 
@@ -152,9 +139,7 @@ array.
 function dihedrals(topology::Topology)
     count = dihedrals_count(topology)
     result = Array{UInt64}(undef, 4, count)
-    __check(lib.chfl_topology_dihedrals(
-        __const_ptr(topology), pointer(result), count
-    ))
+    __check(lib.chfl_topology_dihedrals(__const_ptr(topology), pointer(result), count))
     return result
 end
 
@@ -165,9 +150,7 @@ array.
 function impropers(topology::Topology)
     count = impropers_count(topology)
     result = Array{UInt64}(undef, 4, count)
-    __check(lib.chfl_topology_impropers(
-        __const_ptr(topology), pointer(result), count
-    ))
+    __check(lib.chfl_topology_impropers(__const_ptr(topology), pointer(result), count))
     return result
 end
 
@@ -277,6 +260,6 @@ end
 Make a deep copy of a ``topology``.
 """
 function Base.deepcopy(topology::Topology)
-    ptr = lib.chfl_topology_copy(__ptr(topology))
+    ptr = lib.chfl_topology_copy(__const_ptr(topology))
     return Topology(CxxPointer(ptr, is_const=false))
 end

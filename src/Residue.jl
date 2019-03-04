@@ -20,19 +20,21 @@ function Residue(name::String, id=nothing)
 end
 
 """
-Get a read-only reference to the residue at ``index`` from a ``topology``.
+Get a copy of the residue at ``index`` from a ``topology``.
 
 The residue index in the topology is not always the same as the residue
 identifier.
 """
 function Residue(topology::Topology, index::Integer)
     ptr = lib.chfl_residue_from_topology(__ptr(topology), UInt64(index))
-    return Residue(CxxPointer(ptr, is_const=true))
+    residue = Residue(CxxPointer(ptr, is_const=true))
+    copy = deepcopy(residue)
+    finalize(residue)
+    return copy
 end
 
 """
-Get a read-only reference to the residue containing the atom at ``index`` in
-the ``topology``.
+Get a copy of the residue containing the atom at ``index`` in the ``topology``.
 
 This function will return ``nothing`` if the atom is not in a residue, or if
 the ``index`` is bigger than the number of atoms in the topology.
@@ -42,7 +44,10 @@ function residue_for_atom(topology::Topology, index::Integer)
     if Int(ptr) == 0
         return nothing
     else
-        return Residue(CxxPointer(ptr, is_const=true))
+        residue = Residue(CxxPointer(ptr, is_const=true))
+        copy = deepcopy(residue)
+        finalize(residue)
+        return copy
     end
 end
 

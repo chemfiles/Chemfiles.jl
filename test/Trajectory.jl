@@ -1,7 +1,7 @@
 
 const DATAPATH = joinpath(@__DIR__, "data")
 
-@testset "Trajectory type" begin
+@testset "Trajectory" begin
     @testset "Errors handling" begin
         remove_chemfiles_warning() do
             @test_throws ChemfilesError Trajectory(joinpath(DATAPATH, "not-here.xyz"))
