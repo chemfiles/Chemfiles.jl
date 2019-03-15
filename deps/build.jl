@@ -1,4 +1,4 @@
-version = "0.9.0"
+version = "0.9.1"
 linux_build_id = "hf484d3e_0"
 macos_build_id = "h0a44026_0"
 windows_build_id = "he025d50_0"
