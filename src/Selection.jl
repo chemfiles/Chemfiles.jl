@@ -10,7 +10,7 @@ __const_ptr(selection::Selection) = __const_ptr(selection.__handle)
 Create a ``Selection`` from a selection string.
 """
 function Selection(selection::AbstractString)
-    ptr = lib.chfl_selection(pointer(selection))
+    ptr = @__check_ptr(lib.chfl_selection(pointer(selection)))
     return Selection(CxxPointer(ptr, is_const=false))
 end
 

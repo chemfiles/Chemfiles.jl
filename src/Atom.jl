@@ -13,7 +13,7 @@ Create an atom with the given ``name`` and set the atom ``type`` to be the same
 as ``name``.
 """
 function Atom(name::String)
-    ptr = lib.chfl_atom(pointer(name))
+    ptr = @__check_ptr(lib.chfl_atom(pointer(name)))
     return Atom(CxxPointer(ptr, is_const=false))
 end
 
@@ -21,7 +21,7 @@ end
 Get a copy of the ``atom`` at the given ``index`` from a ``frame``.
 """
 function Atom(frame::Frame, index::Integer)
-    ptr = lib.chfl_atom_from_frame(__ptr(frame), UInt64(index))
+    ptr = @__check_ptr(lib.chfl_atom_from_frame(__ptr(frame), UInt64(index)))
     atom = Atom(CxxPointer(ptr, is_const=false))
     copy = deepcopy(atom)
     finalize(atom)
@@ -32,7 +32,7 @@ end
 Get a copy of the ``atom`` at the given ``index`` from a ``topology``.
 """
 function Atom(topology::Topology, index::Integer)
-    ptr = lib.chfl_atom_from_topology(__ptr(topology), UInt64(index))
+    ptr = @__check_ptr(lib.chfl_atom_from_topology(__ptr(topology), UInt64(index)))
     atom = Atom(CxxPointer(ptr, is_const=false))
     copy = deepcopy(atom)
     finalize(atom)

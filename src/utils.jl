@@ -9,7 +9,7 @@ mutable struct CxxPointer{T}
     __ptr::Ptr{T}
     __is_const::Bool
     function CxxPointer(ptr::Ptr{T}; is_const::Bool=true) where T
-        __check(ptr)
+        @assert Int(ptr) != 0
         this = new{T}(ptr, is_const)
         finalizer(__free, this)
         return this
@@ -42,31 +42,41 @@ function __const_ptr(ptr::CxxPointer)
     return ptr.__ptr
 end
 
-"""
-If there is an error try to get it and throw a ChemfilesError with it.
-Show \"Unknown error\" in case it can't get the last one.
-"""
-function __check(result::Integer, message = "Unknown error")
-    if result != 0
-        str = message
-        try
-            str = last_error()
-        catch error
-            @warn "$error in obtaining an error message"
-        end
-        throw(ChemfilesError(str))
+function __get_last_error()
+    message = ""
+    try
+        message = last_error()
+    catch error
+        @warn "$error while getting chemfiles error message"
     end
-    return nothing
+    return message
 end
 
-"""
-If there is an error try to get it and throw a ChemfilesError with it.
-"""
-function __check(result::Ptr)
-    if Int(result) == 0
-        throw(ChemfilesError(last_error()))
+function __check(result::Integer)
+    if result != 0
+        throw(ChemfilesError(__get_last_error()))
     end
-    return nothing
+end
+
+macro __check_ptr(expr)
+    quote
+        local ptr = $(esc(expr))
+        if Int(ptr) == 0
+            message = __get_last_error()
+            if occursin("internal error: pointer at", message) && occursin("is already managed by shared_allocator", message)
+                @warn "Got an internal error from chemfiles::shared_allocator, running GC and retrying"
+                GC.gc()
+                ptr = $(esc(expr))
+                if Int(ptr) == 0
+                    # This is a legit failure, bail out
+                    throw(ChemfilesError(__get_last_error()))
+                end
+            else
+                throw(ChemfilesError(message))
+            end
+        end
+        ptr
+    end
 end
 
 """

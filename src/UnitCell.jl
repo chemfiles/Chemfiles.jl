@@ -24,7 +24,7 @@ end
 Create an ``UnitCell`` from the three lenghts, with all the angles equal to 90°.
 """
 function UnitCell(a::Number, b::Number, c::Number)
-    ptr = lib.chfl_cell(Float64[a, b, c])
+    ptr = @__check_ptr(lib.chfl_cell(Float64[a, b, c]))
     return UnitCell(CxxPointer(ptr, is_const=false))
 end
 
@@ -32,7 +32,7 @@ end
 Create an ``UnitCell`` from the three lenghts and three angles.
 """
 function UnitCell(a::Number, b::Number, c::Number, α::Number, β::Number, γ::Number)
-    ptr = lib.chfl_cell_triclinic(Float64[a, b, c], Float64[α, β, γ])
+    ptr = @__check_ptr(lib.chfl_cell_triclinic(Float64[a, b, c], Float64[α, β, γ]))
     return UnitCell(CxxPointer(ptr, is_const=false))
 end
 
@@ -41,7 +41,7 @@ end
 Get a copy of the ``UnitCell`` of a ``frame``.
 """
 function UnitCell(frame::Frame)
-    ptr = lib.chfl_cell_from_frame(__const_ptr(frame))
+    ptr = @__check_ptr(lib.chfl_cell_from_frame(__const_ptr(frame)))
     cell = UnitCell(CxxPointer(ptr, is_const=false))
     copy = deepcopy(cell)
     finalize(cell)

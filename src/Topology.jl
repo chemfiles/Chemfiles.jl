@@ -35,14 +35,15 @@ end
 Create an empty ``Topology``.
 """
 function Topology()
-    return Topology(CxxPointer(lib.chfl_topology(), is_const=false))
+    ptr = @__check_ptr(lib.chfl_topology())
+    return Topology(CxxPointer(ptr, is_const=false))
 end
 
 """
 Get a copy of the ``Topology`` of the given ``frame``.
 """
 function Topology(frame::Frame)
-    ptr = lib.chfl_topology_from_frame(__const_ptr(frame))
+    ptr = @__check_ptr(lib.chfl_topology_from_frame(__const_ptr(frame)))
     topology = Topology(CxxPointer(ptr, is_const=true))
     copy = deepcopy(topology)
     finalize(topology)
