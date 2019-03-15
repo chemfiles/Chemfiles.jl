@@ -12,9 +12,9 @@ Create a new residue with the given ``name`` and optional residue identifier
 """
 function Residue(name::String, id=nothing)
     if id == nothing
-        ptr = lib.chfl_residue(pointer(name))
+        ptr = @__check_ptr(lib.chfl_residue(pointer(name)))
     else
-        ptr = lib.chfl_residue_with_id(pointer(name), UInt64(id))
+        ptr = @__check_ptr(lib.chfl_residue_with_id(pointer(name), UInt64(id)))
     end
     return Residue(CxxPointer(ptr, is_const=false))
 end
@@ -26,7 +26,7 @@ The residue index in the topology is not always the same as the residue
 identifier.
 """
 function Residue(topology::Topology, index::Integer)
-    ptr = lib.chfl_residue_from_topology(__ptr(topology), UInt64(index))
+    ptr = @__check_ptr(lib.chfl_residue_from_topology(__ptr(topology), UInt64(index)))
     residue = Residue(CxxPointer(ptr, is_const=true))
     copy = deepcopy(residue)
     finalize(residue)

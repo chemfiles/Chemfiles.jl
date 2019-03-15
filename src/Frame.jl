@@ -13,7 +13,8 @@ __const_ptr(frame::Frame) = __const_ptr(frame.__handle)
 Create a new empty ``Frame``.
 """
 function Frame()
-    return Frame(CxxPointer(lib.chfl_frame(), is_const=false))
+    ptr = @__check_ptr(lib.chfl_frame())
+    return Frame(CxxPointer(ptr, is_const=false))
 end
 
 """

@@ -13,9 +13,9 @@ The ``Trajectory`` function opens a trajectory file, using the file at the given
 give a specific file format to use when opening the file.
 """
 function Trajectory(path::AbstractString, mode::Char='r', format::AbstractString="")
-    ptr = lib.chfl_trajectory_with_format(
+    ptr = @__check_ptr(lib.chfl_trajectory_with_format(
         pointer(path), Int8(mode), pointer(format),
-    )
+    ))
     return Trajectory(CxxPointer(ptr, is_const=false))
 end
 

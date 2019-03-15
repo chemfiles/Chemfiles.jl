@@ -23,7 +23,7 @@ end
 Create a ``Bool`` ``Property``.
 """
 function Property(value::Bool)
-    ptr = lib.chfl_property_bool(convert(UInt8, value))
+    ptr = @__check_ptr(lib.chfl_property_bool(convert(UInt8, value)))
     return Property(CxxPointer(ptr, is_const=false))
 end
 
@@ -31,7 +31,7 @@ end
 Create a ``Float64`` ``Property``.
 """
 function Property(value::Float64)
-    ptr = lib.chfl_property_double(value)
+    ptr = @__check_ptr(lib.chfl_property_double(value))
     return Property(CxxPointer(ptr, is_const=false))
 end
 
@@ -39,7 +39,7 @@ end
 Create a ``String`` ``Property``.
 """
 function Property(value::String)
-    ptr = lib.chfl_property_string(pointer(value))
+    ptr = @__check_ptr(lib.chfl_property_string(pointer(value)))
     return Property(CxxPointer(ptr, is_const=false))
 end
 
@@ -47,7 +47,7 @@ end
 Create a ``Vector`` ``Property``.
 """
 function Property(value::Vector{Float64})
-    ptr = lib.chfl_property_vector3d(value)
+    ptr = @__check_ptr(lib.chfl_property_vector3d(value))
     return Property(CxxPointer(ptr, is_const=false))
 end
 
