@@ -1,7 +1,7 @@
 .. _Residue:
 
-``Residue`` type and associated function
-------------------------------------------
+``Residue`` type
+----------------
 
 .. jl:autotype:: src/Chemfiles.jl Residue
 

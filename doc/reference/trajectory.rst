@@ -1,7 +1,7 @@
 .. _Trajectory:
 
-``Trajectory`` type and associated functions
---------------------------------------------
+``Trajectory`` type
+-------------------
 
 .. jl:autotype:: src/Chemfiles.jl Trajectory
 

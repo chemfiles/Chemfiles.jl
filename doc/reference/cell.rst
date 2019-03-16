@@ -1,7 +1,7 @@
 .. _UnitCell:
 
-``UnitCell`` type and associated function
------------------------------------------
+``UnitCell`` type
+-----------------
 
 .. jl:autotype:: src/Chemfiles.jl UnitCell
 

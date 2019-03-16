@@ -1,7 +1,7 @@
 .. _Frame:
 
-``Frame`` type and associated functions
----------------------------------------
+``Frame`` type
+--------------
 
 .. jl:autotype:: src/Chemfiles.jl Frame
 

@@ -1,7 +1,7 @@
 .. _Topology:
 
-``Topology`` type and associated function
------------------------------------------
+``Topology`` type
+-----------------
 
 .. jl:autotype:: src/Chemfiles.jl Topology
 

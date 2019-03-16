@@ -1,7 +1,7 @@
 .. _Selection:
 
-``Selection`` type and associated function
-------------------------------------------
+``Selection`` type
+------------------
 
 .. jl:autotype:: src/Chemfiles.jl Selection
 

@@ -59,8 +59,8 @@ module Chemfiles
     """
     A ``Topology`` describes the organisation of the particles in the system:
     what their names are, how they are bonded together, *etc.* A ``Topology``
-    is a list of ``Atom``s in the system, together with the list of bonds between
-    the atoms.
+    is a list of ``Atoms`` in the system, together with the list of bonds
+    between the atoms.
     """
     struct Topology
         __handle :: CxxPointer{lib.CHFL_TOPOLOGY}
