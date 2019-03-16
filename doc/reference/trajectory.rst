@@ -19,7 +19,7 @@
 
 .. jl:autofunction:: src/Trajectory.jl set_cell!
 
-.. jl:autofunction:: src/Trajectory.jl nsteps
+.. jl:autofunction:: src/Trajectory.jl length
 
 .. jl:autofunction:: src/Trajectory.jl close
 

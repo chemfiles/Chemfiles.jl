@@ -9,6 +9,11 @@
     add_atom!(topology, Atom("H"))
     @test size(topology) == 4
 
+    @test name(Atom(topology, 0)) == "H"
+    @test name(Atom(topology, 1)) == "O"
+    @test name(Atom(topology, 2)) == "O"
+    @test name(Atom(topology, 3)) == "H"
+
     @test bonds_count(topology) == 0
     @test angles_count(topology) == 0
     @test dihedrals_count(topology) == 0

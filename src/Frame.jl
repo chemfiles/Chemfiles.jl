@@ -18,12 +18,19 @@ function Frame()
 end
 
 """
-Get the ``frame`` size, *i.e.* the current number of atoms.
+Get the number of atoms in the ``frame``.
 """
 function Base.size(frame::Frame)
     count = Ref{UInt64}(0)
     __check(lib.chfl_frame_atoms_count(__const_ptr(frame), count))
     return count[]
+end
+
+"""
+Get the number of atoms in the ``frame``.
+"""
+function Base.length(frame::Frame)
+    size(frame)
 end
 
 """
@@ -262,7 +269,5 @@ function Base.deepcopy(frame::Frame)
 end
 
 # Iteration support
-Base.first(frame::Frame) = 0
-Base.last(frame::Frame) = (size(frame) - 1)
-Base.step(frame::Frame, index) = (Atom(frame, index), index + 1)
 Base.iterate(frame::Frame, state=0) = state >= size(frame) ? nothing : (Atom(frame, state), state+1)
+Base.eltype(frame::Frame) = Atom

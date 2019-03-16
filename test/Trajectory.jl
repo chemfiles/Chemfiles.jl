@@ -14,7 +14,7 @@ const DATAPATH = joinpath(@__DIR__, "data")
 
         @test path(trajectory) == joinpath(DATAPATH, "water.xyz")
 
-        @test nsteps(trajectory) == 100
+        @test length(trajectory) == 100
 
         frame = read(trajectory)
 
@@ -69,7 +69,7 @@ const DATAPATH = joinpath(@__DIR__, "data")
             count += 1
         end
 
-        @test count == nsteps(trajectory)
+        @test count == length(trajectory)
     end
 
     @testset "Write frames" begin
