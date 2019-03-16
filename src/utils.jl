@@ -96,19 +96,16 @@ Call the `callback` with a growing string buffer until the return string
 fits in the buffer.
 """
 function __call_with_growing_buffer(callback::Function, initial_size=64)
-    function _buffer_was_big_enough(buffer)
-        if length(buffer) < 2
-            return false
-        else
-            return buffer[end-2] == '\0'
-        end
+    function __buffer_was_big_enough(buffer)
+        @assert length(buffer) > 2
+        return buffer[end-2] == '\0'
     end
 
     size = initial_size
     buffer = repeat("\0", size)
 
     callback(pointer(buffer), UInt64(size))
-    while !_buffer_was_big_enough(buffer)
+    while !__buffer_was_big_enough(buffer)
         # Grow the buffer and retry
         size *= 2
         buffer = repeat("\0", size)

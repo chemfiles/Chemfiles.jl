@@ -1,7 +1,7 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export read_step, set_topology!, set_cell!, nsteps, path
+export read_step, set_topology!, set_cell!, path
 
 __ptr(trajectory::Trajectory) = __ptr(trajectory.__handle)
 __const_ptr(trajectory::Trajectory) = __const_ptr(trajectory.__handle)
@@ -93,13 +93,20 @@ end
 """
 Get the number of steps (the number of frames) in a ``trajectory``.
 """
-function nsteps(trajectory::Trajectory)
+function Base.size(trajectory::Trajectory)
     @assert isopen(trajectory)
     result = Ref{UInt64}(0)
     __check(lib.chfl_trajectory_nsteps(
         __const_ptr(trajectory), result
     ))
     return result[]
+end
+
+"""
+Get the number of steps (the number of frames) in a ``trajectory``.
+"""
+function Base.length(trajectory::Trajectory)
+    size(trajectory)
 end
 
 """
@@ -135,7 +142,5 @@ function Base.isopen(trajectory::Trajectory)
 end
 
 # Iteration support
-Base.first(trajectory::Trajectory) = 0
-Base.last(trajectory::Trajectory) = (nsteps(trajectory) - 1)
-Base.step(trajectory::Trajectory, index) = (read_step(trajectory, index), index + 1)
-Base.iterate(trajectory::Trajectory, state=0) = state >= nsteps(trajectory) ? nothing : (read_step(trajectory, state), state+1)
+Base.iterate(trajectory::Trajectory, state=0) = state >= length(trajectory) ? nothing : (read_step(trajectory, state), state+1)
+Base.eltype(trajectory::Trajectory) = Frame
