@@ -1,7 +1,7 @@
 .. _Atom:
 
-``Atom`` type and associated function
--------------------------------------
+``Atom`` type
+-------------
 
 .. jl:autotype:: src/Chemfiles.jl Atom
 
