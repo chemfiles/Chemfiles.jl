@@ -11,7 +11,7 @@ script:
   - julia --check-bounds=yes --inline=no -e 'using Pkg; Pkg.activate("."); Pkg.build("Chemfiles"); Pkg.test("Chemfiles"; coverage=true)'
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" && "${TRAVIS_JULIA_VERSION}" == "1.0" ]]; then
-        julia -e 'cd(Pkg.dir("Chemfiles")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
+        julia -e 'using Pkg; Pkg.activate("."); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
         ./scripts/build-docs.sh
     fi
   - cd ${TRAVIS_BUILD_DIR}
