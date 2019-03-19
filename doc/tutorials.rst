@@ -60,8 +60,7 @@ And finally we can print our results
 For more information about reading frame in a trajectory, see the following
 functions:
 
-- :jl:func:`nsteps` gives the number of frame in a Trajectory.
-- :jl:func:`read_step` to directlty read a given step.
+- :jl:func:`read_step` to directly read a given step.
 - ``set_cell!`` and ``set_topology!`` to specify an unit cell or a topology for
   all frames in a trajectory.
 
