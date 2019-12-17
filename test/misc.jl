@@ -17,7 +17,7 @@ end
     end
     @test_throws UndefVarError TEST_CALLBACK == false
 
-    @test Chemfiles.last_error() == "Residue index out of bounds in topology: we have 0 residues, but the index is 3"
+    @test Chemfiles.last_error() == "residue index out of bounds in topology: we have 0 residues, but the index is 3"
 
     Chemfiles.clear_errors()
     @test Chemfiles.last_error() == ""

@@ -17,7 +17,7 @@ include("utils.jl")
 
 function main()
     @testset "Generics" begin
-        @test split(Chemfiles.version(), '-')[1] == "0.9.1"
+        @test split(Chemfiles.version(), '-')[1] == "0.9.2"
     end
     root = dirname(@__FILE__)
     for test in TESTS

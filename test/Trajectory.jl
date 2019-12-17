@@ -20,8 +20,8 @@ const DATAPATH = joinpath(@__DIR__, "data")
 
         @test size(frame) == 297
         pos = positions(frame)
-        @test pos[:, 1] == Float64[0.417219, 8.303366, 11.737172]
-        @test pos[:, 125] == Float64[5.099554, -0.045104, 14.153846]
+        @test pos[:, 1] ≈ Float64[0.417219, 8.303366, 11.737172]
+        @test pos[:, 125] ≈ Float64[5.099554, -0.045104, 14.153846]
 
         topology = Topology(frame)
         @test size(frame) == 297
@@ -34,8 +34,8 @@ const DATAPATH = joinpath(@__DIR__, "data")
         @test lengths(UnitCell(frame)) == [30.0, 30.0, 30.0]
 
         pos = positions(frame)
-        @test pos[:, 1] == Float64[0.761277, 8.106125, 10.622949]
-        @test pos[:, 125] == Float64[5.13242, 0.079862, 14.194161]
+        @test pos[:, 1] ≈ Float64[0.761277, 8.106125, 10.622949]
+        @test pos[:, 125] ≈ Float64[5.13242, 0.079862, 14.194161]
 
         topology = Topology(frame)
         @test size(topology) == 297
@@ -75,18 +75,10 @@ const DATAPATH = joinpath(@__DIR__, "data")
     @testset "Write frames" begin
         EXPECTED_CONTENT = """4
                               Written by the chemfiles library
-                              X 1 2 3
-                              X 1 2 3
-                              X 1 2 3
-                              X 1 2 3
-                              6
-                              Written by the chemfiles library
-                              X 4 5 6
-                              X 4 5 6
-                              X 4 5 6
-                              X 4 5 6
-                              X 4 5 6
-                              X 4 5 6
+                              X 1.0 2.0 3.0
+                              X 1.0 2.0 3.0
+                              X 1.0 2.0 3.0
+                              X 1.0 2.0 3.0
                               """
 
         frame = Frame()
@@ -103,20 +95,6 @@ const DATAPATH = joinpath(@__DIR__, "data")
         set_topology!(frame, topology)
 
         trajectory = Trajectory("test-tmp.xyz", 'w');
-        write(trajectory, frame)
-
-        resize!(frame, 6)
-        pos = positions(frame)
-        for i=1:6
-            pos[:, i] = Float64[4, 5, 6]
-        end
-
-        topology = Topology()
-        for i=1:6
-            add_atom!(topology, Atom("X"))
-        end
-        set_topology!(frame, topology)
-
         write(trajectory, frame)
         close(trajectory)
         @test isopen(trajectory) == false
