@@ -3,6 +3,7 @@ sudo: false
 os:
   - linux
   - osx
+  - windows
 julia:
   - 1.0
   - 1.2
