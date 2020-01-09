@@ -3,12 +3,15 @@
 
 module Chemfiles
     module lib
-        const ROOT = dirname(@__FILE__)
-        const depsfile = normpath(joinpath(ROOT, "..", "deps", "deps.jl"))
-        if isfile(depsfile)
-            include(depsfile)
+        if VERSION >= v"1.3.0"
+            using Chemfiles_jll
         else
-            error("Chemfiles is not installed (the '$depsfile' file is missing).\nPlease run Pkg.build(\"Chemfiles\")")
+            const depsfile = normpath(joinpath(dirname(@__FILE__), "..", "deps", "deps.jl"))
+            if isfile(depsfile)
+                include(depsfile)
+            else
+                error("'$depsfile' is missing, please run Pkg.build(\"Chemfiles\")")
+            end
         end
         include("generated/types.jl")
         include("generated/cdef.jl")
