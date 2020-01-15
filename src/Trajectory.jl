@@ -20,6 +20,19 @@ function Trajectory(path::AbstractString, mode::Char='r', format::AbstractString
 end
 
 """
+Apply the function `f` to the result of `Trajectory(args...)` and close the
+resulting trajectory upon completion, similar to ``open(f, args...)``.
+"""
+function Trajectory(f::Function, args...)
+    tr = Trajectory(args...)
+    try
+        f(tr)
+    finally
+        close(tr)
+    end
+end
+
+"""
 Read the next step of the ``trajectory``, and return the corresponding ``Frame``.
 """
 function Base.read(trajectory::Trajectory)
