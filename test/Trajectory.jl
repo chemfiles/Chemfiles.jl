@@ -107,4 +107,13 @@ const DATAPATH = joinpath(@__DIR__, "data")
 
         rm("test-tmp.xyz")
     end
+
+    @testset "Function syntax" begin
+        trajectory = nothing
+        Trajectory(joinpath(DATAPATH, "water.xyz")) do tr 
+            trajectory = tr
+            @test isopen(trajectory)
+        end
+        @test !isopen(trajectory)
+    end
 end
