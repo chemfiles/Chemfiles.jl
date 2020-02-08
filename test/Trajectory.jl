@@ -75,10 +75,10 @@ const DATAPATH = joinpath(@__DIR__, "data")
     @testset "Write frames" begin
         EXPECTED_CONTENT = """4
                               Written by the chemfiles library
-                              X 1.0 2.0 3.0
-                              X 1.0 2.0 3.0
-                              X 1.0 2.0 3.0
-                              X 1.0 2.0 3.0
+                              X 1 2 3
+                              X 1 2 3
+                              X 1 2 3
+                              X 1 2 3
                               """
 
         frame = Frame()
@@ -110,7 +110,7 @@ const DATAPATH = joinpath(@__DIR__, "data")
 
     @testset "Function syntax" begin
         trajectory = nothing
-        Trajectory(joinpath(DATAPATH, "water.xyz")) do tr 
+        Trajectory(joinpath(DATAPATH, "water.xyz")) do tr
             trajectory = tr
             @test isopen(trajectory)
         end
