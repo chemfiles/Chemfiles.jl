@@ -9,6 +9,8 @@ Chemfiles_jll = "78a364fa-1a3c-552a-b4bb-8fa0f9c1fcca"
 Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
 [compat]
+BinaryProvider = "0.5.8"
+Chemfiles_jll = "= 0.9.3"
 julia = "1.0"
 
 [extras]

@@ -12,7 +12,6 @@ version = "0.5.8"
 [[Chemfiles_jll]]
 deps = ["Libdl", "Pkg"]
 git-tree-sha1 = "44f0261460c751f913f7a80191bb50b17744f35f"
-pinned = true
 uuid = "78a364fa-1a3c-552a-b4bb-8fa0f9c1fcca"
 version = "0.9.3+0"
 
