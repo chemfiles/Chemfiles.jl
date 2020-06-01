@@ -19,7 +19,7 @@
     add_atom!(residue, 56)
     size(residue) == 3
 
-    @test contains(residue, 56) == true
+    @test Chemfiles.contains(residue, 56) == true
 
     topology = Topology()
     @test count_residues(topology) == 0
