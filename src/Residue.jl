@@ -1,7 +1,11 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export id, residue_for_atom, contains, atoms
+export id, residue_for_atom, atoms
+
+if VERSION < v"1.5.0-alpha"
+    export contains
+end
 
 __ptr(residue::Residue) = __ptr(residue.__handle)
 __const_ptr(residue::Residue) = __const_ptr(residue.__handle)
@@ -88,13 +92,22 @@ function add_atom!(residue::Residue, index::Integer)
     return nothing
 end
 
-"""
-Check if the atom at the given ``index`` is in the ``residue``.
-"""
-function contains(residue::Residue, index::Integer)
+function __contains(residue::Residue, index::Integer)
     result = Ref{UInt8}(0)
     __check(lib.chfl_residue_contains(__const_ptr(residue), UInt64(index), result))
     return convert(Bool, result[])
+end
+
+if VERSION < v"1.5.0-alpha"
+    """
+    Check if the atom at the given ``index`` is in the ``residue``.
+    """
+    contains(residue::Residue, index::Integer) = __contains(residue, index)
+else
+    """
+    Check if the atom at the given ``index`` is in the ``residue``.
+    """
+    Base.contains(residue::Residue, index::Integer) = __contains(residue, index)
 end
 
 """
