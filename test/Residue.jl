@@ -21,6 +21,8 @@
 
     @test contains(residue, 56) == true
 
+    @test atoms(residue) == UInt64[0, 30, 56]
+
     topology = Topology()
     @test count_residues(topology) == 0
 

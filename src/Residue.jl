@@ -1,7 +1,7 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export id, residue_for_atom, contains
+export id, residue_for_atom, contains, atoms
 
 __ptr(residue::Residue) = __ptr(residue.__handle)
 __const_ptr(residue::Residue) = __const_ptr(residue.__handle)
@@ -95,6 +95,16 @@ function contains(residue::Residue, index::Integer)
     result = Ref{UInt8}(0)
     __check(lib.chfl_residue_contains(__const_ptr(residue), UInt64(index), result))
     return convert(Bool, result[])
+end
+
+"""
+Get the atoms in a ``residue``. This function returns a list of indexes.
+"""
+function atoms(residue::Residue)
+    count = size(residue)
+    result = Array{UInt64}(undef, count)
+    __check(lib.chfl_residue_atoms(__const_ptr(residue), pointer(result), count))
+    return result
 end
 
 """

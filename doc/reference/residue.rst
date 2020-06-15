@@ -21,6 +21,8 @@
 
 .. jl:autofunction:: src/Residue.jl contains
 
+.. jl:autofunction:: src/Residue.jl atoms
+
 .. jl:autofunction:: src/Residue.jl deepcopy
 
 .. jl:autofunction:: src/Residue.jl property
