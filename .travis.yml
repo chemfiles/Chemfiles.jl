@@ -14,13 +14,12 @@ julia:
 script:
   - julia --check-bounds=yes --inline=no -e 'using Pkg; Pkg.activate("."); Pkg.build("Chemfiles"); Pkg.test("Chemfiles"; coverage=true)'
   - |
-    if [[ "${TRAVIS_OS_NAME}" == "linux" && "${TRAVIS_JULIA_VERSION}" == "1.0" ]]; then
+    if [[ "${TRAVIS_OS_NAME}" == "linux" && "${TRAVIS_JULIA_VERSION}" == "1.4" ]]; then
         julia -e 'using Pkg; Pkg.activate("."); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
         ./scripts/build-docs.sh
     fi
   - cd ${TRAVIS_BUILD_DIR}
   - ./scripts/check_used_functions.py
-  - ./scripts/check_docs.py
 
 deploy:
   # General deploy condition for the latest master
@@ -30,7 +29,7 @@ deploy:
     local_dir: gh-pages
     on:
         branch: master
-        condition: "${TRAVIS_OS_NAME} == linux && ${TRAVIS_JULIA_VERSION} == 1.0"
+        condition: "${TRAVIS_OS_NAME} == linux && ${TRAVIS_JULIA_VERSION} == 1.4"
   # Deploy condition for the releases (tags)
   - provider: pages
     skip_cleanup: true
@@ -38,4 +37,4 @@ deploy:
     local_dir: gh-pages
     on:
         tags: true
-        condition: "${TRAVIS_OS_NAME} == linux && ${TRAVIS_JULIA_VERSION} == 1.0"
+        condition: "${TRAVIS_OS_NAME} == linux && ${TRAVIS_JULIA_VERSION} == 1.4"
