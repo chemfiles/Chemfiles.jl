@@ -19,7 +19,9 @@
 
 .. jl:autofunction:: src/Residue.jl add_atom!
 
-.. jl:autofunction:: src/Residue.jl contains
+.. jl:function:: contains(residue::Residue, index::Integer)
+
+    Check if the atom at the given ``index`` is in the ``residue``.
 
 .. jl:autofunction:: src/Residue.jl atoms
 
