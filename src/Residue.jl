@@ -11,8 +11,8 @@ __ptr(residue::Residue) = __ptr(residue.__handle)
 __const_ptr(residue::Residue) = __const_ptr(residue.__handle)
 
 """
-Create a new residue with the given ``name`` and optional residue identifier
-``id``.
+Create a new residue with the given `name` and optional residue identifier
+`id`.
 """
 function Residue(name::String, id=nothing)
     if id == nothing
@@ -24,7 +24,7 @@ function Residue(name::String, id=nothing)
 end
 
 """
-Get a copy of the residue at ``index`` from a ``topology``.
+Get a copy of the residue at `index` from a `topology`.
 
 The residue index in the topology is not always the same as the residue
 identifier.
@@ -38,10 +38,10 @@ function Residue(topology::Topology, index::Integer)
 end
 
 """
-Get a copy of the residue containing the atom at ``index`` in the ``topology``.
+Get a copy of the residue containing the atom at `index` in the `topology`.
 
-This function will return ``nothing`` if the atom is not in a residue, or if
-the ``index`` is bigger than the number of atoms in the topology.
+This function will return `nothing` if the atom is not in a residue, or if
+the `index` is bigger than the number of atoms in the topology.
 """
 function residue_for_atom(topology::Topology, index::Integer)
     ptr = lib.chfl_residue_for_atom(__ptr(topology), UInt64(index))
@@ -56,7 +56,7 @@ function residue_for_atom(topology::Topology, index::Integer)
 end
 
 """
-Get the name of a ``residue``.
+Get the name of a `residue`.
 """
 function name(residue::Residue)
     return __call_with_growing_buffer(
@@ -67,7 +67,7 @@ function name(residue::Residue)
 end
 
 """
-Get the identifier of a ``residue`` in the initial topology.
+Get the identifier of a `residue` in the initial topology.
 """
 function id(residue::Residue)
     resid = Ref{UInt64}(0)
@@ -76,7 +76,7 @@ function id(residue::Residue)
 end
 
 """
-Get the number of atoms in a ``residue``.
+Get the number of atoms in a `residue`.
 """
 function Base.size(residue::Residue)
     count = Ref{UInt64}(0)
@@ -85,7 +85,7 @@ function Base.size(residue::Residue)
 end
 
 """
-Add the atom at the given ``index`` in the ``residue``.
+Add the atom at the given `index` in the `residue`.
 """
 function add_atom!(residue::Residue, index::Integer)
     __check(lib.chfl_residue_add_atom(__ptr(residue), UInt64(index)))
@@ -100,12 +100,12 @@ end
 
 if VERSION < v"1.5.0-alpha"
     """
-    Check if the atom at the given ``index`` is in the ``residue``.
+    Check if the atom at the given `index` is in the `residue`.
     """
     contains(residue::Residue, index::Integer) = __contains(residue, index)
 else
     """
-    Check if the atom at the given ``index`` is in the ``residue``.
+    Check if the atom at the given `index` is in the `residue`.
     """
     Base.contains(residue::Residue, index::Integer) = __contains(residue, index)
 end
@@ -159,7 +159,7 @@ function list_properties(residue::Residue)
 end
 
 """
-Make a deep copy of a ``residue``.
+Make a deep copy of a `residue`.
 """
 function Base.deepcopy(residue::Residue)
     ptr = lib.chfl_residue_copy(__const_ptr(residue))

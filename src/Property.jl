@@ -4,14 +4,6 @@
 __ptr(property::Property) = __ptr(property.__handle)
 __const_ptr(property::Property) = __const_ptr(property.__handle)
 
-"""
-The possible types of Properties are:
-
-- ``Chemfiles.PropertyBool`` for storing bools
-- ``Chemfiles.PropertyDouble`` for storing doubles
-- ``Chemfiles.PropertyString`` for storing strings
-- ``Chemfiles.PropertyVector3d`` for storing vectors
-"""
 @enum PropertyKind begin
     PropertyBool = lib.CHFL_PROPERTY_BOOL
     PropertyDouble = lib.CHFL_PROPERTY_DOUBLE
@@ -19,42 +11,33 @@ The possible types of Properties are:
     PropertyVector3d = lib.CHFL_PROPERTY_VECTOR3D
 end
 
-"""
-Create a ``Bool`` ``Property``.
-"""
+# Create a `Bool` `Property`.
 function Property(value::Bool)
     ptr = @__check_ptr(lib.chfl_property_bool(convert(UInt8, value)))
     return Property(CxxPointer(ptr, is_const=false))
 end
 
-"""
-Create a ``Float64`` ``Property``.
-"""
+# Create a `Float64` `Property`.
 function Property(value::Float64)
     ptr = @__check_ptr(lib.chfl_property_double(value))
     return Property(CxxPointer(ptr, is_const=false))
 end
 
-"""
-Create a ``String`` ``Property``.
-"""
+# Create a `String` `Property`.
 function Property(value::String)
     ptr = @__check_ptr(lib.chfl_property_string(pointer(value)))
     return Property(CxxPointer(ptr, is_const=false))
 end
 
-"""
-Create a ``Vector`` ``Property``.
-"""
+# Create a `Vector3D` `Property`.
 function Property(value::Vector{Float64})
     @assert size(value) == (3,)
     ptr = @__check_ptr(lib.chfl_property_vector3d(value))
     return Property(CxxPointer(ptr, is_const=false))
 end
 
-"""
-Obtain the kind of property.
-"""
+
+# Get the kind of a property.
 function kind(property::Property)
     result = Ref{lib.chfl_property_kind}(0)
     __check(lib.chfl_property_get_kind(__const_ptr(property), result))
@@ -85,9 +68,8 @@ function __extract_vector3d(property::Property)
     return result
 end
 
-"""
-Obtain the value stored by a property.
-"""
+
+# Obtain the value stored by a property.
 function extract(property::Property)
     property_kind = kind(property)
     if property_kind == PropertyBool

@@ -11,14 +11,14 @@ __const_ptr(topology::Topology) = __const_ptr(topology.__handle)
 
 """
 Possible bond orders in Chemfiles:
-    - ``Chemfiles.UnknownBond``: when the bond order is not specified
-    - ``Chemfiles.SingleBond``: for single bonds
-    - ``Chemfiles.DoubleBond``: for double bonds
-    - ``Chemfiles.TripleBond``: for triple bonds
-    - ``Chemfiles.QuadrupleBond``: for quadruple bonds (present in some metals)
-    - ``Chemfiles.QintupletBond``: for qintuplet bonds (present in some metals)
-    - ``Chemfiles.AmideBond``: for amide bonds
-    - ``Chemfiles.AromaticBond``: for aromatic bonds
+    - `Chemfiles.UnknownBond`: when the bond order is not specified
+    - `Chemfiles.SingleBond`: for single bonds
+    - `Chemfiles.DoubleBond`: for double bonds
+    - `Chemfiles.TripleBond`: for triple bonds
+    - `Chemfiles.QuadrupleBond`: for quadruple bonds (present in some metals)
+    - `Chemfiles.QintupletBond`: for qintuplet bonds (present in some metals)
+    - `Chemfiles.AmideBond`: for amide bonds
+    - `Chemfiles.AromaticBond`: for aromatic bonds
 """
 @enum BondOrder begin
     UnknownBond = lib.CHFL_BOND_UNKNOWN
@@ -32,7 +32,7 @@ Possible bond orders in Chemfiles:
 end
 
 """
-Create an empty ``Topology``.
+Create an empty `Topology`.
 """
 function Topology()
     ptr = @__check_ptr(lib.chfl_topology())
@@ -40,7 +40,7 @@ function Topology()
 end
 
 """
-Get a copy of the ``Topology`` of the given ``frame``.
+Get a copy of the `Topology` of the given `frame`.
 """
 function Topology(frame::Frame)
     ptr = @__check_ptr(lib.chfl_topology_from_frame(__const_ptr(frame)))
@@ -51,7 +51,7 @@ function Topology(frame::Frame)
 end
 
 """
-Get the ``Topology`` size, i.e. the current number of atoms.
+Get the `Topology` size, i.e. the current number of atoms.
 """
 function Base.size(topology::Topology)
     count = Ref{UInt64}(0)
@@ -62,7 +62,7 @@ function Base.size(topology::Topology)
 end
 
 """
-Add an ``atom`` at the end of a ``topology``.
+Add an `atom` at the end of a `topology`.
 """
 function add_atom!(topology::Topology, atom::Atom)
     __check(lib.chfl_topology_add_atom(__ptr(topology), __const_ptr(atom)))
@@ -70,7 +70,7 @@ function add_atom!(topology::Topology, atom::Atom)
 end
 
 """
-Remove the atom at the given ``index`` from a ``topology``.
+Remove the atom at the given `index` from a `topology`.
 """
 function remove_atom!(topology::Topology, index::Integer)
     __check(lib.chfl_topology_remove(__ptr(topology), UInt64(index)))
@@ -78,7 +78,7 @@ function remove_atom!(topology::Topology, index::Integer)
 end
 
 """
-Get the number of bonds in the ``topology``.
+Get the number of bonds in the `topology`.
 """
 function bonds_count(topology::Topology)
     count = Ref{UInt64}(0)
@@ -87,7 +87,7 @@ function bonds_count(topology::Topology)
 end
 
 """
-Get the number of angles in the ``topology``.
+Get the number of angles in the `topology`.
 """
 function angles_count(topology::Topology)
     count = Ref{UInt64}(0)
@@ -96,7 +96,7 @@ function angles_count(topology::Topology)
 end
 
 """
-Get the number of dihedral angles in the ``topology``.
+Get the number of dihedral angles in the `topology`.
 """
 function dihedrals_count(topology::Topology)
     count = Ref{UInt64}(0)
@@ -105,7 +105,7 @@ function dihedrals_count(topology::Topology)
 end
 
 """
-Get the number of improper angles in the ``topology``.
+Get the number of improper angles in the `topology`.
 """
 function impropers_count(topology::Topology)
     count = Ref{UInt64}(0)
@@ -114,7 +114,7 @@ function impropers_count(topology::Topology)
 end
 
 """
-Get the bonds in the ``topology``, in a ``2 x bonds_count(topology)`` array.
+Get the bonds in the `topology`, in a `2 x bonds_count(topology)` array.
 """
 function bonds(topology::Topology)
     count = bonds_count(topology)
@@ -124,7 +124,7 @@ function bonds(topology::Topology)
 end
 
 """
-Get the angles in the ``topology``, in a ``3 x angles_count(topology)`` array.
+Get the angles in the `topology`, in a `3 x angles_count(topology)` array.
 """
 function angles(topology::Topology)
     count = angles_count(topology)
@@ -134,7 +134,7 @@ function angles(topology::Topology)
 end
 
 """
-Get the dihedral angles in the ``topology``, in a ``4 x dihedrals_count(topology)``
+Get the dihedral angles in the `topology`, in a `4 x dihedrals_count(topology)`
 array.
 """
 function dihedrals(topology::Topology)
@@ -145,7 +145,7 @@ function dihedrals(topology::Topology)
 end
 
 """
-Get the improper angles in the ``topology``, in a ``4 x impropers_count(topology)``
+Get the improper angles in the `topology`, in a `4 x impropers_count(topology)`
 array.
 """
 function impropers(topology::Topology)
@@ -156,8 +156,8 @@ function impropers(topology::Topology)
 end
 
 """
-Add a bond between the atoms ``i`` and ``j`` in the ``topology``, optionaly
-setting the bond ``order``.
+Add a bond between the atoms `i` and `j` in the `topology`, optionaly
+setting the bond `order`.
 """
 function add_bond!(topology::Topology, i::Integer, j::Integer, order=nothing)
     if order == nothing
@@ -173,7 +173,7 @@ function add_bond!(topology::Topology, i::Integer, j::Integer, order=nothing)
 end
 
 """
-Remove any existing bond between the atoms ``i`` and ``j`` in the ``topology``.
+Remove any existing bond between the atoms `i` and `j` in the `topology`.
 """
 function remove_bond!(topology::Topology, i::Integer, j::Integer)
     __check(lib.chfl_topology_remove_bond(
@@ -183,8 +183,8 @@ function remove_bond!(topology::Topology, i::Integer, j::Integer)
 end
 
 """
-Get the ``BondOrder`` for the bond between atoms ``i`` and ``j`` in the
-``topology``.
+Get the `BondOrder` for the bond between atoms `i` and `j` in the
+`topology`.
 """
 function bond_order(topology::Topology, i::Integer, j::Integer)
     order = Ref{lib.chfl_bond_order}(lib.CHFL_BOND_UNKNOWN)
@@ -195,7 +195,7 @@ function bond_order(topology::Topology, i::Integer, j::Integer)
 end
 
 """
-Get the ``BondOrder`` for all the bonds in the ``topology``.
+Get the `BondOrder` for all the bonds in the `topology`.
 """
 function bond_orders(topology::Topology)
     count = bonds_count(topology)
@@ -207,7 +207,7 @@ function bond_orders(topology::Topology)
 end
 
 """
-Add a copy of ``residue`` to this ``topology``.
+Add a copy of `residue` to this `topology`.
 
 The residue id must not already be in the topology, and the residue must
 contain only atoms that are not already in another residue.
@@ -220,7 +220,7 @@ function add_residue!(topology::Topology, residue::Residue)
 end
 
 """
-Get the number of residues in the ``topology``.
+Get the number of residues in the `topology`.
 """
 function count_residues(topology::Topology)
     count = Ref{UInt64}(0)
@@ -231,7 +231,7 @@ function count_residues(topology::Topology)
 end
 
 """
-Check if the two residues ``first`` and ``second`` from the ``topology`` are
+Check if the two residues `first` and `second` from the `topology` are
 linked together, *i.e.* if there is a bond between one atom in the first
 residue and one atom in the second one.
 """
@@ -244,7 +244,7 @@ function are_linked(topology::Topology, first::Residue, second::Residue)
 end
 
 """
-Resize the ``topology`` to hold ``natoms`` atoms. If the new number of atoms is
+Resize the `topology` to hold `natoms` atoms. If the new number of atoms is
 bigger than the current number, new atoms will be created with an empty name
 and type.
 
@@ -258,7 +258,7 @@ function Base.resize!(topology::Topology, size::Integer)
 end
 
 """
-Make a deep copy of a ``topology``.
+Make a deep copy of a `topology`.
 """
 function Base.deepcopy(topology::Topology)
     ptr = lib.chfl_topology_copy(__const_ptr(topology))

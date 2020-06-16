@@ -7,7 +7,7 @@ __ptr(selection::Selection) = __ptr(selection.__handle)
 __const_ptr(selection::Selection) = __const_ptr(selection.__handle)
 
 """
-Create a ``Selection`` from a selection string.
+Create a `Selection` from a selection string.
 """
 function Selection(selection::AbstractString)
     ptr = @__check_ptr(lib.chfl_selection(pointer(selection)))
@@ -15,7 +15,7 @@ function Selection(selection::AbstractString)
 end
 
 """
-Get the selection string used to create a given ``selection``.
+Get the selection string used to create a given `selection`.
 """
 function selection_string(selection::Selection)
     return __call_with_growing_buffer(
@@ -26,7 +26,7 @@ function selection_string(selection::Selection)
 end
 
 """
-Get the size of a ``selection``, *i.e.* the number of atoms we are selecting
+Get the size of a `selection`, *i.e.* the number of atoms we are selecting
 together.
 """
 function Base.size(selection::Selection)
@@ -36,7 +36,7 @@ function Base.size(selection::Selection)
 end
 
 """
-Evaluate a ``selection`` on a given ``frame``. This function return a list of
+Evaluate a `selection` on a given `frame`. This function return a list of
 indexes or tuples of indexes of atoms in the frame matching the selection.
 """
 function evaluate(selection::Selection, frame::Frame)
@@ -66,7 +66,7 @@ function evaluate(selection::Selection, frame::Frame)
 end
 
 """
-Make a deep copy of a ``selection``.
+Make a deep copy of a `selection`.
 """
 function Base.deepcopy(selection::Selection)
     ptr = lib.chfl_selection_copy(__const_ptr(selection))

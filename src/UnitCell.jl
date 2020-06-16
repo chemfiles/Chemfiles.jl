@@ -10,9 +10,9 @@ __const_ptr(cell::UnitCell) = __const_ptr(cell.__handle)
 """
 The possible shape for an unit cell are:
 
-- ``Chemfiles.Orthorhombic`` for unit cells with the three angles are 90°.
-- ``Chemfiles.Triclinic`` for unit cells where the three angles may not be 90°.
-- ``Chemfiles.Infinite`` for unit cells without boundaries.
+- `Chemfiles.Orthorhombic` for unit cells with the three angles are 90°.
+- `Chemfiles.Triclinic` for unit cells where the three angles may not be 90°.
+- `Chemfiles.Infinite` for unit cells without boundaries.
 """
 @enum CellShape begin
     Infinite = lib.CHFL_CELL_INFINITE
@@ -21,7 +21,7 @@ The possible shape for an unit cell are:
 end
 
 """
-Create an ``UnitCell`` from the three lenghts, with all the angles equal to 90°.
+Create an `UnitCell` from the three lenghts, with all the angles equal to 90°.
 """
 function UnitCell(a::Number, b::Number, c::Number)
     ptr = @__check_ptr(lib.chfl_cell(Float64[a, b, c]))
@@ -29,7 +29,7 @@ function UnitCell(a::Number, b::Number, c::Number)
 end
 
 """
-Create an ``UnitCell`` from the three lenghts and three angles.
+Create an `UnitCell` from the three lenghts and three angles.
 """
 function UnitCell(a::Number, b::Number, c::Number, α::Number, β::Number, γ::Number)
     ptr = @__check_ptr(lib.chfl_cell_triclinic(Float64[a, b, c], Float64[α, β, γ]))
@@ -38,7 +38,7 @@ end
 
 
 """
-Get a copy of the ``UnitCell`` of a ``frame``.
+Get a copy of the `UnitCell` of a `frame`.
 """
 function UnitCell(frame::Frame)
     ptr = @__check_ptr(lib.chfl_cell_from_frame(__const_ptr(frame)))
@@ -49,7 +49,7 @@ function UnitCell(frame::Frame)
 end
 
 """
-Get the unit ``cell`` volume.
+Get the unit `cell` volume.
 """
 function volume(cell::UnitCell)
     result = Ref{Float64}(0)
@@ -58,7 +58,7 @@ function volume(cell::UnitCell)
 end
 
 """
-Get the three ``cell`` lengths (a, b and c) in angstroms.
+Get the three `cell` lengths (a, b and c) in angstroms.
 """
 function lengths(cell::UnitCell)
     result = Float64[0, 0, 0]
@@ -67,9 +67,9 @@ function lengths(cell::UnitCell)
 end
 
 """
-Set the ``cell`` lengths to ``a``, ``b`` and ``c``.
+Set the `cell` lengths to `a`, `b` and `c`.
 
-``a``, ``b`` and ``c`` should be in angstroms.
+`a`, `b` and `c` should be in angstroms.
 """
 function set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
     __check(lib.chfl_cell_set_lengths(__ptr(cell), Float64[a, b, c]))
@@ -77,7 +77,7 @@ function set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
 end
 
 """
-Get the three ``cell`` angles (alpha, beta and gamma) in degrees.
+Get the three `cell` angles (alpha, beta and gamma) in degrees.
 """
 function angles(cell::UnitCell)
     result = Float64[0, 0, 0]
@@ -86,9 +86,9 @@ function angles(cell::UnitCell)
 end
 
 """
-Set the `cell` angles to ``α``, ``β`` and ``γ``.
+Set the `cell` angles to `α`, `β` and `γ`.
 
-``α``, ``β`` and ``γ`` should be in degrees.
+`α`, `β` and `γ` should be in degrees.
 """
 function set_angles!(cell::UnitCell, α::Real, β::Real, γ::Real)
     __check(lib.chfl_cell_set_angles(__ptr(cell), Float64[α, β, γ]))
@@ -96,7 +96,7 @@ function set_angles!(cell::UnitCell, α::Real, β::Real, γ::Real)
 end
 
 """
-Get the ``cell`` matricial representation, *i.e.* the representation of the
+Get the `cell` matricial representation, *i.e.* the representation of the
 three base vectors as::
 
         | a_x   b_x   c_x |
@@ -110,7 +110,7 @@ function matrix(cell::UnitCell)
 end
 
 """
-Get the ``cell`` shape, as a ``CellShape`` value.
+Get the `cell` shape, as a `CellShape` value.
 """
 function shape(cell::UnitCell)
     result = Ref{lib.chfl_cellshape}(0)
@@ -119,7 +119,7 @@ function shape(cell::UnitCell)
 end
 
 """
-Set the ``cell`` shape to the given ``shape``.
+Set the `cell` shape to the given `shape`.
 """
 function set_shape!(cell::UnitCell, shape::CellShape)
     __check(lib.chfl_cell_set_shape(__ptr(cell), lib.chfl_cellshape(shape)))
@@ -138,7 +138,7 @@ function wrap!(cell::UnitCell, vector::Vector{Float64})
 end
 
 """
-Make a deep copy of a ``cell``.
+Make a deep copy of a `cell`.
 """
 function Base.deepcopy(cell::UnitCell)
     ptr = lib.chfl_cell_copy(__const_ptr(cell))
