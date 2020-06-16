@@ -7,6 +7,8 @@ __ptr(selection::Selection) = __ptr(selection.__handle)
 __const_ptr(selection::Selection) = __const_ptr(selection.__handle)
 
 """
+    Selection(selection::AbstractString)
+
 Create a `Selection` from a selection string.
 """
 function Selection(selection::AbstractString)
@@ -15,6 +17,8 @@ function Selection(selection::AbstractString)
 end
 
 """
+    selection_string(selection::Selection)
+
 Get the selection string used to create a given `selection`.
 """
 function selection_string(selection::Selection)
@@ -26,6 +30,8 @@ function selection_string(selection::Selection)
 end
 
 """
+    size(selection::Selection)
+
 Get the size of a `selection`, *i.e.* the number of atoms we are selecting
 together.
 """
@@ -36,6 +42,8 @@ function Base.size(selection::Selection)
 end
 
 """
+    evaluate(selection::Selection, frame::Frame)
+
 Evaluate a `selection` on a given `frame`. This function return a list of
 indexes or tuples of indexes of atoms in the frame matching the selection.
 """
@@ -66,6 +74,8 @@ function evaluate(selection::Selection, frame::Frame)
 end
 
 """
+    deepcopy(selection::Selection)
+
 Make a deep copy of a `selection`.
 """
 function Base.deepcopy(selection::Selection)
