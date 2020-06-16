@@ -47,6 +47,7 @@ end
 Create a ``Vector`` ``Property``.
 """
 function Property(value::Vector{Float64})
+    @assert size(value) == (3,)
     ptr = @__check_ptr(lib.chfl_property_vector3d(value))
     return Property(CxxPointer(ptr, is_const=false))
 end
