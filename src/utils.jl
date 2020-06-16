@@ -1,32 +1,22 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-"""
-Wrapper around C++ pointers used by chemfiles, adding automatic memory
-management and constness checking.
-"""
+
+# Wrapper around C++ pointers used by chemfiles, adding automatic memory
+# management and constness checking.
 mutable struct CxxPointer{T}
     __ptr::Ptr{T}
     __is_const::Bool
     function CxxPointer(ptr::Ptr{T}; is_const::Bool=true) where T
         @assert Int(ptr) != 0
         this = new{T}(ptr, is_const)
-        finalizer(__free, this)
+        finalizer(o -> lib.chfl_free(Ptr{Cvoid}(__const_ptr(o))), this)
         return this
     end
 end
 
-"""
-Free the allocated memory for a chemfiles object.
-"""
-function __free(object::CxxPointer)
-    lib.chfl_free(Ptr{Cvoid}(__const_ptr(object)))
-end
-
-"""
-Get a mutable C pointer from a CxxPointer, checking that we do have mutable
-access to the object.
-"""
+# Get a mutable C pointer from a CxxPointer, checking that we do have mutable
+# access to the object.
 function __ptr(ptr::CxxPointer)
     if ptr.__is_const
         throw(ChemfilesError("This object is immutable"))
@@ -35,9 +25,7 @@ function __ptr(ptr::CxxPointer)
     end
 end
 
-"""
-Get a non mutable C pointer from a CxxPointer.
-"""
+# Get a non mutable C pointer from a CxxPointer.
 function __const_ptr(ptr::CxxPointer)
     return ptr.__ptr
 end
@@ -79,9 +67,8 @@ macro __check_ptr(expr)
     end
 end
 
-"""
-Remove the final NULL ('\0') character in string `s` coming from C
-"""
+
+# Remove the final NULL ('\0') character in string `s` coming from C
 function __strip_null(s)
     for i in 1:length(s)
         if s[i] == '\0'
@@ -91,10 +78,9 @@ function __strip_null(s)
     throw(ChemfilesError("A C string is not NULL terminated"))
 end
 
-"""
-Call the `callback` with a growing string buffer until the return string
-fits in the buffer.
-"""
+
+# Call the `callback` with a growing string buffer until the return string
+# fits in the buffer.
 function __call_with_growing_buffer(callback::Function, initial_size=64)
     function __buffer_was_big_enough(buffer)
         @assert length(buffer) > 2

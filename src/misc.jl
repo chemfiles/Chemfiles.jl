@@ -23,9 +23,8 @@ function clear_errors()
     __check(lib.chfl_clear_errors())
 end
 
-"""
-Default warning callback for Chemfiles
-"""
+
+# Default to the standard logging infrastructure
 function __default_warning_callback(message::String)
     @warn "$message"
 end
@@ -43,9 +42,9 @@ function _warning_callback_adaptator(message)
 end
 
 """
-Set the global warning ``callback`` to be used for each warning event.
+Set the global warning `callback` to be used for each warning event.
 
-The ``callback`` function must take a ``String`` and return nothing.
+The `callback` function must take a `String` and return nothing.
 """
 function set_warning_callback(callback::Function)
     global WARNING_CALLBACK

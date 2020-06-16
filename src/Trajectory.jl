@@ -7,9 +7,9 @@ __ptr(trajectory::Trajectory) = __ptr(trajectory.__handle)
 __const_ptr(trajectory::Trajectory) = __const_ptr(trajectory.__handle)
 
 """
-The ``Trajectory`` function opens a trajectory file, using the file at the given
-``path``. The opening ``mode`` can be ``'r'`` for read, ``'w'`` for write or
-``'a'`` for append, and defaults to ``'r'``. The optional ``format`` parameter
+The `Trajectory` function opens a trajectory file, using the file at the given
+`path`. The opening `mode` can be `'r'` for read, `'w'` for write or
+`'a'` for append, and defaults to `'r'`. The optional `format` parameter
 give a specific file format to use when opening the file.
 """
 function Trajectory(path::AbstractString, mode::Char='r', format::AbstractString="")
@@ -21,7 +21,7 @@ end
 
 """
 Apply the function `f` to the result of `Trajectory(args...)` and close the
-resulting trajectory upon completion, similar to ``open(f, args...)``.
+resulting trajectory upon completion, similar to `open(f, args...)`.
 """
 function Trajectory(f::Function, args...)
     tr = Trajectory(args...)
@@ -33,7 +33,7 @@ function Trajectory(f::Function, args...)
 end
 
 """
-Read the next step of the ``trajectory``, and return the corresponding ``Frame``.
+Read the next step of the `trajectory`, and return the corresponding `Frame`.
 """
 function Base.read(trajectory::Trajectory)
     @assert isopen(trajectory)
@@ -45,8 +45,8 @@ function Base.read(trajectory::Trajectory)
 end
 
 """
-Read the given ``step`` of the ``trajectory``, and return the corresponding
-``Frame``.
+Read the given `step` of the `trajectory`, and return the corresponding
+`Frame`.
 """
 function read_step(trajectory::Trajectory, step::Integer)
     @assert isopen(trajectory)
@@ -58,7 +58,7 @@ function read_step(trajectory::Trajectory, step::Integer)
 end
 
 """
-Write the given ``frame`` to the ``trajectory``.
+Write the given `frame` to the `trajectory`.
 """
 function Base.write(trajectory::Trajectory, frame::Frame)
     @assert isopen(trajectory)
@@ -69,7 +69,7 @@ function Base.write(trajectory::Trajectory, frame::Frame)
 end
 
 """
-Set the ``Topology`` associated with a ``trajectory``. This topology will be
+Set the `Topology` associated with a `trajectory`. This topology will be
 used when reading and writing the file, replacing any topology in the file.
 """
 function set_topology!(trajectory::Trajectory, topology::Topology)
@@ -81,9 +81,9 @@ function set_topology!(trajectory::Trajectory, topology::Topology)
 end
 
 """
-Set the ``Topology`` associated with a ``trajectory`` by reading the first frame
-of the file at ``path``; and extracting the topology of this frame. The optional
-``format`` parameter can be used to specify the file format.
+Set the `Topology` associated with a `trajectory` by reading the first frame
+of the file at `path`; and extracting the topology of this frame. The optional
+`format` parameter can be used to specify the file format.
 """
 function set_topology!(trajectory::Trajectory, path::AbstractString, format::AbstractString = "")
     @assert isopen(trajectory)
@@ -94,7 +94,7 @@ function set_topology!(trajectory::Trajectory, path::AbstractString, format::Abs
 end
 
 """
-Set the ``cell`` associated with a ``trajectory``. This cell will be used when
+Set the `cell` associated with a `trajectory`. This cell will be used when
 reading and writing the file, replacing any unit cell in the file.
 """
 function set_cell!(trajectory::Trajectory, cell::UnitCell)
@@ -104,7 +104,7 @@ function set_cell!(trajectory::Trajectory, cell::UnitCell)
 end
 
 """
-Get the number of steps (the number of frames) in a ``trajectory``.
+Get the number of steps (the number of frames) in a `trajectory`.
 """
 function Base.size(trajectory::Trajectory)
     @assert isopen(trajectory)
@@ -116,14 +116,14 @@ function Base.size(trajectory::Trajectory)
 end
 
 """
-Get the number of steps (the number of frames) in a ``trajectory``.
+Get the number of steps (the number of frames) in a `trajectory`.
 """
 function Base.length(trajectory::Trajectory)
     size(trajectory)
 end
 
 """
-Get the path used to open a ``trajectory``.
+Get the path used to open a `trajectory`.
 """
 function path(trajectory::Trajectory)
     @assert isopen(trajectory)
@@ -136,7 +136,7 @@ function path(trajectory::Trajectory)
 end
 
 """
-Close a ``trajectory``. This function flushes any buffer content to the hard
+Close a `trajectory`. This function flushes any buffer content to the hard
 drive, and frees the associated memory. Necessary when running on the REPL to
 finish  writing.
 """
@@ -148,7 +148,7 @@ function Base.close(trajectory::Trajectory)
 end
 
 """
-Check if the ``trajectory`` is open.
+Check if the `trajectory` is open.
 """
 function Base.isopen(trajectory::Trajectory)
     return Int(trajectory.__handle.__ptr) != 0

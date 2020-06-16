@@ -26,16 +26,14 @@ module Chemfiles
         unsafe_string(lib.chfl_version())
     end
 
-    """
-    A ``Property`` is a generic container for various forms of metadata
-    stored for other structures.
-    """
+    # A `Property` is a generic container for additional data stored by some
+    # formats
     struct Property
         __handle :: CxxPointer{lib.CHFL_PROPERTY}
     end
 
     """
-    An ``Atom`` is a particle in the current ``Frame``.
+    An `Atom` is a particle in the current `Frame`.
 
     An atom stores the following atomic properties:
       - atom name
@@ -51,7 +49,7 @@ module Chemfiles
     end
 
     """
-    A ``Residue`` is a group of atoms belonging to the same logical unit. They
+    A `Residue` is a group of atoms belonging to the same logical unit. They
     can be small molecules, amino-acids in a protein, monomers in polymers,
     *etc.*
     """
@@ -60,9 +58,9 @@ module Chemfiles
     end
 
     """
-    A ``Topology`` describes the organisation of the particles in the system:
-    what their names are, how they are bonded together, *etc.* A ``Topology``
-    is a list of ``Atoms`` in the system, together with the list of bonds
+    A `Topology` describes the organisation of the particles in the system:
+    what their names are, how they are bonded together, *etc.* A `Topology`
+    is a list of `Atoms` in the system, together with the list of bonds
     between the atoms.
     """
     struct Topology
@@ -70,30 +68,30 @@ module Chemfiles
     end
 
     """
-    A ``UnitCell`` describes the bounding box of a system. It is represented by
-    three base vectors of lengths ``a``, ``b`` and ``c``; and the angles
-    between these vectors are ``alpha``, ``beta`` and ``gamma``.
+    A `UnitCell` describes the bounding box of a system. It is represented by
+    three base vectors of lengths `a`, `b` and `c`; and the angles
+    between these vectors are `alpha`, `beta` and `gamma`.
     """
     struct UnitCell
         __handle :: CxxPointer{lib.CHFL_CELL}
     end
 
     """
-    A ``Frame`` holds data for one step of a simulation. As not all formats
+    A `Frame` holds data for one step of a simulation. As not all formats
     provide all the types of information, some fields may be initialized to a
-    default value. A ``Frame`` may contain the following data:
+    default value. A `Frame` may contain the following data:
 
     - Positions for all the atoms in the system;
     - Velocities for all the atoms in the system;
-    - The ``Topology`` of the system;
-    - The ``UnitCell`` of the system.
+    - The `Topology` of the system;
+    - The `UnitCell` of the system.
     """
     struct Frame
         __handle :: CxxPointer{lib.CHFL_FRAME}
     end
 
     """
-    A ``Selection`` is used to select a group of atoms. Examples of selections are
+    A `Selection` is used to select a group of atoms. Examples of selections are
     "name H" and "(x < 45 and name O) or name C". See the `full documentation
     <http://chemfiles.org/chemfiles/latest/selections.html>`_ for more
     information about the selection language.
@@ -103,11 +101,11 @@ module Chemfiles
     end
 
     """
-    A ``Trajectory`` represents a simulation file on the hard drive. It can read
-    or write one or many ``Frame``s to this file. The file format can be
+    A `Trajectory` represents a simulation file on the hard drive. It can read
+    or write one or many `Frame`s to this file. The file format can be
     automatically determined from the extention, or manually specified.
-    Writing to a ``Trajectory`` is buffered, which means that one needs to
-    ``close()`` the trajectory and flush the buffer before being able to read the
+    Writing to a `Trajectory` is buffered, which means that one needs to
+    `close()` the trajectory and flush the buffer before being able to read the
     file again.
     """
     struct Trajectory
