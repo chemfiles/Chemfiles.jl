@@ -1,4 +1,0 @@
-sphinx>1.8
-sphinx_bootstrap_theme
-toml
-https://github.com/Luthaf/sphinx-julia/archive/3a408fc790f30957c9e590696b4d401bf167b354.zip
