@@ -29,8 +29,6 @@ add_bond!(frame, 4, 5)
 
 set_cell!(frame, UnitCell(10, 10, 10))
 
-trajectory = Trajectory("water-co2.pdb", 'w')
-write(trajectory, frame)
-# When running on the REPL, remember to close the trajectory or else it won't
-# end writing.
-close(trajectory) 
+Trajectory("water-co2.pdb", 'w') do trajectory
+    write(trajectory, frame)
+end

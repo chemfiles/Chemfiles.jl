@@ -12,10 +12,12 @@ selection = Selection("name Zn or name N")
 for frame in trajectory
     to_remove = evaluate(selection, frame)
     for i in reverse(sort(to_remove))
-        remove!(frame, i)
+        remove_atom!(frame, i)
     end
     write(output, frame)
 end
-# When running on the REPL, remember to close the trajectory or else it won't
-# end writing.
-close(trajectory) 
+
+close(trajectory)
+# When running on the REPL, closing the trajectory
+# is required to flush buffered output and finish writing
+close(output)
