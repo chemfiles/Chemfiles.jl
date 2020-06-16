@@ -21,6 +21,8 @@ The possible shape for an unit cell are:
 end
 
 """
+    UnitCell(a::Number, b::Number, c::Number)
+
 Create an `UnitCell` from the three lenghts, with all the angles equal to 90°.
 """
 function UnitCell(a::Number, b::Number, c::Number)
@@ -29,6 +31,8 @@ function UnitCell(a::Number, b::Number, c::Number)
 end
 
 """
+    UnitCell(a::Number, b::Number, c::Number, α::Number, β::Number, γ::Number)
+
 Create an `UnitCell` from the three lenghts and three angles.
 """
 function UnitCell(a::Number, b::Number, c::Number, α::Number, β::Number, γ::Number)
@@ -38,6 +42,8 @@ end
 
 
 """
+    UnitCell(frame::Frame)
+
 Get a copy of the `UnitCell` of a `frame`.
 """
 function UnitCell(frame::Frame)
@@ -49,6 +55,8 @@ function UnitCell(frame::Frame)
 end
 
 """
+    volume(cell::UnitCell)
+
 Get the unit `cell` volume.
 """
 function volume(cell::UnitCell)
@@ -58,7 +66,9 @@ function volume(cell::UnitCell)
 end
 
 """
-Get the three `cell` lengths (a, b and c) in angstroms.
+    lengths(cell::UnitCell)
+
+Get the three `cell` lengths (a, b, and c) in angstroms.
 """
 function lengths(cell::UnitCell)
     result = Float64[0, 0, 0]
@@ -67,9 +77,11 @@ function lengths(cell::UnitCell)
 end
 
 """
-Set the `cell` lengths to `a`, `b` and `c`.
+    set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
 
-`a`, `b` and `c` should be in angstroms.
+Set the `cell` lengths to `a`, `b`, and `c`.
+
+`a`, `b`, and `c` should be in angstroms.
 """
 function set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
     __check(lib.chfl_cell_set_lengths(__ptr(cell), Float64[a, b, c]))
@@ -77,7 +89,9 @@ function set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
 end
 
 """
-Get the three `cell` angles (alpha, beta and gamma) in degrees.
+    angles(cell::UnitCell)
+
+Get the three `cell` angles (alpha, beta, and gamma) in degrees.
 """
 function angles(cell::UnitCell)
     result = Float64[0, 0, 0]
@@ -86,9 +100,11 @@ function angles(cell::UnitCell)
 end
 
 """
-Set the `cell` angles to `α`, `β` and `γ`.
+    set_angles!(cell::UnitCell, α::Real, β::Real, γ::Real)
 
-`α`, `β` and `γ` should be in degrees.
+Set the `cell` angles to `α`, `β`, and `γ`.
+
+`α`, `β`, and `γ` should be in degrees.
 """
 function set_angles!(cell::UnitCell, α::Real, β::Real, γ::Real)
     __check(lib.chfl_cell_set_angles(__ptr(cell), Float64[α, β, γ]))
@@ -96,6 +112,8 @@ function set_angles!(cell::UnitCell, α::Real, β::Real, γ::Real)
 end
 
 """
+    matrix(cell::UnitCell)
+
 Get the `cell` matricial representation, *i.e.* the representation of the
 three base vectors as::
 
@@ -110,6 +128,8 @@ function matrix(cell::UnitCell)
 end
 
 """
+    shape(cell::UnitCell)
+
 Get the `cell` shape, as a `CellShape` value.
 """
 function shape(cell::UnitCell)
@@ -119,6 +139,8 @@ function shape(cell::UnitCell)
 end
 
 """
+    set_shape!(cell::UnitCell, shape::CellShape)
+
 Set the `cell` shape to the given `shape`.
 """
 function set_shape!(cell::UnitCell, shape::CellShape)
@@ -127,6 +149,8 @@ function set_shape!(cell::UnitCell, shape::CellShape)
 end
 
 """
+    wrap!(cell::UnitCell, vector::Vector{Float64})
+
 Wrap a `vector` in the unit `cell`.
 """
 function wrap!(cell::UnitCell, vector::Vector{Float64})
@@ -138,6 +162,8 @@ function wrap!(cell::UnitCell, vector::Vector{Float64})
 end
 
 """
+    deepcopy(cell::UnitCell)
+
 Make a deep copy of a `cell`.
 """
 function Base.deepcopy(cell::UnitCell)

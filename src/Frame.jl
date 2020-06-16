@@ -10,6 +10,8 @@ __ptr(frame::Frame) = __ptr(frame.__handle)
 __const_ptr(frame::Frame) = __const_ptr(frame.__handle)
 
 """
+    Frame()
+
 Create a new empty `Frame`.
 """
 function Frame()
@@ -18,6 +20,8 @@ function Frame()
 end
 
 """
+    size(frame::Frame)
+
 Get the number of atoms in the `frame`.
 """
 function Base.size(frame::Frame)
@@ -27,6 +31,8 @@ function Base.size(frame::Frame)
 end
 
 """
+    length(frame::Frame)
+
 Get the number of atoms in the `frame`.
 """
 function Base.length(frame::Frame)
@@ -34,6 +40,8 @@ function Base.length(frame::Frame)
 end
 
 """
+    resize!(frame::Frame, natoms::Integer)
+
 Resize the positions and the velocities in the `frame`, to make space for
 `natoms` atoms. This function may invalidate any pointer to the positions or
 the velocities if the new size is bigger than the old one. In all the cases,
@@ -45,6 +53,8 @@ function Base.resize!(frame::Frame, natoms::Integer)
 end
 
 """
+    positions(frame::Frame)
+
 Get the positions in a `Frame` as an array. The positions are readable and
 writable from this array. If the frame is resized (by writing to it, or calling
 `resize!`), the array is invalidated.
@@ -58,6 +68,8 @@ end
 
 
 """
+    velocities(frame::Frame)
+
 Get the velocities in a `Frame` as an array. The velocities are readable and
 writable from this array. If the frame is resized (by writing to it, or calling
 `resize!`), the array is invalidated.
@@ -74,8 +86,10 @@ end
 
 
 """
+    add_velocities!(frame::Frame)
+
 Add velocities to this `frame`. The storage is initialized with the result of
-`size(frame)` as number of atoms. If the frame already have velocities, this
+`size(frame)` as the number of atoms. If the frame already has velocities, this
 does nothing.
 """
 function add_velocities!(frame::Frame)
@@ -84,6 +98,8 @@ function add_velocities!(frame::Frame)
 end
 
 """
+    has_velocities(frame::Frame)
+
 Check if a `frame` contains velocity data or not.
 """
 function has_velocities(frame::Frame)
@@ -93,6 +109,8 @@ function has_velocities(frame::Frame)
 end
 
 """
+    set_cell!(frame::Frame, cell::UnitCell)
+
 Set the `cell` associated with a `frame`.
 """
 function set_cell!(frame::Frame, cell::UnitCell)
@@ -101,6 +119,8 @@ function set_cell!(frame::Frame, cell::UnitCell)
 end
 
 """
+    set_topology!(frame::Frame, topology::Topology)
+
 Set the `topology` associated with a `frame`.
 """
 function set_topology!(frame::Frame, topology::Topology)
@@ -109,6 +129,8 @@ function set_topology!(frame::Frame, topology::Topology)
 end
 
 """
+    step(frame::Frame)
+
 Get the `frame` step, *i.e.* the frame number in the trajectory.
 """
 function Base.step(frame::Frame)
@@ -118,6 +140,8 @@ function Base.step(frame::Frame)
 end
 
 """
+    set_step!(frame::Frame, step::Integer)
+
 Set the `frame` step to `step`.
 """
 function set_step!(frame::Frame, step::Integer)
@@ -127,7 +151,9 @@ end
 
 
 """
-Guess the bonds, angles and dihedrals in the `frame` using a distance criteria.
+    guess_bonds!(frame::Frame)
+
+Guess the bonds, angles, and dihedrals in the `frame` using a distance criteria.
 """
 function guess_bonds!(frame::Frame)
     __check(lib.chfl_frame_guess_bonds(__ptr(frame)))
@@ -135,6 +161,8 @@ function guess_bonds!(frame::Frame)
 end
 
 """
+    distance(frame::Frame, i::Integer, j::Integer)
+
 Calculate the distance between two atoms.
 """
 function distance(frame::Frame, i::Integer, j::Integer)
@@ -144,6 +172,8 @@ function distance(frame::Frame, i::Integer, j::Integer)
 end
 
 """
+    angle(frame::Frame, i::Integer, j::Integer, k::Integer)
+
 Calculate the angle made by three atoms.
 """
 function Base.angle(frame::Frame, i::Integer, j::Integer, k::Integer)
@@ -153,6 +183,8 @@ function Base.angle(frame::Frame, i::Integer, j::Integer, k::Integer)
 end
 
 """
+    dihedral(frame::Frame, i::Integer, j::Integer, k::Integer, m::Integer)
+
 Calculate the dihedral (torsional) angle made by four unbranched atoms.
 """
 function dihedral(frame::Frame, i::Integer, j::Integer, k::Integer, m::Integer)
@@ -162,6 +194,8 @@ function dihedral(frame::Frame, i::Integer, j::Integer, k::Integer, m::Integer)
 end
 
 """
+    out_of_plane(frame::Frame, i::Integer, j::Integer, k::Integer, m::Integer)
+
 Calculate the out-of-plane (improper) angle made by four atoms.
 """
 function out_of_plane(frame::Frame, i::Integer, j::Integer, k::Integer, m::Integer)
@@ -171,6 +205,13 @@ function out_of_plane(frame::Frame, i::Integer, j::Integer, k::Integer, m::Integ
 end
 
 """
+    add_atom!(
+        frame::Frame,
+        atom::Atom,
+        position::Vector{Float64},
+        velocity::Vector{Float64} = Float64[0.0,0.0,0.0]
+    )
+
 Add an `atom` and the corresponding `position` and `velocity` data to a
 `frame`.
 """
@@ -180,10 +221,12 @@ function add_atom!(frame::Frame, atom::Atom, position::Vector{Float64}, velocity
 end
 
 """
+    remove_atom!(frame::Frame, index::Integer)
+
 Remove the `atom` at `index` from the `frame`.
 
-This modify all the `atoms` indexes after `index`, and invalidate any
-array obtained using `positions` or `velocities`.
+This function modifies all the `atoms` indexes after `index`, and invalidates
+any array obtained using `positions` or `velocities`.
 """
 function remove_atom!(frame::Frame, index::Integer)
     __check(lib.chfl_frame_remove(__ptr(frame), UInt64(index)))
@@ -191,6 +234,8 @@ function remove_atom!(frame::Frame, index::Integer)
 end
 
 """
+    set_property!(frame::Frame, name::String, value)
+
 Set a named property for the given `Frame`.
 """
 function set_property!(frame::Frame, name::String, value)
@@ -202,6 +247,8 @@ function set_property!(frame::Frame, name::String, value)
 end
 
 """
+    property(frame::Frame, name::String)
+
 Get a named property for the given atom.
 """
 function property(frame::Frame, name::String)
@@ -210,6 +257,8 @@ function property(frame::Frame, name::String)
 end
 
 """
+    properties_count(frame::Frame)
+
 Get the number of properties associated with a frame.
 """
 function properties_count(frame::Frame)
@@ -219,6 +268,8 @@ function properties_count(frame::Frame)
 end
 
 """
+    list_properties(frame::Frame)
+
 Get the names of all properties associated with a frame.
 """
 function list_properties(frame::Frame)
@@ -229,6 +280,8 @@ function list_properties(frame::Frame)
 end
 
 """
+    add_bond!(frame::Frame, i::Integer, j::Integer, order=nothing)
+
 Add an additional bond to the `Frame`'s `Topology`.
 """
 function add_bond!(frame::Frame, i::Integer, j::Integer, order=nothing)
@@ -245,6 +298,8 @@ function add_bond!(frame::Frame, i::Integer, j::Integer, order=nothing)
 end
 
 """
+    remove_bond!(frame::Frame, i::Integer, j::Integer)
+
 Remove a bond from the `Frame`'s `Topology`.
 """
 function remove_bond!(frame::Frame, i::Integer, j::Integer)
@@ -253,6 +308,8 @@ function remove_bond!(frame::Frame, i::Integer, j::Integer)
 end
 
 """
+    add_residue!(frame::Frame, residue::Residue)
+
 Add a residue to the `Frame`'s `Topology`.
 """
 function add_residue!(frame::Frame, residue::Residue)
@@ -261,6 +318,8 @@ function add_residue!(frame::Frame, residue::Residue)
 end
 
 """
+    deepcopy(frame::Frame)
+
 Make a deep copy of a `Frame`.
 """
 function Base.deepcopy(frame::Frame)
@@ -269,5 +328,11 @@ function Base.deepcopy(frame::Frame)
 end
 
 # Iteration support
-Base.iterate(frame::Frame, state=0) = state >= size(frame) ? nothing : (Atom(frame, state), state+1)
+function Base.iterate(frame::Frame, atom=0)
+    if atom >= size(frame)
+        return nothing
+    else
+        return (Atom(frame, atom), atom + 1)
+    end
+end
 Base.eltype(frame::Frame) = Atom

@@ -10,6 +10,8 @@ end
 Base.show(io::IO, e::ChemfilesError) = show(io, "Chemfiles error: $(e.message)")
 
 """
+    Chemfiles.last_error()
+
 Get the last error message from the chemfiles runtime.
 """
 function last_error()
@@ -17,6 +19,8 @@ function last_error()
 end
 
 """
+    Chemfiles.clear_errors()
+
 Clear any error messages stored by the chemfiles runtime.
 """
 function clear_errors()
@@ -42,6 +46,8 @@ function _warning_callback_adaptator(message)
 end
 
 """
+    Chemfiles.set_warning_callback(callback::Function)
+
 Set the global warning `callback` to be used for each warning event.
 
 The `callback` function must take a `String` and return nothing.
@@ -54,6 +60,8 @@ function set_warning_callback(callback::Function)
 end
 
 """
+    Chemfile.add_configuration(path::String)
+
 Read configuration data from the file at `path`.
 
 By default, chemfiles reads configuration from any file name `.chemfilesrc`

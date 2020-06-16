@@ -33,7 +33,7 @@ module Chemfiles
     end
 
     """
-    An `Atom` is a particle in the current `Frame`.
+    An `Atom` is a particle in the current [`Frame`](@ref).
 
     An atom stores the following atomic properties:
       - atom name
@@ -41,8 +41,9 @@ module Chemfiles
       - atom mass
       - atom charge
 
-    The atom name is usually an unique identifier ("H1", "C_a") while the atom
-    type will be shared among all particles of the same type: "H", "Ow", "CH3".
+    The atom name is usually an unique identifier (`"H1"`, `"C_a"`) while the
+    atom type will be shared among all particles of the same type: `"H"`,
+    `"Ow"`, `"CH3"`.
     """
     struct Atom
         __handle :: CxxPointer{lib.CHFL_ATOM}
@@ -60,7 +61,7 @@ module Chemfiles
     """
     A `Topology` describes the organisation of the particles in the system:
     what their names are, how they are bonded together, *etc.* A `Topology`
-    is a list of `Atoms` in the system, together with the list of bonds
+    is a list of [`Atom`](@ref)s in the system, together with the list of bonds
     between the atoms.
     """
     struct Topology
@@ -69,8 +70,8 @@ module Chemfiles
 
     """
     A `UnitCell` describes the bounding box of a system. It is represented by
-    three base vectors of lengths `a`, `b` and `c`; and the angles
-    between these vectors are `alpha`, `beta` and `gamma`.
+    three base vectors of lengths `a`, `b`, and `c`; and the angles
+    between these vectors are `alpha`, `beta`, and `gamma`.
     """
     struct UnitCell
         __handle :: CxxPointer{lib.CHFL_CELL}
@@ -83,8 +84,8 @@ module Chemfiles
 
     - Positions for all the atoms in the system;
     - Velocities for all the atoms in the system;
-    - The `Topology` of the system;
-    - The `UnitCell` of the system.
+    - The [`Topology`](@ref) of the system;
+    - The [`UnitCell`](@ref) of the system.
     """
     struct Frame
         __handle :: CxxPointer{lib.CHFL_FRAME}
@@ -102,7 +103,7 @@ module Chemfiles
 
     """
     A `Trajectory` represents a simulation file on the hard drive. It can read
-    or write one or many `Frame`s to this file. The file format can be
+    or write one or many [`Frame`](@ref)s to this file. The file format can be
     automatically determined from the extention, or manually specified.
     Writing to a `Trajectory` is buffered, which means that one needs to
     `close()` the trajectory and flush the buffer before being able to read the

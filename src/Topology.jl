@@ -32,6 +32,8 @@ Possible bond orders in Chemfiles:
 end
 
 """
+    Topology()
+
 Create an empty `Topology`.
 """
 function Topology()
@@ -40,6 +42,8 @@ function Topology()
 end
 
 """
+    Topology(frame::Frame)
+
 Get a copy of the `Topology` of the given `frame`.
 """
 function Topology(frame::Frame)
@@ -51,6 +55,8 @@ function Topology(frame::Frame)
 end
 
 """
+    size(topology::Topology)
+
 Get the `Topology` size, i.e. the current number of atoms.
 """
 function Base.size(topology::Topology)
@@ -62,6 +68,8 @@ function Base.size(topology::Topology)
 end
 
 """
+    add_atom!(topology::Topology, atom::Atom)
+
 Add an `atom` at the end of a `topology`.
 """
 function add_atom!(topology::Topology, atom::Atom)
@@ -70,6 +78,8 @@ function add_atom!(topology::Topology, atom::Atom)
 end
 
 """
+    remove_atom!(topology::Topology, index::Integer)
+
 Remove the atom at the given `index` from a `topology`.
 """
 function remove_atom!(topology::Topology, index::Integer)
@@ -78,6 +88,8 @@ function remove_atom!(topology::Topology, index::Integer)
 end
 
 """
+    bonds_count(topology::Topology)
+
 Get the number of bonds in the `topology`.
 """
 function bonds_count(topology::Topology)
@@ -87,6 +99,8 @@ function bonds_count(topology::Topology)
 end
 
 """
+    angles_count(topology::Topology)
+
 Get the number of angles in the `topology`.
 """
 function angles_count(topology::Topology)
@@ -96,6 +110,8 @@ function angles_count(topology::Topology)
 end
 
 """
+    dihedrals_count(topology::Topology)
+
 Get the number of dihedral angles in the `topology`.
 """
 function dihedrals_count(topology::Topology)
@@ -105,6 +121,8 @@ function dihedrals_count(topology::Topology)
 end
 
 """
+    impropers_count(topology::Topology)
+
 Get the number of improper angles in the `topology`.
 """
 function impropers_count(topology::Topology)
@@ -114,6 +132,8 @@ function impropers_count(topology::Topology)
 end
 
 """
+    bonds(topology::Topology)
+
 Get the bonds in the `topology`, in a `2 x bonds_count(topology)` array.
 """
 function bonds(topology::Topology)
@@ -124,6 +144,8 @@ function bonds(topology::Topology)
 end
 
 """
+    angles(topology::Topology)
+
 Get the angles in the `topology`, in a `3 x angles_count(topology)` array.
 """
 function angles(topology::Topology)
@@ -134,6 +156,8 @@ function angles(topology::Topology)
 end
 
 """
+    dihedrals(topology::Topology)
+
 Get the dihedral angles in the `topology`, in a `4 x dihedrals_count(topology)`
 array.
 """
@@ -145,6 +169,8 @@ function dihedrals(topology::Topology)
 end
 
 """
+    impropers(topology::Topology)
+
 Get the improper angles in the `topology`, in a `4 x impropers_count(topology)`
 array.
 """
@@ -156,6 +182,8 @@ function impropers(topology::Topology)
 end
 
 """
+    add_bond!(topology::Topology, i::Integer, j::Integer, order=nothing)
+
 Add a bond between the atoms `i` and `j` in the `topology`, optionaly
 setting the bond `order`.
 """
@@ -173,6 +201,8 @@ function add_bond!(topology::Topology, i::Integer, j::Integer, order=nothing)
 end
 
 """
+    remove_bond!(topology::Topology, i::Integer, j::Integer)
+
 Remove any existing bond between the atoms `i` and `j` in the `topology`.
 """
 function remove_bond!(topology::Topology, i::Integer, j::Integer)
@@ -183,6 +213,8 @@ function remove_bond!(topology::Topology, i::Integer, j::Integer)
 end
 
 """
+    bond_order(topology::Topology, i::Integer, j::Integer)
+
 Get the `BondOrder` for the bond between atoms `i` and `j` in the
 `topology`.
 """
@@ -195,6 +227,8 @@ function bond_order(topology::Topology, i::Integer, j::Integer)
 end
 
 """
+    bond_orders(topology::Topology)
+
 Get the `BondOrder` for all the bonds in the `topology`.
 """
 function bond_orders(topology::Topology)
@@ -207,6 +241,8 @@ function bond_orders(topology::Topology)
 end
 
 """
+    add_residue!(topology::Topology, residue::Residue)
+
 Add a copy of `residue` to this `topology`.
 
 The residue id must not already be in the topology, and the residue must
@@ -220,6 +256,8 @@ function add_residue!(topology::Topology, residue::Residue)
 end
 
 """
+    count_residues(topology::Topology)
+
 Get the number of residues in the `topology`.
 """
 function count_residues(topology::Topology)
@@ -231,6 +269,8 @@ function count_residues(topology::Topology)
 end
 
 """
+    are_linked(topology::Topology, first::Residue, second::Residue)
+
 Check if the two residues `first` and `second` from the `topology` are
 linked together, *i.e.* if there is a bond between one atom in the first
 residue and one atom in the second one.
@@ -244,6 +284,8 @@ function are_linked(topology::Topology, first::Residue, second::Residue)
 end
 
 """
+    resize!(topology::Topology, size::Integer)
+
 Resize the `topology` to hold `natoms` atoms. If the new number of atoms is
 bigger than the current number, new atoms will be created with an empty name
 and type.
@@ -258,6 +300,8 @@ function Base.resize!(topology::Topology, size::Integer)
 end
 
 """
+    deepcopy(topology::Topology)
+
 Make a deep copy of a `topology`.
 """
 function Base.deepcopy(topology::Topology)
