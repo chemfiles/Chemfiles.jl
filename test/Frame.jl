@@ -5,6 +5,7 @@
 
         resize!(frame, 4)
         @test size(frame) == 4
+        @test length(frame) == 4
 
         pos = positions(frame)
         expected = Array{Float64}(undef, 3, 4)

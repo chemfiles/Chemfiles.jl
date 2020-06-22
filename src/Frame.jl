@@ -9,6 +9,21 @@ export distance, dihedral, out_of_plane
 __ptr(frame::Frame) = __ptr(frame.__handle)
 __const_ptr(frame::Frame) = __const_ptr(frame.__handle)
 
+# A small wrapper around Array{Float64, 2}, keeping a reference to the
+# corresponding frame to prevent garbage collection (see issue
+# https://github.com/chemfiles/Chemfiles.jl/issues/37)
+struct ChemfilesArray <: AbstractArray{Float64, 2}
+    data::Array{Float64, 2}
+    parent::Frame
+end
+
+# Implement the Array interface for ChemfilesArray
+@inline Base.size(A::ChemfilesArray) = size(A.data)
+@inline Base.getindex(A::ChemfilesArray, I::Int) = getindex(A.data, I)
+@inline Base.getindex(A::ChemfilesArray, I::Int...) = getindex(A.data, I...)
+@inline Base.setindex!(A::ChemfilesArray, v, I::Int) = setindex!(A.data, v, I)
+@inline Base.setindex!(A::ChemfilesArray, v, I::Int...) = setindex!(A.data, v, I...)
+
 """
     Frame()
 
@@ -63,7 +78,8 @@ function positions(frame::Frame)
     ptr = Ref{Ptr{Float64}}()
     natoms = Ref{UInt64}(0)
     __check(lib.chfl_frame_positions(__ptr(frame), ptr, natoms))
-    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])); own=false)
+    data = unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])); own=false)
+    return ChemfilesArray(data, frame)
 end
 
 
@@ -81,7 +97,8 @@ function velocities(frame::Frame)
     ptr = Ref{Ptr{Float64}}()
     natoms = Ref{UInt64}(0)
     __check(lib.chfl_frame_velocities(__ptr(frame), ptr, natoms))
-    return unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])); own=false)
+    data = unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])); own=false)
+    return ChemfilesArray(data, frame)
 end
 
 
