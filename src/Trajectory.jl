@@ -78,7 +78,7 @@ function read_step(trajectory::Trajectory, step::Integer)
 end
 
 """
-    read_step(trajectory::Trajectory, step::Integer, frame:Frame)
+    read_step!(trajectory::Trajectory, step::Integer, frame:Frame)
 
 Read the given `step` of the `trajectory` into an preexisting `Frame` structure.
 """
