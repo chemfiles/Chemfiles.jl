@@ -1,7 +1,7 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export read_step, set_topology!, set_cell!, path
+export read_step, read_step!, set_topology!, set_cell!, path
 
 __ptr(trajectory::Trajectory) = __ptr(trajectory.__handle)
 __const_ptr(trajectory::Trajectory) = __const_ptr(trajectory.__handle)
