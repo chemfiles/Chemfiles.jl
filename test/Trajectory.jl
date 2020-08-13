@@ -23,6 +23,12 @@ const DATAPATH = joinpath(@__DIR__, "data")
         @test pos[:, 1] ≈ Float64[0.417219, 8.303366, 11.737172]
         @test pos[:, 125] ≈ Float64[5.099554, -0.045104, 14.153846]
 
+        read!(trajectory,frame)
+        @test size(frame) == 297
+        pos = positions(frame)
+        @test pos[:, 1] ≈ Float64[1.299095, 8.310030, 11.721462]
+        @test pos[:, 125] ≈ Float64[5.099554, -0.045104, 14.153846]
+
         topology = Topology(frame)
         @test size(frame) == 297
         @test name(Atom(frame, 0)) == "O"
@@ -30,6 +36,14 @@ const DATAPATH = joinpath(@__DIR__, "data")
 
         set_cell!(trajectory, UnitCell(30, 30, 30))
         frame = read_step(trajectory, 41)
+
+        @test lengths(UnitCell(frame)) == [30.0, 30.0, 30.0]
+
+        pos = positions(frame)
+        @test pos[:, 1] ≈ Float64[0.761277, 8.106125, 10.622949]
+        @test pos[:, 125] ≈ Float64[5.13242, 0.079862, 14.194161]
+
+        read_step!(trajectory,41,frame)
 
         @test lengths(UnitCell(frame)) == [30.0, 30.0, 30.0]
 
