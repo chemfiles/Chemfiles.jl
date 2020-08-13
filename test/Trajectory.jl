@@ -27,7 +27,7 @@ const DATAPATH = joinpath(@__DIR__, "data")
         @test size(frame) == 297
         pos = positions(frame)
         @test pos[:, 1] ≈ Float64[0.357720, 8.306397, 11.744901]
-        @test pos[:, 125] ≈ Float64[5.007032, 0.066848, 14.18483]
+        @test pos[:, 125] ≈ Float64[5.007032, 0.066848, 14.184831]
 
         topology = Topology(frame)
         @test size(frame) == 297
