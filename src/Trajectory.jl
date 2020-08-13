@@ -51,6 +51,18 @@ function Base.read(trajectory::Trajectory)
 end
 
 """
+    read!(trajectory::Trajectory, frame::Frame)
+
+Read the next step of the `trajectory` data into the preexisting `Frame` structure.
+"""
+function Base.read!(trajectory::Trajectory, frame::Frame)
+    @assert isopen(trajectory)
+    __check(lib.chfl_trajectory_read(
+        __ptr(trajectory), __ptr(frame)
+    ))
+end
+
+"""
     read_step(trajectory::Trajectory, step::Integer)
 
 Read the given `step` of the `trajectory`, and return the corresponding
@@ -63,6 +75,18 @@ function read_step(trajectory::Trajectory, step::Integer)
         __ptr(trajectory), UInt64(step), __ptr(frame)
     ))
     return frame
+end
+
+"""
+    read_step(trajectory::Trajectory, step::Integer, frame:Frame)
+
+Read the given `step` of the `trajectory` into an preexisting `Frame` structure.
+"""
+function read_step!(trajectory::Trajectory, step::Integer, frame::Frame)
+    @assert isopen(trajectory)
+    __check(lib.chfl_trajectory_read_step(
+        __ptr(trajectory), UInt64(step), __ptr(frame)
+    ))
 end
 
 """
