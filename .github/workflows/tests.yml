@@ -1,0 +1,52 @@
+name: Test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    # Check all PR
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04]
+        julia-version: ["1.0", "1.2", "1.5", "nightly"]
+        julia-arch: [x64]
+        include:
+          - name: Linux 32-bit
+            os: ubuntu-18.04
+            julia-version: "1.5"
+            julia-arch: x86
+          - name: Windows 32-bit
+            os: windows-2019
+            julia-version: "1.5"
+            julia-arch: x86
+          - name: Windows 64-bit
+            os: windows-2019
+            julia-version: "1.5"
+            julia-arch: x64
+          - os: macos-10.15
+            julia-version: "1.5"
+            julia-arch: x64
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup Julia
+        uses: julia-actions/setup-julia@v1
+        with:
+          version: ${{ matrix.julia-version }}
+          arch: ${{ matrix.julia-arch }}
+      - name: build package
+        run: julia --check-bounds=yes --inline=no --project -e 'using Pkg; Pkg.build("Chemfiles")'
+      - name: run tests
+        run: julia --check-bounds=yes --inline=no --project -e 'using Pkg; Pkg.test("Chemfiles"; coverage=true)'
+      - name: run extra checks
+        if: matrix.os == 'ubuntu-18.04'
+        run: ./scripts/check_used_functions.py
+      - name: upload coverage
+        run: julia --project -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
