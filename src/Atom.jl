@@ -1,7 +1,7 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export mass, set_mass!, charge, set_charge!, name, set_name!, type, set_type!
+export mass, set_mass!, charge, set_charge!, name, set_name!, type , set_type!
 export vdw_radius, covalent_radius, atomic_number
 export set_property!, property, properties_count, list_properties
 
@@ -218,7 +218,7 @@ Get the number of properties associated with an atom.
 function properties_count(atom::Atom)
     count = Ref{UInt64}(0)
     __check(lib.chfl_atom_properties_count(__const_ptr(atom), count))
-    return count[]
+    return Int(count[])
 end
 
 """
@@ -227,7 +227,7 @@ end
 Get the names of all properties associated with an atom.
 """
 function list_properties(atom::Atom)
-    count = properties_count(atom)
+    count = UInt64(properties_count(atom))
     names = Array{Ptr{UInt8}}(undef, count)
     __check(lib.chfl_atom_list_properties(__const_ptr(atom), pointer(names), count))
     return map(unsafe_string, names)

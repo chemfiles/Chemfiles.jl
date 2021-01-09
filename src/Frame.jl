@@ -12,8 +12,8 @@ __const_ptr(frame::Frame) = __const_ptr(frame.__handle)
 # A small wrapper around Array{Float64, 2}, keeping a reference to the
 # corresponding frame to prevent garbage collection (see issue
 # https://github.com/chemfiles/Chemfiles.jl/issues/37)
-struct ChemfilesArray <: AbstractArray{Float64, 2}
-    data::Array{Float64, 2}
+struct ChemfilesArray <: AbstractArray{Float64,2}
+    data::Array{Float64,2}
     parent::Frame
 end
 
@@ -42,7 +42,7 @@ Get the number of atoms in the `frame`.
 function Base.size(frame::Frame)
     count = Ref{UInt64}(0)
     __check(lib.chfl_frame_atoms_count(__const_ptr(frame), count))
-    return count[]
+    return Int(count[])
 end
 
 """
@@ -78,7 +78,7 @@ function positions(frame::Frame)
     ptr = Ref{Ptr{Float64}}()
     natoms = Ref{UInt64}(0)
     __check(lib.chfl_frame_positions(__ptr(frame), ptr, natoms))
-    data = unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])); own=false)
+    data = unsafe_wrap(Array{Float64,2}, ptr[], (3, Int(natoms[])); own=false)
     return ChemfilesArray(data, frame)
 end
 
@@ -97,7 +97,7 @@ function velocities(frame::Frame)
     ptr = Ref{Ptr{Float64}}()
     natoms = Ref{UInt64}(0)
     __check(lib.chfl_frame_velocities(__ptr(frame), ptr, natoms))
-    data = unsafe_wrap(Array{Float64, 2}, ptr[], (3, Int(natoms[])); own=false)
+    data = unsafe_wrap(Array{Float64,2}, ptr[], (3, Int(natoms[])); own=false)
     return ChemfilesArray(data, frame)
 end
 
@@ -232,7 +232,7 @@ end
 Add an `atom` and the corresponding `position` and `velocity` data to a
 `frame`.
 """
-function add_atom!(frame::Frame, atom::Atom, position::Vector{Float64}, velocity::Vector{Float64} = Float64[0.0,0.0,0.0])
+function add_atom!(frame::Frame, atom::Atom, position::Vector{Float64}, velocity::Vector{Float64}=Float64[0.0,0.0,0.0])
     __check(lib.chfl_frame_add_atom(__ptr(frame), __const_ptr(atom), position, velocity))
     return nothing
 end
@@ -281,7 +281,7 @@ Get the number of properties associated with a frame.
 function properties_count(frame::Frame)
     count = Ref{UInt64}(0)
     __check(lib.chfl_frame_properties_count(__const_ptr(frame), count))
-    return count[]
+    return Int(count[])
 end
 
 """
@@ -290,7 +290,7 @@ end
 Get the names of all properties associated with a frame.
 """
 function list_properties(frame::Frame)
-    count = properties_count(frame)
+    count = UInt64(properties_count(frame))
     names = Array{Ptr{UInt8}}(undef, count)
     __check(lib.chfl_frame_list_properties(__const_ptr(frame), pointer(names), count))
     return map(unsafe_string, names)
@@ -321,6 +321,16 @@ Remove a bond from the `Frame`'s `Topology`.
 """
 function remove_bond!(frame::Frame, i::Integer, j::Integer)
     __check(lib.chfl_frame_remove_bond(__ptr(frame), UInt64(i), UInt64(j)))
+    return nothing
+end
+
+"""
+    clear_bonds!(frame::Frame)
+
+Remove all bonds, angles and dihedral angles from the `Frame`'s `Topology`.
+"""
+function clear_bonds!(frame::Frame)
+    __check(lib.chfl_frame_clear_bonds(__ptr(frame)))
     return nothing
 end
 

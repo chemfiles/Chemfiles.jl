@@ -17,10 +17,10 @@ Create a new residue with the given `name` and optional residue identifier
 `id`.
 """
 function Residue(name::String, id=nothing)
-    if id == nothing
+    if id === nothing
         ptr = @__check_ptr(lib.chfl_residue(pointer(name)))
     else
-        ptr = @__check_ptr(lib.chfl_residue_with_id(pointer(name), UInt64(id)))
+        ptr = @__check_ptr(lib.chfl_residue_with_id(pointer(name), Int64(id)))
     end
     return Residue(CxxPointer(ptr, is_const=false))
 end
@@ -80,7 +80,7 @@ end
 Get the identifier of a `residue` in the initial topology.
 """
 function id(residue::Residue)
-    resid = Ref{UInt64}(0)
+    resid = Ref{Int64}(0)
     __check(lib.chfl_residue_id(__const_ptr(residue), resid))
     return resid[]
 end
@@ -93,7 +93,7 @@ Get the number of atoms in a `residue`.
 function Base.size(residue::Residue)
     count = Ref{UInt64}(0)
     __check(lib.chfl_residue_atoms_count(__const_ptr(residue), count))
-    return count[]
+    return Int(count[])
 end
 
 """
@@ -113,19 +113,19 @@ function __contains(residue::Residue, index::Integer)
 end
 
 if VERSION < v"1.5.0-alpha"
-"""
+    """
     contains(residue::Residue, index::Integer)
 
 Check if the atom at the given `index` is in the `residue`.
 """
-contains(residue::Residue, index::Integer) = __contains(residue, index)
+    contains(residue::Residue, index::Integer) = __contains(residue, index)
 else
-"""
+    """
     contains(residue::Residue, index::Integer)
 
 Check if the atom at the given `index` is in the `residue`.
 """
-Base.contains(residue::Residue, index::Integer) = __contains(residue, index)
+    Base.contains(residue::Residue, index::Integer) = __contains(residue, index)
 end
 
 """
@@ -134,7 +134,7 @@ end
 Get the atoms in a ``residue``. This function returns a list of indexes.
 """
 function atoms(residue::Residue)
-    count = size(residue)
+    count = UInt64(size(residue))
     result = Array{UInt64}(undef, count)
     __check(lib.chfl_residue_atoms(__const_ptr(residue), pointer(result), count))
     return result
@@ -171,7 +171,7 @@ Get the number of properties associated with a residue.
 function properties_count(residue::Residue)
     count = Ref{UInt64}(0)
     __check(lib.chfl_residue_properties_count(__const_ptr(residue), count))
-    return count[]
+    return Int(count[])
 end
 
 """
@@ -180,7 +180,7 @@ end
 Get the names of all properties associated with a residue.
 """
 function list_properties(residue::Residue)
-    count = properties_count(residue)
+    count = UInt64(properties_count(residue))
     names = Array{Ptr{UInt8}}(undef, count)
     __check(lib.chfl_residue_list_properties(__const_ptr(residue), pointer(names), count))
     return map(unsafe_string, names)

@@ -46,7 +46,7 @@ function Base.read(trajectory::Trajectory)
     frame = Frame()
     __check(lib.chfl_trajectory_read(
         __ptr(trajectory), __ptr(frame)
-    ))
+))
     return frame
 end
 
@@ -73,7 +73,7 @@ function read_step(trajectory::Trajectory, step::Integer)
     frame = Frame()
     __check(lib.chfl_trajectory_read_step(
         __ptr(trajectory), UInt64(step), __ptr(frame)
-    ))
+))
     return frame
 end
 
@@ -99,7 +99,7 @@ function Base.write(trajectory::Trajectory, frame::Frame)
     __check(lib.chfl_trajectory_write(
         __ptr(trajectory), __const_ptr(frame)
     ))
-    return nothing
+return nothing
 end
 
 """
@@ -113,7 +113,7 @@ function set_topology!(trajectory::Trajectory, topology::Topology)
     __check(lib.chfl_trajectory_set_topology(
         __ptr(trajectory), __const_ptr(topology)
     ))
-    return nothing
+return nothing
 end
 
 """
@@ -123,12 +123,12 @@ Set the `Topology` associated with a `trajectory` by reading the first frame
 of the file at `path`; and extracting the topology of this frame. The optional
 `format` parameter can be used to specify the file format.
 """
-function set_topology!(trajectory::Trajectory, path::AbstractString, format::AbstractString = "")
+function set_topology!(trajectory::Trajectory, path::AbstractString, format::AbstractString="")
     @assert isopen(trajectory)
     __check(lib.chfl_trajectory_topology_file(
         __ptr(trajectory), pointer(path), pointer(format)
     ))
-    return nothing
+return nothing
 end
 
 """
@@ -140,7 +140,7 @@ reading and writing the file, replacing any unit cell in the file.
 function set_cell!(trajectory::Trajectory, cell::UnitCell)
     @assert isopen(trajectory)
     __check(lib.chfl_trajectory_set_cell(__ptr(trajectory), __const_ptr(cell)))
-    return nothing
+return nothing
 end
 
 """
@@ -173,12 +173,9 @@ Get the path used to open a `trajectory`.
 """
 function path(trajectory::Trajectory)
     @assert isopen(trajectory)
-    result = Ref{Ptr{UInt8}}(0)
-    Base.cconvert(Ptr{Ptr{UInt8}}, result)
-    __check(
-        lib.chfl_trajectory_path(__const_ptr(trajectory), Base.unsafe_convert(Ptr{Ptr{UInt8}}, result))
+    return __call_with_growing_buffer(
+        (buffer, size) -> __check(lib.chfl_trajectory_path(__const_ptr(trajectory), buffer, size))
     )
-    return unsafe_string(result[])
 end
 
 """
@@ -192,7 +189,7 @@ function Base.close(trajectory::Trajectory)
     # Manually free and set the pointer to NULL
     lib.chfl_trajectory_close(trajectory.__handle.__ptr)
     trajectory.__handle.__ptr = 0
-    return nothing
+return nothing
 end
 
 """

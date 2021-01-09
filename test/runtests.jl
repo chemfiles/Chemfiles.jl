@@ -2,22 +2,22 @@ using Chemfiles
 using Test
 
 TESTS = [
-    "Atom.jl",
-    "Residue.jl",
-    "Topology.jl",
-    "UnitCell.jl",
-    "Frame.jl",
-    "Property.jl",
-    "Trajectory.jl",
-    "Selection.jl",
+    "atom.jl",
+    "residue.jl",
+    "topology.jl",
+    "cell.jl",
+    "frame.jl",
+    "property.jl",
+    "trajectory.jl",
+    "selection.jl",
     "misc.jl",
 ]
 
 include("utils.jl")
 
 function main()
-    @testset "Generics" begin
-        @test split(Chemfiles.version(), '-')[1] == "0.9.3"
+    @testset "Version" begin
+        @test split(Chemfiles.version(), '-')[1] == "0.10.0"
     end
     root = dirname(@__FILE__)
     for test in TESTS

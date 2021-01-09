@@ -8,6 +8,9 @@
 # =========================================================================== #
 
 # === Manually translated from the header
+const Cbool = Cuchar
+const chfl_vector3d = Array{Cdouble, 1}
+
 struct chfl_match
     size    ::UInt64
     atoms_1 ::UInt64
@@ -16,8 +19,21 @@ struct chfl_match
     atoms_4 ::UInt64
 end
 
-const Cbool = Cuchar
-const chfl_vector3d = Array{Cdouble, 1}
+struct chfl_format_metadata
+    name :: Ptr{Cchar}
+    extension :: Ptr{Cchar}
+    description :: Ptr{Cchar}
+    reference :: Ptr{Cchar}
+    read :: Cbool
+    write :: Cbool
+    memory :: Cbool
+    positions :: Cbool
+    velocities :: Cbool
+    unit_cell :: Cbool
+    atoms :: Cbool
+    bonds :: Cbool
+    residues :: Cbool
+end
 # === End of manual translation
 
 struct CHFL_TRAJECTORY end
@@ -56,7 +72,7 @@ const CHFL_BOND_SINGLE = chfl_bond_order(1)
 const CHFL_BOND_DOUBLE = chfl_bond_order(2)
 const CHFL_BOND_TRIPLE = chfl_bond_order(3)
 const CHFL_BOND_QUADRUPLE = chfl_bond_order(4)
-const CHFL_BOND_QINTUPLET = chfl_bond_order(5)
+const CHFL_BOND_QUINTUPLET = chfl_bond_order(5)
 const CHFL_BOND_AMIDE = chfl_bond_order(254)
 const CHFL_BOND_AROMATIC = chfl_bond_order(255)
 
