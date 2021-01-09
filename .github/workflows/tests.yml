@@ -23,10 +23,10 @@ jobs:
             os: ubuntu-18.04
             julia-version: "1.5"
             julia-arch: x86
-          - name: Windows 32-bit
-            os: windows-2019
-            julia-version: "1.5"
-            julia-arch: x86
+          # - name: Windows 32-bit
+          #   os: windows-2019
+          #   julia-version: "1.5"
+          #   julia-arch: x86
           - name: Windows 64-bit
             os: windows-2019
             julia-version: "1.5"
