@@ -1,20 +1,14 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-export id, residue_for_atom, atoms
-
-if VERSION < v"1.5.0-alpha"
-    export contains
-end
+using Compat: contains
+export id, residue_for_atom, atoms, contains
 
 __ptr(residue::Residue) = __ptr(residue.__handle)
 __const_ptr(residue::Residue) = __const_ptr(residue.__handle)
 
 """
-    Residue(name::String, id=nothing)
-
-Create a new residue with the given `name` and optional residue identifier
-`id`.
+Create a new residue with the given `name` and optional residue identifier `id`.
 """
 function Residue(name::String, id=nothing)
     if id === nothing
@@ -26,8 +20,6 @@ function Residue(name::String, id=nothing)
 end
 
 """
-    Residue(topology::Topology, index::Integer)
-
 Get a copy of the residue at `index` from a `topology`.
 
 The residue index in the topology is not always the same as the residue
@@ -42,12 +34,10 @@ function Residue(topology::Topology, index::Integer)
 end
 
 """
-    residue_for_atom(topology::Topology, index::Integer)
-
 Get a copy of the residue containing the atom at `index` in the `topology`.
 
-This function will return `nothing` if the atom is not in a residue, or if
-the `index` is bigger than the number of atoms in the topology.
+This function will return `nothing` if the atom is not in a residue, or if the
+`index` is bigger than the number of atoms in the topology.
 """
 function residue_for_atom(topology::Topology, index::Integer)
     ptr = lib.chfl_residue_for_atom(__ptr(topology), UInt64(index))
@@ -62,8 +52,6 @@ function residue_for_atom(topology::Topology, index::Integer)
 end
 
 """
-    name(residue::Residue)
-
 Get the name of a `residue`.
 """
 function name(residue::Residue)
@@ -75,8 +63,6 @@ function name(residue::Residue)
 end
 
 """
-    id(residue::Residue)
-
 Get the identifier of a `residue` in the initial topology.
 """
 function id(residue::Residue)
@@ -86,8 +72,6 @@ function id(residue::Residue)
 end
 
 """
-    size(residue::Residue)
-
 Get the number of atoms in a `residue`.
 """
 function Base.size(residue::Residue)
@@ -97,8 +81,6 @@ function Base.size(residue::Residue)
 end
 
 """
-    add_atom!(residue::Residue, index::Integer)
-
 Add the atom at the given `index` in the `residue`.
 """
 function add_atom!(residue::Residue, index::Integer)
@@ -106,31 +88,16 @@ function add_atom!(residue::Residue, index::Integer)
     return nothing
 end
 
-function __contains(residue::Residue, index::Integer)
+"""
+Check if the atom at the given `index` is in the `residue`.
+"""
+function Compat.contains(residue::Residue, index::Integer)
     result = Ref{UInt8}(0)
     __check(lib.chfl_residue_contains(__const_ptr(residue), UInt64(index), result))
     return convert(Bool, result[])
 end
 
-if VERSION < v"1.5.0-alpha"
-    """
-    contains(residue::Residue, index::Integer)
-
-Check if the atom at the given `index` is in the `residue`.
 """
-    contains(residue::Residue, index::Integer) = __contains(residue, index)
-else
-    """
-    contains(residue::Residue, index::Integer)
-
-Check if the atom at the given `index` is in the `residue`.
-"""
-    Base.contains(residue::Residue, index::Integer) = __contains(residue, index)
-end
-
-"""
-    atoms(residue::Residue)
-
 Get the atoms in a ``residue``. This function returns a list of indexes.
 """
 function atoms(residue::Residue)
@@ -141,11 +108,9 @@ function atoms(residue::Residue)
 end
 
 """
-    set_property!(residue::Residue, name::String, value)
-
 Set a named property for the given residue.
 """
-function set_property!(residue::Residue, name::String, value)
+function set_property!(residue::Residue, name::String, value::PropertyValue)
     property = Property(value)
     __check(lib.chfl_residue_set_property(
         __ptr(residue), pointer(name), __const_ptr(property)
@@ -154,18 +119,14 @@ function set_property!(residue::Residue, name::String, value)
 end
 
 """
-    property(residue::Residue, name::String)
-
 Get a named property for the given residue.
 """
-function property(residue::Residue, name::String)
+function property(residue::Residue, name::String)::PropertyValue
     ptr = lib.chfl_residue_get_property(__const_ptr(residue), pointer(name))
     return extract(Property(CxxPointer(ptr, is_const=false)))
 end
 
 """
-    properties_count(residue::Residue)
-
 Get the number of properties associated with a residue.
 """
 function properties_count(residue::Residue)
@@ -175,8 +136,6 @@ function properties_count(residue::Residue)
 end
 
 """
-    list_properties(residue::Residue)
-
 Get the names of all properties associated with a residue.
 """
 function list_properties(residue::Residue)
@@ -187,8 +146,6 @@ function list_properties(residue::Residue)
 end
 
 """
-    deepcopy(residue::Residue)
-
 Make a deep copy of a `residue`.
 """
 function Base.deepcopy(residue::Residue)

@@ -10,7 +10,6 @@ around the main types of chemfiles: [`Trajectory`](@ref), [`Frame`](@ref),
 [`UnitCell`](@ref), [`Topology`](@ref), [`Residue`](@ref), [`Atom`](@ref), and
 [`Selection`](@ref).
 
-
 !!! warning
 
     All indexing in chemfiles is 0-based! That means that the first atom in a
@@ -20,11 +19,10 @@ around the main types of chemfiles: [`Trajectory`](@ref), [`Frame`](@ref),
     This may change in future release to use 1-based indexing, which is more
     familiar to Julia developers.
 
-
 ## Installation
 
-You will need to use a recent version of Julia (``Julia >= 1.0``), and then you
-can install the ``Chemfiles`` package by running the following at Julia prompt:
+You will need to use a recent version of Julia (`Julia >= 1.0`), and then you
+can install the `Chemfiles` package by running the following at Julia prompt:
 
 ```julia
 pkg> add Chemfiles

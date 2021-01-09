@@ -2,6 +2,16 @@
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
 module Chemfiles
+    import Compat
+    using DocStringExtensions
+
+    @template METHODS =
+    """
+    $(TYPEDSIGNATURES)
+
+    $(DOCSTRING)
+    """
+
     module lib
         if VERSION >= v"1.3.0"
             using Chemfiles_jll

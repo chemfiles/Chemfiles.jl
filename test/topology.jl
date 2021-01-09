@@ -77,10 +77,10 @@
         first = residue_for_atom(topology, 2)
         second = residue_for_atom(topology, 0)
 
-        @test residue_for_atom(topology, 7) == nothing
+        @test residue_for_atom(topology, 7) === nothing
 
-        @test first != nothing
-        @test second != nothing
+        @test first !== nothing
+        @test second !== nothing
         remove_chemfiles_warning() do
             @test_throws ChemfilesError Residue(topology, 4)
         end
