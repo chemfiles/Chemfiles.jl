@@ -57,8 +57,8 @@ const DATAPATH = joinpath(@__DIR__, "data")
 
         guess_bonds!(frame)
         topology = Topology(frame)
-        @test bonds_count(topology) == 181
-        @test angles_count(topology) == 87
+        @test bonds_count(topology) == 180
+        @test angles_count(topology) == 84
 
         topology = Topology()
         a = Atom("Cs")
@@ -88,7 +88,7 @@ const DATAPATH = joinpath(@__DIR__, "data")
 
     @testset "Write frames" begin
         EXPECTED_CONTENT = """4
-                              Written by the chemfiles library
+                              Properties=species:S:1:pos:R:3
                               X 1 2 3
                               X 1 2 3
                               X 1 2 3

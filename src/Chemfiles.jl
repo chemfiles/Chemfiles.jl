@@ -123,9 +123,9 @@ module Chemfiles
     include("Trajectory.jl")
 
     function __init__()
-        if !startswith(version(), "0.9")
+        if !startswith(version(), "0.10")
             error(
-                """Chemfiles.jl requires the 0.9 version of libchemfiles,
+                """Chemfiles.jl requires the 0.10 version of libchemfiles,
                 but $(version()) is installed. You can try to run
                 Pkg.build(\"Chemfiles\") to update libchemfiles."""
             )

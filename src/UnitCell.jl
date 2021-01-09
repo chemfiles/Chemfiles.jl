@@ -26,7 +26,7 @@ end
 Create an `UnitCell` from the three lenghts, with all the angles equal to 90°.
 """
 function UnitCell(a::Number, b::Number, c::Number)
-    ptr = @__check_ptr(lib.chfl_cell(Float64[a, b, c]))
+    ptr = @__check_ptr(lib.chfl_cell(Float64[a, b, c], [90.0, 90.0, 90.0]))
     return UnitCell(CxxPointer(ptr, is_const=false))
 end
 
@@ -36,7 +36,7 @@ end
 Create an `UnitCell` from the three lenghts and three angles.
 """
 function UnitCell(a::Number, b::Number, c::Number, α::Number, β::Number, γ::Number)
-    ptr = @__check_ptr(lib.chfl_cell_triclinic(Float64[a, b, c], Float64[α, β, γ]))
+    ptr = @__check_ptr(lib.chfl_cell(Float64[a, b, c], Float64[α, β, γ]))
     return UnitCell(CxxPointer(ptr, is_const=false))
 end
 
@@ -108,7 +108,7 @@ Set the `cell` angles to `α`, `β`, and `γ`.
 """
 function set_angles!(cell::UnitCell, α::Real, β::Real, γ::Real)
     __check(lib.chfl_cell_set_angles(__ptr(cell), Float64[α, β, γ]))
-    return nothing
+return nothing
 end
 
 """
@@ -145,7 +145,7 @@ Set the `cell` shape to the given `shape`.
 """
 function set_shape!(cell::UnitCell, shape::CellShape)
     __check(lib.chfl_cell_set_shape(__ptr(cell), lib.chfl_cellshape(shape)))
-    return nothing
+return nothing
 end
 
 """

@@ -9,9 +9,9 @@
 
         pos = positions(frame)
         expected = Array{Float64}(undef, 3, 4)
-        for i=1:3, j=1:4
-            pos[i, j] = i*j
-            expected[i, j] = i*j
+        for i in 1:3, j in 1:4
+            pos[i, j] = i * j
+            expected[i, j] = i * j
         end
         @test positions(frame) == expected
 
@@ -20,8 +20,8 @@
         @test has_velocities(frame) == true
 
         vel = velocities(frame)
-        for i=1:3, j=1:4
-            vel[i, j] = i*j
+        for i in 1:3, j in 1:4
+            vel[i, j] = i * j
         end
         @test velocities(frame) == expected
 
@@ -73,27 +73,27 @@
         frame = Frame()
         add_atom!(frame, Atom(""), [0.0, 0.0, 0.0])
         add_atom!(frame, Atom(""), [1.0, 2.0, 3.0])
-        @test distance(frame, 0, 1) ≈ sqrt(14.0) atol=1e-10
+        @test distance(frame, 0, 1) ≈ sqrt(14.0) atol = 1e-10
 
         frame = Frame()
         add_atom!(frame, Atom(""), [1.0, 0.0, 0.0])
         add_atom!(frame, Atom(""), [0.0, 0.0, 0.0])
         add_atom!(frame, Atom(""), [0.0, 1.0, 0.0])
-        @test angle(frame, 0, 1, 2) ≈ pi/2 atol=1e-10
+        @test angle(frame, 0, 1, 2) ≈ pi / 2 atol = 1e-10
 
         frame = Frame()
         add_atom!(frame, Atom(""), [1.0, 0.0, 0.0])
         add_atom!(frame, Atom(""), [0.0, 0.0, 0.0])
         add_atom!(frame, Atom(""), [0.0, 1.0, 0.0])
         add_atom!(frame, Atom(""), [0.0, 1.0, 1.0])
-        @test dihedral(frame, 0, 1, 2, 3) ≈ pi/2 atol=1e-10
+        @test dihedral(frame, 0, 1, 2, 3) ≈ pi / 2 atol = 1e-10
 
         frame = Frame()
         add_atom!(frame, Atom(""), [0.0, 0.0, 0.0])
         add_atom!(frame, Atom(""), [0.0, 0.0, 2.0])
         add_atom!(frame, Atom(""), [1.0, 0.0, 0.0])
         add_atom!(frame, Atom(""), [0.0, 1.0, 0.0])
-        @test out_of_plane(frame, 0, 1, 2, 3) ≈ 2 atol=1e-10
+        @test out_of_plane(frame, 0, 1, 2, 3) ≈ 2 atol = 1e-10
     end
 
     @testset "Frame add/remove bonds" begin
@@ -108,14 +108,18 @@
         # the bonds are actually stored inside the topology
         topology = Topology(frame)
 
-        @test bonds(topology) == reshape(UInt64[0,1, 1,2], (2,2))
-        @test angles(topology) == reshape(UInt64[0, 1, 2], (3,1))
+        @test bonds(topology) == reshape(UInt64[0, 1, 1, 2], (2, 2))
+        @test angles(topology) == reshape(UInt64[0, 1, 2], (3, 1))
 
         @test bond_order(topology, 0, 1) == Chemfiles.UnknownBond
         @test bond_order(topology, 1, 2) == Chemfiles.TripleBond
 
         remove_bond!(frame, 1, 0)
-        @test bonds(Topology(frame)) == reshape(UInt64[1,2], (2,1))
+        @test bonds(Topology(frame)) == reshape(UInt64[1, 2], (2, 1))
+
+        @test bonds_count(Topology(frame)) == 1
+        clear_bonds!(frame)
+        @test bonds_count(Topology(frame)) == 0
     end
 
     @testset "Frame add residues" begin
@@ -124,8 +128,8 @@
         add_atom!(frame, Atom("Fe"), [1.0, 2.0, 3.0])
 
         residue = Residue("first")
-        add_atom!(residue,0)
-        add_residue!(frame,residue)
+        add_atom!(residue, 0)
+        add_residue!(frame, residue)
 
         # residues are actually stored in the topology
         @test count_residues(Topology(frame)) == 1

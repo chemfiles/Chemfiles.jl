@@ -42,6 +42,9 @@
     @test angles_count(topology) == 1
     @test dihedrals_count(topology) == 0
 
+    clear_bonds!(topology)
+    @test bonds_count(topology) == 0
+
     remove_atom!(topology, 3)
     @test size(topology) == 3
 

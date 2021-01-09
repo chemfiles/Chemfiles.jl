@@ -3,7 +3,7 @@
 
 export bonds_count, angles_count, dihedrals_count, impropers_count
 export bonds, angles, dihedrals, impropers
-export add_bond!, remove_bond!, bond_order, bond_orders
+export add_bond!, remove_bond!, clear_bonds!, bond_order, bond_orders
 export add_residue!, residues, are_linked, count_residues
 
 __ptr(topology::Topology) = __ptr(topology.__handle)
@@ -16,7 +16,7 @@ Possible bond orders in Chemfiles:
     - `Chemfiles.DoubleBond`: for double bonds
     - `Chemfiles.TripleBond`: for triple bonds
     - `Chemfiles.QuadrupleBond`: for quadruple bonds (present in some metals)
-    - `Chemfiles.QintupletBond`: for qintuplet bonds (present in some metals)
+    - `Chemfiles.QuintupletBond`: for qintuplet bonds (present in some metals)
     - `Chemfiles.AmideBond`: for amide bonds
     - `Chemfiles.AromaticBond`: for aromatic bonds
 """
@@ -26,7 +26,7 @@ Possible bond orders in Chemfiles:
     DoubleBond = lib.CHFL_BOND_DOUBLE
     TripleBond = lib.CHFL_BOND_TRIPLE
     QuadrupleBond = lib.CHFL_BOND_QUADRUPLE
-    QintupletBond = lib.CHFL_BOND_QINTUPLET
+    QuintupletBond = lib.CHFL_BOND_QUINTUPLET
     AmideBond = lib.CHFL_BOND_AMIDE
     AromaticBond = lib.CHFL_BOND_AROMATIC
 end
@@ -64,7 +64,7 @@ function Base.size(topology::Topology)
     __check(lib.chfl_topology_atoms_count(
         __const_ptr(topology), count
     ))
-    return count[]
+    return Int(count[])
 end
 
 """
@@ -95,7 +95,7 @@ Get the number of bonds in the `topology`.
 function bonds_count(topology::Topology)
     count = Ref{UInt64}(0)
     __check(lib.chfl_topology_bonds_count(__const_ptr(topology), count))
-    return count[]
+    return Int(count[])
 end
 
 """
@@ -106,7 +106,7 @@ Get the number of angles in the `topology`.
 function angles_count(topology::Topology)
     count = Ref{UInt64}(0)
     __check(lib.chfl_topology_angles_count(__const_ptr(topology), count))
-    return count[]
+    return Int(count[])
 end
 
 """
@@ -117,7 +117,7 @@ Get the number of dihedral angles in the `topology`.
 function dihedrals_count(topology::Topology)
     count = Ref{UInt64}(0)
     __check(lib.chfl_topology_dihedrals_count(__const_ptr(topology), count))
-    return count[]
+    return Int(count[])
 end
 
 """
@@ -128,7 +128,7 @@ Get the number of improper angles in the `topology`.
 function impropers_count(topology::Topology)
     count = Ref{UInt64}(0)
     __check(lib.chfl_topology_impropers_count(__const_ptr(topology), count))
-    return count[]
+    return Int(count[])
 end
 
 """
@@ -137,7 +137,7 @@ end
 Get the bonds in the `topology`, in a `2 x bonds_count(topology)` array.
 """
 function bonds(topology::Topology)
-    count = bonds_count(topology)
+    count = UInt64(bonds_count(topology))
     result = Array{UInt64}(undef, 2, count)
     __check(lib.chfl_topology_bonds(__const_ptr(topology), pointer(result), count))
     return result
@@ -149,7 +149,7 @@ end
 Get the angles in the `topology`, in a `3 x angles_count(topology)` array.
 """
 function angles(topology::Topology)
-    count = angles_count(topology)
+    count = UInt64(angles_count(topology))
     result = Array{UInt64}(undef, 3, count)
     __check(lib.chfl_topology_angles(__const_ptr(topology), pointer(result), count))
     return result
@@ -162,7 +162,7 @@ Get the dihedral angles in the `topology`, in a `4 x dihedrals_count(topology)`
 array.
 """
 function dihedrals(topology::Topology)
-    count = dihedrals_count(topology)
+    count = UInt64(dihedrals_count(topology))
     result = Array{UInt64}(undef, 4, count)
     __check(lib.chfl_topology_dihedrals(__const_ptr(topology), pointer(result), count))
     return result
@@ -175,7 +175,7 @@ Get the improper angles in the `topology`, in a `4 x impropers_count(topology)`
 array.
 """
 function impropers(topology::Topology)
-    count = impropers_count(topology)
+    count = UInt64(impropers_count(topology))
     result = Array{UInt64}(undef, 4, count)
     __check(lib.chfl_topology_impropers(__const_ptr(topology), pointer(result), count))
     return result
@@ -188,7 +188,7 @@ Add a bond between the atoms `i` and `j` in the `topology`, optionaly
 setting the bond `order`.
 """
 function add_bond!(topology::Topology, i::Integer, j::Integer, order=nothing)
-    if order == nothing
+    if order === nothing
         __check(lib.chfl_topology_add_bond(__ptr(topology), UInt64(i), UInt64(j)))
     else
         # Check that the order is a valid BondOrder
@@ -213,6 +213,16 @@ function remove_bond!(topology::Topology, i::Integer, j::Integer)
 end
 
 """
+    clear_bonds!(topology::Topology)
+
+Remove all bonds, angles and dihedral angles from this `Topology`.
+"""
+function clear_bonds!(topology::Topology)
+    __check(lib.chfl_topology_clear_bonds(__ptr(topology)))
+    return nothing
+end
+
+"""
     bond_order(topology::Topology, i::Integer, j::Integer)
 
 Get the `BondOrder` for the bond between atoms `i` and `j` in the
@@ -232,7 +242,7 @@ end
 Get the `BondOrder` for all the bonds in the `topology`.
 """
 function bond_orders(topology::Topology)
-    count = bonds_count(topology)
+    count = UInt64(bonds_count(topology))
     result = Array{lib.chfl_bond_order}(undef, count)
     __check(lib.chfl_topology_bond_orders(
         __const_ptr(topology), pointer(result), count
@@ -265,7 +275,7 @@ function count_residues(topology::Topology)
     __check(lib.chfl_topology_residues_count(
         __const_ptr(topology), count
     ))
-    return count[]
+    return Int(count[])
 end
 
 """
