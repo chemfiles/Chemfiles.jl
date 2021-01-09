@@ -16,7 +16,7 @@ function Selectors.runner(::Type{LiteralInclude}, node, page, doc)
     end
 
     matched = match(r"@literalinclude (.*) (\d+)-(\d*)", node.language)
-    if matched == nothing
+    if matched === nothing
         error("@literalinclude should look like '@literalinclude path/to/file.jl 3-5'")
     end
 
@@ -33,7 +33,7 @@ function Selectors.runner(::Type{LiteralInclude}, node, page, doc)
 
     content = open(path) do fd
         lines = readlines(fd)
-        if stop != nothing
+        if stop !== nothing
             join(lines[start:stop], '\n')
         else
             join(lines[start:end], '\n')
@@ -48,14 +48,14 @@ Pkg.activate(joinpath(@__DIR__, ".."))
 using Chemfiles
 
 makedocs(
-    sitename = "Chemfiles.jl",
-    modules = [Chemfiles],
-    strict = true,
-    checkdocs = :all,
-    format = Documenter.HTML(
-       prettyurls = get(ENV, "CI", nothing) == "true",
+    sitename="Chemfiles.jl",
+    modules=[Chemfiles],
+    strict=true,
+    checkdocs=:all,
+    format=Documenter.HTML(
+       prettyurls=get(ENV, "CI", nothing) == "true",
     ),
-    pages = [
+    pages=[
         "index.md",
         "tutorials.md",
         "reference/trajectory.md",

@@ -7,8 +7,6 @@ __ptr(trajectory::Trajectory) = __ptr(trajectory.__handle)
 __const_ptr(trajectory::Trajectory) = __const_ptr(trajectory.__handle)
 
 """
-    Trajectory(path::AbstractString, mode::Char='r', format::AbstractString="")
-
 The `Trajectory` function opens a trajectory file, using the file at the given
 `path`. The opening `mode` can be `'r'` for read, `'w'` for write or
 `'a'` for append, and defaults to `'r'`. The optional `format` parameter
@@ -22,8 +20,6 @@ function Trajectory(path::AbstractString, mode::Char='r', format::AbstractString
 end
 
 """
-    Trajectory(f::Function, args...)
-
 Apply the function `f` to the result of `Trajectory(args...)` and close the
 resulting trajectory upon completion, similar to `open(f, args...)`.
 """
@@ -37,8 +33,6 @@ function Trajectory(f::Function, args...)
 end
 
 """
-    read(trajectory::Trajectory)
-
 Read the next step of the `trajectory`, and return the corresponding `Frame`.
 """
 function Base.read(trajectory::Trajectory)
@@ -51,8 +45,6 @@ function Base.read(trajectory::Trajectory)
 end
 
 """
-    read!(trajectory::Trajectory, frame::Frame)
-
 Read the next step of the `trajectory` data into the preexisting `Frame` structure.
 """
 function Base.read!(trajectory::Trajectory, frame::Frame)
@@ -63,8 +55,6 @@ function Base.read!(trajectory::Trajectory, frame::Frame)
 end
 
 """
-    read_step(trajectory::Trajectory, step::Integer)
-
 Read the given `step` of the `trajectory`, and return the corresponding
 `Frame`.
 """
@@ -78,8 +68,6 @@ function read_step(trajectory::Trajectory, step::Integer)
 end
 
 """
-    read_step!(trajectory::Trajectory, step::Integer, frame:Frame)
-
 Read the given `step` of the `trajectory` into an preexisting `Frame` structure.
 """
 function read_step!(trajectory::Trajectory, step::Integer, frame::Frame)
@@ -90,8 +78,6 @@ function read_step!(trajectory::Trajectory, step::Integer, frame::Frame)
 end
 
 """
-    write(trajectory::Trajectory, frame::Frame)
-
 Write the given `frame` to the `trajectory`.
 """
 function Base.write(trajectory::Trajectory, frame::Frame)
@@ -103,8 +89,6 @@ return nothing
 end
 
 """
-    set_topology!(trajectory::Trajectory, topology::Topology)
-
 Set the `Topology` associated with a `trajectory`. This topology will be
 used when reading and writing the file, replacing any topology in the file.
 """
@@ -117,8 +101,6 @@ return nothing
 end
 
 """
-    set_topology!(trajectory::Trajectory, path::AbstractString, format::AbstractString = "")
-
 Set the `Topology` associated with a `trajectory` by reading the first frame
 of the file at `path`; and extracting the topology of this frame. The optional
 `format` parameter can be used to specify the file format.
@@ -132,8 +114,6 @@ return nothing
 end
 
 """
-    set_cell!(trajectory::Trajectory, cell::UnitCell)
-
 Set the `cell` associated with a `trajectory`. This cell will be used when
 reading and writing the file, replacing any unit cell in the file.
 """
@@ -144,8 +124,6 @@ return nothing
 end
 
 """
-    size(trajectory::Trajectory)
-
 Get the number of steps (the number of frames) in a `trajectory`.
 """
 function Base.size(trajectory::Trajectory)
@@ -158,8 +136,6 @@ function Base.size(trajectory::Trajectory)
 end
 
 """
-    length(trajectory::Trajectory)
-
 Get the number of steps (the number of frames) in a `trajectory`.
 """
 function Base.length(trajectory::Trajectory)
@@ -167,8 +143,6 @@ function Base.length(trajectory::Trajectory)
 end
 
 """
-    path(trajectory::Trajectory)
-
 Get the path used to open a `trajectory`.
 """
 function path(trajectory::Trajectory)
@@ -179,8 +153,6 @@ function path(trajectory::Trajectory)
 end
 
 """
-    close(trajectory::Trajectory)
-
 Close a `trajectory`. This function flushes any buffer content to the hard
 drive, and frees the associated memory. Necessary when running on the REPL to
 finish writing.
@@ -193,8 +165,6 @@ return nothing
 end
 
 """
-    isopen(trajectory::Trajectory)
-
 Check if the `trajectory` is open.
 """
 function Base.isopen(trajectory::Trajectory)
@@ -209,4 +179,4 @@ function Base.iterate(trajectory::Trajectory, step=0)
         return (read_step(trajectory, step), step + 1)
     end
 end
-Base.eltype(trajectory::Trajectory) = Frame
+Base.eltype(::Trajectory) = Frame

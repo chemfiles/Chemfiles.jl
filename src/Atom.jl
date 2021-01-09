@@ -9,8 +9,6 @@ __ptr(atom::Atom) = __ptr(atom.__handle)
 __const_ptr(atom::Atom) = __const_ptr(atom.__handle)
 
 """
-    Atom(name::String)
-
 Create an atom with the given `name` and set the atom `type` to be the same
 as `name`.
 """
@@ -20,8 +18,6 @@ function Atom(name::String)
 end
 
 """
-    Atom(frame::Frame, index::Integer)
-
 Get a copy of the `atom` at the given `index` from a `frame`.
 """
 function Atom(frame::Frame, index::Integer)
@@ -33,8 +29,6 @@ function Atom(frame::Frame, index::Integer)
 end
 
 """
-    Atom(topology::Topology, index::Integer)
-
 Get a copy of the `atom` at the given `index` from a `topology`.
 """
 function Atom(topology::Topology, index::Integer)
@@ -46,8 +40,6 @@ function Atom(topology::Topology, index::Integer)
 end
 
 """
-    mass(atom::Atom)
-
 Get the mass of an `atom` in atomic mass units.
 """
 function mass(atom::Atom)
@@ -57,8 +49,6 @@ function mass(atom::Atom)
 end
 
 """
-    set_mass!(atom::Atom, mass)
-
 Set the mass of an `atom` to `mass`.
 
 The mass must be in atomic mass units.
@@ -69,8 +59,6 @@ function set_mass!(atom::Atom, mass)
 end
 
 """
-    charge(atom::Atom)
-
 Get the charge of an `atom` in number of the electron charge *e*.
 """
 function charge(atom::Atom)
@@ -80,8 +68,6 @@ function charge(atom::Atom)
 end
 
 """
-    set_charge!(atom::Atom, charge)
-
 Set the charge of an `atom` to `charge`.
 
 The charge must be in number of the electron charge *e*.
@@ -92,8 +78,6 @@ function set_charge!(atom::Atom, charge)
 end
 
 """
-    name(atom::Atom)
-
 Get the name of an `atom`.
 """
 function name(atom::Atom)
@@ -103,8 +87,6 @@ function name(atom::Atom)
 end
 
 """
-    set_name!(atom::Atom, name::String)
-
 Set the name of an `atom` to `name`.
 """
 function set_name!(atom::Atom, name::String)
@@ -113,8 +95,6 @@ function set_name!(atom::Atom, name::String)
 end
 
 """
-    type(atom::Atom)
-
 Get the type of an `atom`.
 """
 function type(atom::Atom)
@@ -124,8 +104,6 @@ function type(atom::Atom)
 end
 
 """
-    set_type!(atom::Atom, type::String)
-
 Set the type of an `atom` to `type`.
 """
 function set_type!(atom::Atom, type::String)
@@ -134,8 +112,6 @@ function set_type!(atom::Atom, type::String)
 end
 
 """
-    fullname(atom::Atom)
-
 Get the full name of an `atom` from the atom type.
 
 For example, the full name of an atom with type "He" is "Helium".
@@ -149,8 +125,6 @@ function Base.fullname(atom::Atom)
 end
 
 """
-    vdw_radius(atom::Atom)
-
 Get the van der Waals radius of an `atom` from the atom type.
 
 If the radius can not be found, this function returns 0.
@@ -162,8 +136,6 @@ function vdw_radius(atom::Atom)
 end
 
 """
-    covalent_radius(atom::Atom)
-
 Get the covalent radius of an `atom` from the atom type.
 
 If the radius can not be found, returns 0.
@@ -175,8 +147,6 @@ function covalent_radius(atom::Atom)
 end
 
 """
-    atomic_number(atom::Atom)
-
 Get the atomic number of an `atom` from the atom type.
 
 If the atomic number can not be found, returns 0.
@@ -188,11 +158,9 @@ function atomic_number(atom::Atom)
 end
 
 """
-    set_property!(atom::Atom, name::String, value)
-
 Set a named property for the given atom.
 """
-function set_property!(atom::Atom, name::String, value)
+function set_property!(atom::Atom, name::String, value::PropertyValue)
     property = Property(value)
     __check(lib.chfl_atom_set_property(
         __ptr(atom), pointer(name), __const_ptr(property)
@@ -201,8 +169,6 @@ function set_property!(atom::Atom, name::String, value)
 end
 
 """
-    property(atom::Atom, name::String)
-
 Get a named property for the given atom.
 """
 function property(atom::Atom, name::String)
@@ -211,8 +177,6 @@ function property(atom::Atom, name::String)
 end
 
 """
-    properties_count(atom::Atom)
-
 Get the number of properties associated with an atom.
 """
 function properties_count(atom::Atom)
@@ -222,8 +186,6 @@ function properties_count(atom::Atom)
 end
 
 """
-    list_properties(atom::Atom)
-
 Get the names of all properties associated with an atom.
 """
 function list_properties(atom::Atom)
@@ -234,8 +196,6 @@ function list_properties(atom::Atom)
 end
 
 """
-    deepcopy(atom::Atom)
-
 Make a deep copy of an `atom`.
 """
 function Base.deepcopy(atom::Atom)

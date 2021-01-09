@@ -11,6 +11,8 @@ __const_ptr(property::Property) = __const_ptr(property.__handle)
     PropertyVector3d = lib.CHFL_PROPERTY_VECTOR3D
 end
 
+PropertyValue = Union{Bool,Float64,String,Vector{Float64}}
+
 # Create a `Bool` `Property`.
 function Property(value::Bool)
     ptr = @__check_ptr(lib.chfl_property_bool(convert(UInt8, value)))
@@ -70,7 +72,7 @@ end
 
 
 # Obtain the value stored by a property.
-function extract(property::Property)
+function extract(property::Property)::PropertyValue
     property_kind = kind(property)
     if property_kind == PropertyBool
         return __extract_bool(property)

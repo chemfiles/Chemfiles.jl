@@ -21,8 +21,6 @@ The possible shape for an unit cell are:
 end
 
 """
-    UnitCell(a::Number, b::Number, c::Number)
-
 Create an `UnitCell` from the three lenghts, with all the angles equal to 90°.
 """
 function UnitCell(a::Number, b::Number, c::Number)
@@ -31,8 +29,6 @@ function UnitCell(a::Number, b::Number, c::Number)
 end
 
 """
-    UnitCell(a::Number, b::Number, c::Number, α::Number, β::Number, γ::Number)
-
 Create an `UnitCell` from the three lenghts and three angles.
 """
 function UnitCell(a::Number, b::Number, c::Number, α::Number, β::Number, γ::Number)
@@ -42,8 +38,6 @@ end
 
 
 """
-    UnitCell(frame::Frame)
-
 Get a copy of the `UnitCell` of a `frame`.
 """
 function UnitCell(frame::Frame)
@@ -55,8 +49,6 @@ function UnitCell(frame::Frame)
 end
 
 """
-    volume(cell::UnitCell)
-
 Get the unit `cell` volume.
 """
 function volume(cell::UnitCell)
@@ -66,8 +58,6 @@ function volume(cell::UnitCell)
 end
 
 """
-    lengths(cell::UnitCell)
-
 Get the three `cell` lengths (a, b, and c) in angstroms.
 """
 function lengths(cell::UnitCell)
@@ -77,8 +67,6 @@ function lengths(cell::UnitCell)
 end
 
 """
-    set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
-
 Set the `cell` lengths to `a`, `b`, and `c`.
 
 `a`, `b`, and `c` should be in angstroms.
@@ -89,8 +77,6 @@ function set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
 end
 
 """
-    angles(cell::UnitCell)
-
 Get the three `cell` angles (alpha, beta, and gamma) in degrees.
 """
 function angles(cell::UnitCell)
@@ -100,8 +86,6 @@ function angles(cell::UnitCell)
 end
 
 """
-    set_angles!(cell::UnitCell, α::Real, β::Real, γ::Real)
-
 Set the `cell` angles to `α`, `β`, and `γ`.
 
 `α`, `β`, and `γ` should be in degrees.
@@ -112,8 +96,6 @@ return nothing
 end
 
 """
-    matrix(cell::UnitCell)
-
 Get the `cell` matricial representation, *i.e.* the representation of the
 three base vectors as::
 
@@ -128,8 +110,6 @@ function matrix(cell::UnitCell)
 end
 
 """
-    shape(cell::UnitCell)
-
 Get the `cell` shape, as a `CellShape` value.
 """
 function shape(cell::UnitCell)
@@ -139,8 +119,6 @@ function shape(cell::UnitCell)
 end
 
 """
-    set_shape!(cell::UnitCell, shape::CellShape)
-
 Set the `cell` shape to the given `shape`.
 """
 function set_shape!(cell::UnitCell, shape::CellShape)
@@ -149,8 +127,6 @@ return nothing
 end
 
 """
-    wrap!(cell::UnitCell, vector::Vector{Float64})
-
 Wrap a `vector` in the unit `cell`.
 """
 function wrap!(cell::UnitCell, vector::Vector{Float64})
@@ -162,8 +138,6 @@ function wrap!(cell::UnitCell, vector::Vector{Float64})
 end
 
 """
-    deepcopy(cell::UnitCell)
-
 Make a deep copy of a `cell`.
 """
 function Base.deepcopy(cell::UnitCell)
