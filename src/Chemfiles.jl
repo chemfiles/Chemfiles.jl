@@ -12,6 +12,13 @@ module Chemfiles
     $(DOCSTRING)
     """
 
+    @template TYPES =
+    """
+    $(DOCSTRING)
+
+    $(TYPEDFIELDS)
+    """
+
     module lib
         if VERSION >= v"1.3.0"
             using Chemfiles_jll

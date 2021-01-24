@@ -67,3 +67,106 @@ any existing data.
 function add_configuration(path::String)
     __check(lib.chfl_add_configuration(pointer(path)))
 end
+
+"""
+Metadata associated with one of the format Chemfiles can read/write
+"""
+struct FormatMetadata
+    """Name of the format"""
+    name::String
+    """Extension associated with the format, or `nothing` if there is no extension
+    associated."""
+    extension::Union{String,Nothing}
+    """Extended user-facing description of the format"""
+    description::String
+    """URL pointing to the format definition/reference"""
+    reference::String
+
+    """Is reading files in this format implemented?"""
+    read::Bool
+    """Is writing files in this format implemented?"""
+    write::Bool
+    """Does this format support in-memory IO?"""
+    memory::Bool
+
+    """Does this format support storing atomic positions?"""
+    positions::Bool
+    """Does this format support storing atomic velocities?"""
+    velocities::Bool
+    """Does this format support storing unit cell information?"""
+    unit_cell::Bool
+    """Does this format support storing atom names or types?"""
+    atoms::Bool
+    """Does this format support storing bonds between atoms?"""
+    bonds::Bool
+    """Does this format support storing residues?"""
+    residues::Bool
+end
+
+function Base.show(io::IO, metadata::FormatMetadata)
+    print(io, "FormatMetadata(")
+    print(io, "name=\"$(metadata.name)\", ")
+
+    if metadata.extension === nothing
+        print(io, "extension=nothing, ")
+    else
+        print(io, "extension=\"$(metadata.extension)\", ")
+    end
+    print(io, "description=\"$(metadata.description)\", ")
+    print(io, "reference=\"$(metadata.reference)\", ")
+
+    print(io, "read=$(metadata.read), "),
+    print(io, "write=$(metadata.write), "),
+    print(io, "memory=$(metadata.memory), "),
+    print(io, "positions=$(metadata.positions), "),
+    print(io, "velocities=$(metadata.velocities), "),
+    print(io, "unit_cell=$(metadata.unit_cell), "),
+    print(io, "atoms=$(metadata.atoms), "),
+    print(io, "bonds=$(metadata.bonds), "),
+    print(io, "residues=$(metadata.residues)"),
+
+    print(io, ")")
+end
+
+function FormatMetadata(metadata::lib.chfl_format_metadata)
+    name = unsafe_string(metadata.name)
+    if metadata.extension == C_NULL
+        extension = nothing
+    else
+        extension = unsafe_string(metadata.extension)
+    end
+    description = unsafe_string(metadata.description)
+    reference = unsafe_string(metadata.reference)
+
+    return FormatMetadata(
+        name,
+        extension,
+        description,
+        reference,
+        convert(Bool, metadata.read[]),
+        convert(Bool, metadata.write[]),
+        convert(Bool, metadata.memory[]),
+        convert(Bool, metadata.positions[]),
+        convert(Bool, metadata.velocities[]),
+        convert(Bool, metadata.unit_cell[]),
+        convert(Bool, metadata.atoms[]),
+        convert(Bool, metadata.bonds[]),
+        convert(Bool, metadata.residues[]),
+    )
+end
+
+"""
+Get the full list of formats supported by Chemfiles, and associated metadata
+"""
+function format_list()
+    metadata = Ref{Ptr{lib.chfl_format_metadata}}()
+    count = Ref{UInt64}(0)
+    lib.chfl_formats_list(metadata, count)
+
+    all = FormatMetadata[]
+    for i in 1:count[]
+        push!(all, FormatMetadata(unsafe_load(metadata[], i)))
+    end
+    lib.chfl_free(Ptr{Cvoid}(metadata[]))
+    return all
+end

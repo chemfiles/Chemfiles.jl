@@ -39,3 +39,28 @@ end
     @test name(Atom(frame, 9)) == "Oz"
     @test type(Atom(frame, 9)) == "F"
 end
+
+
+@testset "Format list" begin
+    for metadata in Chemfiles.format_list()
+        if metadata.name == "XYZ"
+            @test metadata.description == "XYZ text format"
+            @test metadata.extension == ".xyz"
+            @test metadata.reference == "https://openbabel.org/wiki/XYZ"
+
+            @test metadata.read == true
+            @test metadata.write == true
+            @test metadata.memory == true
+            @test metadata.positions == true
+            @test metadata.velocities == false
+            @test metadata.unit_cell == true
+            @test metadata.atoms == true
+            @test metadata.bonds == false
+            @test metadata.residues == false
+        end
+
+        if metadata.name == "LAMMPD Data"
+            @test metadata.extension === nothing
+        end
+    end
+end
