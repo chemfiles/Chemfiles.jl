@@ -21,18 +21,21 @@ The possible shape for an unit cell are:
 end
 
 """
-Create an `UnitCell` from the three lenghts, with all the angles equal to 90°.
+Create an `UnitCell` from the given `lengths` and `angles`.
 """
-function UnitCell(a::Number, b::Number, c::Number)
-    ptr = @__check_ptr(lib.chfl_cell(Float64[a, b, c], [90.0, 90.0, 90.0]))
+function UnitCell(lengths::Vector{Float64}, angles::Vector{Float64}=[90.0, 90.0, 90.0])
+    @assert length(lengths) == 3
+    @assert length(angles) == 3
+    ptr = @__check_ptr(lib.chfl_cell(lengths, angles))
     return UnitCell(CxxPointer(ptr, is_const=false))
 end
 
 """
-Create an `UnitCell` from the three lenghts and three angles.
+Create an `UnitCell` from the given 3x3 cell `matrix`.
 """
-function UnitCell(a::Number, b::Number, c::Number, α::Number, β::Number, γ::Number)
-    ptr = @__check_ptr(lib.chfl_cell(Float64[a, b, c], Float64[α, β, γ]))
+function UnitCell(matrix::Array{Float64,2})
+    @assert size(matrix) == (3, 3)
+    ptr = @__check_ptr(lib.chfl_cell_from_matrix(pointer(matrix)))
     return UnitCell(CxxPointer(ptr, is_const=false))
 end
 
@@ -58,7 +61,7 @@ function volume(cell::UnitCell)
 end
 
 """
-Get the three `cell` lengths (a, b, and c) in angstroms.
+Get the three cell lengths in angstroms.
 """
 function lengths(cell::UnitCell)
     result = Float64[0, 0, 0]
@@ -67,17 +70,16 @@ function lengths(cell::UnitCell)
 end
 
 """
-Set the `cell` lengths to `a`, `b`, and `c`.
-
-`a`, `b`, and `c` should be in angstroms.
+Set the cell `lengths` to the given values. The lengths should be in angstroms.
 """
-function set_lengths!(cell::UnitCell, a::Real, b::Real, c::Real)
-    __check(lib.chfl_cell_set_lengths(__ptr(cell), Float64[a, b, c]))
+function set_lengths!(cell::UnitCell, lengths::Vector{Float64})
+    @assert length(lengths) == 3
+    __check(lib.chfl_cell_set_lengths(__ptr(cell), lengths))
     return nothing
 end
 
 """
-Get the three `cell` angles (alpha, beta, and gamma) in degrees.
+Get the three cell angles in degrees.
 """
 function angles(cell::UnitCell)
     result = Float64[0, 0, 0]
@@ -86,18 +88,17 @@ function angles(cell::UnitCell)
 end
 
 """
-Set the `cell` angles to `α`, `β`, and `γ`.
-
-`α`, `β`, and `γ` should be in degrees.
+Set the cell `angles` to the given values. The angles should be in degrees.
 """
-function set_angles!(cell::UnitCell, α::Real, β::Real, γ::Real)
-    __check(lib.chfl_cell_set_angles(__ptr(cell), Float64[α, β, γ]))
+function set_angles!(cell::UnitCell, angles::Vector{Float64})
+    @assert length(angles) == 3
+    __check(lib.chfl_cell_set_angles(__ptr(cell), angles))
 return nothing
 end
 
 """
 Get the `cell` matricial representation, *i.e.* the representation of the
-three base vectors as::
+three base vectors as:
 
         | a_x   b_x   c_x |
         |  0    b_y   c_y |

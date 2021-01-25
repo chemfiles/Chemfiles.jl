@@ -38,7 +38,7 @@ const DATAPATH = joinpath(@__DIR__, "data")
         @test name(Atom(frame, 0)) == "O"
         @test name(Atom(frame, 1)) == "H"
 
-        set_cell!(trajectory, UnitCell(30, 30, 30))
+        set_cell!(trajectory, UnitCell([30.0, 30.0, 30.0]))
         frame = read_step(trajectory, 41)
 
         @test lengths(UnitCell(frame)) == [30.0, 30.0, 30.0]
