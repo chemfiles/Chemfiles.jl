@@ -70,6 +70,8 @@ end
 
 """
 Metadata associated with one of the format Chemfiles can read/write
+
+$(TYPEDFIELDS)
 """
 struct FormatMetadata
     """Name of the format"""
