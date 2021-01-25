@@ -25,7 +25,7 @@
         end
         @test velocities(frame) == expected
 
-        set_cell!(frame, UnitCell(3, 4, 5))
+        set_cell!(frame, UnitCell([3.0, 4.0, 5.0]))
         cell = UnitCell(frame)
         @test lengths(cell) == [3.0, 4.0, 5.0]
 

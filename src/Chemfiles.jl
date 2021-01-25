@@ -80,8 +80,7 @@ module Chemfiles
 
     """
     A `UnitCell` describes the bounding box of a system. It is represented by
-    three base vectors of lengths `a`, `b`, and `c`; and the angles
-    between these vectors are `alpha`, `beta`, and `gamma`.
+    a 3x3 matrix containing the base vectors `a`, `b` and `c`.
     """
     struct UnitCell
         __handle :: CxxPointer{lib.CHFL_CELL}
