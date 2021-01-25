@@ -34,7 +34,7 @@ struct chfl_format_metadata
     bonds :: Cbool
     residues :: Cbool
 end
-# === End of manual translation
+# === End of manual type defintion
 
 struct CHFL_TRAJECTORY end
 

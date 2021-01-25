@@ -8,3 +8,7 @@ Trajectory
 Modules = [Chemfiles]
 Pages   = ["Trajectory.jl"]
 ```
+
+```@docs
+Chemfiles.DataBuffer
+```

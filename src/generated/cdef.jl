@@ -7,6 +7,13 @@
 # This file contains Julia interface to the C API
 # =========================================================================== #
 
+# === Manually translated from the header
+# Function 'chfl_trajectory_memory_buffer'
+function chfl_trajectory_memory_buffer(trajectory::Ptr{CHFL_TRAJECTORY}, data::Ref{Ptr{UInt8}}, size::Ref{UInt64})
+    ccall((:chfl_trajectory_memory_buffer, libchemfiles), chfl_status, (Ptr{CHFL_TRAJECTORY}, Ref{Ptr{UInt8}}, Ref{UInt64}), trajectory, data, size)
+end
+# === End of manual function defintion
+
 # Function 'chfl_version' at types.h:150
 function chfl_version()
     ccall((:chfl_version, libchemfiles), Ptr{UInt8}, (), )
@@ -645,11 +652,6 @@ end
 # Function 'chfl_trajectory_nsteps' at trajectory.h:164
 function chfl_trajectory_nsteps(trajectory::Ptr{CHFL_TRAJECTORY}, nsteps::Ref{UInt64})
     ccall((:chfl_trajectory_nsteps, libchemfiles), chfl_status, (Ptr{CHFL_TRAJECTORY}, Ref{UInt64}), trajectory, nsteps)
-end
-
-# Function 'chfl_trajectory_memory_buffer' at trajectory.h:178
-function chfl_trajectory_memory_buffer(trajectory::Ptr{CHFL_TRAJECTORY}, data::Ptr{Ptr{UInt8}}, size::Ref{UInt64})
-    ccall((:chfl_trajectory_memory_buffer, libchemfiles), chfl_status, (Ptr{CHFL_TRAJECTORY}, Ptr{Ptr{UInt8}}, Ref{UInt64}), trajectory, data, size)
 end
 
 # Function 'chfl_trajectory_close' at trajectory.h:188

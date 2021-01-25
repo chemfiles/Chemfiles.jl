@@ -12,13 +12,6 @@ module Chemfiles
     $(DOCSTRING)
     """
 
-    @template TYPES =
-    """
-    $(DOCSTRING)
-
-    $(TYPEDFIELDS)
-    """
-
     module lib
         if VERSION >= v"1.3.0"
             using Chemfiles_jll
@@ -119,6 +112,13 @@ module Chemfiles
     end
 
     """
+    Data (either binary or string) used for in-memory reading of trajectory
+
+        DataBuffer = Union{AbstractString,Vector{UInt8},Nothing}
+    """
+    DataBuffer = Union{AbstractString,Vector{UInt8},Nothing}
+
+    """
     A `Trajectory` represents a simulation file on the hard drive. It can read
     or write one or many [`Frame`](@ref)s to this file. The file format can be
     automatically determined from the extention, or manually specified.
@@ -128,6 +128,9 @@ module Chemfiles
     """
     struct Trajectory
         __handle :: CxxPointer{lib.CHFL_TRAJECTORY}
+        # hold a reference to the data to prevent garbage collection when using
+        # a in-memory reader
+        __data::DataBuffer
     end
 
     include("Property.jl")

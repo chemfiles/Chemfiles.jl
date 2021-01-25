@@ -2,21 +2,44 @@
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
 export read_step, read_step!, set_topology!, set_cell!, path
+export MemoryTrajectory
 
 __ptr(trajectory::Trajectory) = __ptr(trajectory.__handle)
 __const_ptr(trajectory::Trajectory) = __const_ptr(trajectory.__handle)
 
 """
-The `Trajectory` function opens a trajectory file, using the file at the given
-`path`. The opening `mode` can be `'r'` for read, `'w'` for write or
-`'a'` for append, and defaults to `'r'`. The optional `format` parameter
-give a specific file format to use when opening the file.
+Opens the trajectory file at the given `path`.
+
+The opening `mode` can be `'r'` for read, `'w'` for write or `'a'` for append,
+and defaults to `'r'`. The optional `format` parameter give a specific file
+format to use when opening the file.
 """
 function Trajectory(path::AbstractString, mode::Char='r', format::AbstractString="")
     ptr = @__check_ptr(lib.chfl_trajectory_with_format(
         pointer(path), Int8(mode), pointer(format),
     ))
-    return Trajectory(CxxPointer(ptr, is_const=false))
+    return Trajectory(CxxPointer(ptr, is_const=false), nothing)
+end
+
+"""
+Open a trajectory that read in-memory data as if it were a formatted file.
+
+The `format` of the data is mandatory, and must match one of the known formats.
+If `data` is `nothing`, this function creates a memory writer, the resulting
+data can be retrieved with `buffer`. Else, this function creates a memory reader
+using the given data.
+"""
+function MemoryTrajectory(format::AbstractString, data::DataBuffer=nothing)
+    if data === nothing
+        # memory writer
+        ptr = @__check_ptr(lib.chfl_trajectory_memory_writer(pointer(format)))
+    else
+        # memory reader
+        ptr = @__check_ptr(lib.chfl_trajectory_memory_reader(
+            pointer(data), UInt64(sizeof(data)), pointer(format),
+        ))
+    end
+    return Trajectory(CxxPointer(ptr, is_const=false), data)
 end
 
 """
@@ -86,6 +109,22 @@ function Base.write(trajectory::Trajectory, frame::Frame)
         __ptr(trajectory), __const_ptr(frame)
     ))
 return nothing
+end
+
+"""
+Obtain the memory buffer of a in-memory trajectory writer as a `Vector{UInt8}`,
+without copying.
+
+If more data is written to the trajectory, the buffer is invalidated.
+"""
+function Base.take!(trajectory::Trajectory)
+    @assert isopen(trajectory)
+    size = Ref{UInt64}(0)
+    ptr = Ref{Ptr{UInt8}}()
+    __check(lib.chfl_trajectory_memory_buffer(
+        __const_ptr(trajectory), ptr, size
+    ))
+    return unsafe_wrap(Array{UInt8,1}, ptr[], (size[],); own=false)
 end
 
 """

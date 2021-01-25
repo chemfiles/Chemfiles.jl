@@ -6,6 +6,10 @@ const DATAPATH = joinpath(@__DIR__, "data")
         remove_chemfiles_warning() do
             @test_throws ChemfilesError Trajectory(joinpath(DATAPATH, "not-here.xyz"))
             @test_throws ChemfilesError Trajectory(joinpath(DATAPATH, "empty.unknown"))
+
+            trajectory = Trajectory(joinpath(DATAPATH, "water.xyz"))
+            @test_throws ChemfilesError take!(trajectory)
+            close(trajectory)
         end
     end
 
@@ -96,17 +100,9 @@ const DATAPATH = joinpath(@__DIR__, "data")
                               """
 
         frame = Frame()
-        resize!(frame, 4)
-        pos = positions(frame)
         for i=1:4
-            pos[:, i] = Float64[1, 2, 3]
+            add_atom!(frame, Atom("X"), Float64[1, 2, 3])
         end
-
-        topology = Topology()
-        for i=1:4
-            add_atom!(topology, Atom("X"))
-        end
-        set_topology!(frame, topology)
 
         trajectory = Trajectory("test-tmp.xyz", 'w');
         write(trajectory, frame)
@@ -129,5 +125,42 @@ const DATAPATH = joinpath(@__DIR__, "data")
             @test isopen(trajectory)
         end
         @test !isopen(trajectory)
+    end
+
+    @testset "In-memory reader" begin
+        trajectory = MemoryTrajectory("XYZ", """3
+
+H 0 0 0
+C 1 2 0
+Zn 3 2 -5""")
+        frame = read(trajectory)
+        expected = transpose([
+            0 0 0
+            1 2 0
+            3 2 -5
+        ])
+        @test positions(frame) == expected
+        @test name(Atom(frame, 0)) == "H"
+        @test name(Atom(frame, 1)) == "C"
+        @test name(Atom(frame, 2)) == "Zn"
+    end
+
+    @testset "In-memory writer" begin
+        frame = Frame()
+        add_atom!(frame, Atom("Cu"), Float64[2, 1, 4])
+        add_atom!(frame, Atom("Hf"), Float64[0, 3.2, 0])
+        add_atom!(frame, Atom("Li"), Float64[1, 0, -4])
+
+        trajectory = MemoryTrajectory("PDB")
+        write(trajectory, frame)
+        expected = """MODEL    1
+CRYST1    0.000    0.000    0.000  90.00  90.00  90.00 P 1           1
+HETATM    1 Cu           1       2.000   1.000   4.000  1.00  0.00          Cu
+HETATM    2 Hf           2       0.000   3.200   0.000  1.00  0.00          Hf
+HETATM    3 Li           3       1.000   0.000  -4.000  1.00  0.00          Li
+ENDMDL
+"""
+
+        @test String(take!(trajectory)) == expected
     end
 end
