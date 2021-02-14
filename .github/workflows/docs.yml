@@ -1,0 +1,40 @@
+name: Documentation
+
+on:
+  push:
+    branches: [master]
+    tags: ["*"]
+  pull_request:
+    # Check all PR
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup Julia
+        uses: julia-actions/setup-julia@v1
+        with:
+          version: 1.5
+      - name: build documentation
+        run: julia docs/make.jl
+      - name: put documentation in the website
+        run: |
+          git clone https://github.com/$GITHUB_REPOSITORY --branch gh-pages gh-pages
+          rm -rf gh-pages/.git
+
+          REF_KIND=$(echo $GITHUB_REF | cut -d / -f2)
+          if [[ "$REF_KIND" == "tags" ]]; then
+              TAG=${GITHUB_REF#refs/tags/}
+              mv docs/build/ gh-pages/$TAG
+          else
+              rm -rf gh-pages/latest
+              mv docs/build/ gh-pages/latest
+          fi
+      - name: deploy to gh-pages
+        if: github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./gh-pages/
+          force_orphan: true
