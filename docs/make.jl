@@ -1,3 +1,8 @@
+using Pkg
+if !haskey(Pkg.installed(), "Documenter")
+    Pkg.add("Documenter")
+end
+
 using Documenter
 using Documenter: Selectors, Expanders
 using Markdown
@@ -14,12 +19,12 @@ function Selectors.runner(::Type{LiteralInclude}, node, page, doc)
     if node.code != ""
         error("content is not supported in @literalinclude")
     end
-
+    
     matched = match(r"@literalinclude (.*) (\d+)-(\d*)", node.language)
     if matched === nothing
         error("@literalinclude should look like '@literalinclude path/to/file.jl 3-5'")
     end
-
+    
     path = matched[1]
     start = parse(Int, matched[2])
     if matched[3] == ""
@@ -30,7 +35,7 @@ function Selectors.runner(::Type{LiteralInclude}, node, page, doc)
             error("@literalinclude last line should be larger than start line")
         end
     end
-
+    
     content = open(path) do fd
         lines = readlines(fd)
         if stop !== nothing
@@ -43,8 +48,9 @@ function Selectors.runner(::Type{LiteralInclude}, node, page, doc)
 end
 
 
-using Pkg
+
 Pkg.activate(joinpath(@__DIR__, ".."))
+Pkg.instantiate()
 using Chemfiles
 
 makedocs(
