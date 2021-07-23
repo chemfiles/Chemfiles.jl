@@ -1,7 +1,7 @@
 name = "Chemfiles"
 uuid = "46823bd8-5fb3-5f92-9aa0-96921f3dd015"
-authors = ["Guillaume Fraux <guillaume.fraux@chimie-paristech.fr>"]
-version = "0.10.0"
+authors = ["Guillaume Fraux <guillaume.fraux@epfl.ch>"]
+version = "0.10.1"
 
 [deps]
 BinaryProvider = "b99e7846-7c00-51b0-8f62-c81ae34c0232"
@@ -12,10 +12,10 @@ Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
 [compat]
 BinaryProvider = "0.5.8"
+Chemfiles_jll = "= 0.10.1"
 Compat = "3.15"
-Chemfiles_jll = "= 0.10.0"
-julia = "1.0"
 DocStringExtensions = "0.8.3"
+julia = "1.0"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

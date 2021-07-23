@@ -172,3 +172,23 @@ function format_list()
     lib.chfl_free(Ptr{Cvoid}(metadata[]))
     return all
 end
+
+"""
+Get the format that chemfiles would use to read a file at the given `path`.
+
+The format is mostly guessed from the path extension, chemfiles only tries to
+read the file to distinguish between CIF and mmCIF files. Opening the file using
+the returned format string might still fail. For example, it will fail if the
+file is not actually formatted according to the guessed format; or the
+format/compression combination is not supported (e.g. `XTC / GZ` will not work
+since the XTC reader does not support compressed files).
+
+The returned format is represented in a way compatible with the various
+`Trajectory` constructors, i.e. `"<format name> [/ <compression>]"`, where
+compression is optional.
+"""
+function guess_format(path::String)
+    buffer = repeat("\0", 64)
+    lib.chfl_guess_format(pointer(path), pointer(buffer), UInt64(length(buffer)))
+    return __strip_null(buffer)
+end

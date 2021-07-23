@@ -44,7 +44,12 @@ function chfl_formats_list(metadata::Ref{Ptr{chfl_format_metadata}}, count::Ref{
     ccall((:chfl_formats_list, libchemfiles), chfl_status, (Ref{Ptr{chfl_format_metadata}}, Ref{UInt64}), metadata, count)
 end
 
-# Function 'chfl_free' at misc.h:80
+# Function 'chfl_guess_format' at misc.h:93
+function chfl_guess_format(path::Ptr{UInt8}, format::Ptr{UInt8}, buffsize::UInt64)
+    ccall((:chfl_guess_format, libchemfiles), chfl_status, (Ptr{UInt8}, Ptr{UInt8}, UInt64), path, format, buffsize)
+end
+
+# Function 'chfl_free' at misc.h:102
 function chfl_free(object::Ptr{Cvoid})
     ccall((:chfl_free, libchemfiles), Cvoid, (Ptr{Cvoid},), object)
 end
