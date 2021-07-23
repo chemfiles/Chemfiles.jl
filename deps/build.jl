@@ -3,4 +3,4 @@ if VERSION >= v"1.3.0"
     Sys.exit()
 end
 
-include("build_Chemfiles.v0.10.0.jl")
+include("build_Chemfiles.v0.10.1.jl")

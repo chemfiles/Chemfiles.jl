@@ -64,3 +64,9 @@ end
         end
     end
 end
+
+
+@testset "Guess format" begin
+    @test Chemfiles.guess_format("file.xyz.gz") == "XYZ / GZ"
+    @test Chemfiles.guess_format("file.nc") == "Amber NetCDF"
+end
