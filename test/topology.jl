@@ -105,4 +105,13 @@
         @test impropers_count(topology) == 1
         @test impropers(topology) == reshape(UInt64[1, 0, 2, 3], (4,1))
     end
+
+    @testset "Topology indexing" begin
+        topology = Topology()
+        add_atom!(topology, Atom("N"))
+        add_atom!(topology, Atom("H"))
+
+        @test name(topology[0]) == "N"
+        @test name(topology[1]) == "H"
+    end
 end
