@@ -1,7 +1,6 @@
 # Chemfiles.jl
 
-[![Build Status -- Linux](https://travis-ci.org/chemfiles/Chemfiles.jl.svg?branch=master)](https://travis-ci.org/chemfiles/Chemfiles.jl)
-[![Build status -- Windows](https://ci.appveyor.com/api/projects/status/2v1ert2bktpwpiqo?svg=true)](https://ci.appveyor.com/project/Luthaf/chemfiles-jl)
+[![Build status](https://github.com/chemfiles/Chemfiles.jl/actions/workflows/tests.yml/badge.svg)](https://github.com/chemfiles/Chemfiles.jl/actions/workflows/tests.yml)
 [![Code coverage](https://codecov.io/github/chemfiles/Chemfiles.jl/coverage.svg?branch=master)](https://codecov.io/github/chemfiles/Chemfiles.jl?branch=master)
 [![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](http://chemfiles.org/Chemfiles.jl/)
 
@@ -17,14 +16,9 @@ please read the [introduction to chemfiles][docs_intro].
 
 ## Installation
 
-Julia versions 0.6 and 0.5 are supported.
+You can install Chemfiles with `Pkg.add("Chemfiles")`. You can also run the test
+suite with:
 
-To install, run the following commands:
-```julia
-julia> Pkg.add("Chemfiles")
-```
-
-You can also test the Julia interface with:
 ```julia
 julia> Pkg.test("Chemfiles")
 ```
