@@ -292,12 +292,15 @@ function Base.deepcopy(frame::Frame)
     return Frame(CxxPointer(ptr, is_const=false))
 end
 
+# Indexing support
+Base.getindex(frame::Frame, index::Integer) = Atom(frame, index)
+
 # Iteration support
 function Base.iterate(frame::Frame, atom=0)
     if atom >= size(frame)
         return nothing
     else
-        return (Atom(frame, atom), atom + 1)
+        return (frame[atom], atom + 1)
     end
 end
 Base.eltype(::Frame) = Atom

@@ -272,3 +272,6 @@ function Base.deepcopy(topology::Topology)
     ptr = lib.chfl_topology_copy(__const_ptr(topology))
     return Topology(CxxPointer(ptr, is_const=false))
 end
+
+# Indexing support
+Base.getindex(topology::Topology, index::Integer) = Atom(topology, index)
