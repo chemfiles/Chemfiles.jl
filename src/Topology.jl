@@ -275,3 +275,9 @@ end
 
 # Indexing support
 Base.getindex(topology::Topology, index::Integer) = Atom(topology, index)
+
+function Base.view(topology::Topology, index::Integer)
+    ptr = @__check_ptr(lib.chfl_atom_from_topology(__ptr(topology), UInt64(index)))
+    atom = Atom(CxxPointer(ptr, is_const=false))
+    return atom
+end

@@ -295,6 +295,12 @@ end
 # Indexing support
 Base.getindex(frame::Frame, index::Integer) = Atom(frame, index)
 
+function Base.view(frame::Frame, index::Integer)
+    ptr = @__check_ptr(lib.chfl_atom_from_frame(__ptr(frame), UInt64(index)))
+    atom = Atom(CxxPointer(ptr, is_const=false))
+    return atom
+end
+
 # Iteration support
 function Base.iterate(frame::Frame, atom=0)
     if atom >= size(frame)

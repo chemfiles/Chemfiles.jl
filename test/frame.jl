@@ -142,6 +142,15 @@
 
         @test name(frame[0]) == "Zn"
         @test name(frame[1]) == "Fe"
+
+        # @view is required to reference an atom without create a copy
+        @test name(@view frame[1]) == "Fe"
+
+        # Modifying an atom requires view, as normal slicing creates a copy
+        set_charge!(frame[0], 2.0)
+        @test charge(frame[0]) == 0.0 # Didn't change
+        set_charge!(@view(frame[0]), 2.0)
+        @test charge(frame[0]) ≈ 2.0 # Now changed
     end
 
     @testset "Frame iteration" begin
