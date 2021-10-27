@@ -115,7 +115,7 @@
         @test name(topology[1]) == "H"
 
         # @view is required to reference an atom without create a copy
-        # Modifying an atom requires view, as normal slicing creates a copy
+        # Modifying an atom requires view, as normal indexing creates a copy
         set_type!(topology[0], "O")
         @test type(topology[0]) == "N"
         set_type!(@view(topology[0]), "O")
