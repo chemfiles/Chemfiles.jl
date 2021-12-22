@@ -293,8 +293,38 @@ function Base.deepcopy(frame::Frame)
 end
 
 # Indexing support
+"""
+Get the `Atom` at the given `index` of the `frame`. By default this creates a 
+copy so as to be safe. To not create a copy, use `@view frame[index]`.
+
+See also [`Base.view`](@ref)
+"""
 Base.getindex(frame::Frame, index::Integer) = Atom(frame, index)
 
+"""
+Get the `Atom` at the given `index` of the `frame` without creating a copy.
+
+!!! warning
+
+    This can lead to issues in cases where registration of pointers to an 
+    invalid memory location is done, like follows:
+
+    ```
+    frame = Frame()        
+    resize!(frame, 3)      
+       
+    atom_1 = @view frame[0]
+                           
+    resize!(frame, 4)      
+    atom_2 = @view frame[0]
+    ```
+
+    Here, `atom_1` contains a pointer to memory owned by `frame`, but the 
+    pointer is invalidated by resizing the frame. Then later `atom_2` tries to
+    register another pointer at the same location with chemfiles' reference 
+    counting scheme, and fails since `atom_1` still holds onto a pointer to the
+    same (now invalid) memory location.
+"""
 function Base.view(frame::Frame, index::Integer)
     ptr = @__check_ptr(lib.chfl_atom_from_frame(__ptr(frame), UInt64(index)))
     atom = Atom(CxxPointer(ptr, is_const=false))

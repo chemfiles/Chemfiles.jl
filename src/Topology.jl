@@ -274,8 +274,22 @@ function Base.deepcopy(topology::Topology)
 end
 
 # Indexing support
+"""
+Get the `Atom` at the given `index` of the `topology`. By default this creates 
+a copy so as to be safe. To not create a copy, use `@view topology[index]`.
+
+See also [`Base.view`](@ref)
+"""
 Base.getindex(topology::Topology, index::Integer) = Atom(topology, index)
 
+"""
+Get the `Atom` at the given `index` of the `topology` without creating a copy.
+
+!!! warning
+
+    This can lead to issues in cases where registration of pointers to an 
+    invalid memory location is done.
+"""
 function Base.view(topology::Topology, index::Integer)
     ptr = @__check_ptr(lib.chfl_atom_from_topology(__ptr(topology), UInt64(index)))
     atom = Atom(CxxPointer(ptr, is_const=false))
