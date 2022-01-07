@@ -2,7 +2,6 @@
 
 ```@docs
 Topology
-Chemfiles.BondOrder
 ```
 
 ```@autodocs
