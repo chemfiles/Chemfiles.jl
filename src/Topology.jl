@@ -275,10 +275,10 @@ end
 
 # Indexing support
 """
-Get the `Atom` at the given `index` of the `topology`. By default this creates 
+Get the `Atom` at the given `index` of the `topology`. By default this creates
 a copy so as to be safe. To not create a copy, use `@view topology[index]`.
 
-See also [`Base.view`](@ref)
+See also [`Base.view(topology::Topology, index::Integer)`](@ref)
 """
 Base.getindex(topology::Topology, index::Integer) = Atom(topology, index)
 
@@ -287,8 +287,9 @@ Get the `Atom` at the given `index` of the `topology` without creating a copy.
 
 !!! warning
 
-    This can lead to issues in cases where registration of pointers to an 
-    invalid memory location is done.
+    This function can lead to unefined behavior when keeping the returned `Atom`
+    around. See [`Base.view(frame::Frame, index::Integer)`](@ref) for more
+    information on this issue.
 """
 function Base.view(topology::Topology, index::Integer)
     ptr = @__check_ptr(lib.chfl_atom_from_topology(__ptr(topology), UInt64(index)))
