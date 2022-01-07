@@ -15,9 +15,11 @@ jobs:
       - name: setup Julia
         uses: julia-actions/setup-julia@v1
         with:
-          version: 1.5
+          version: 1.6
       - name: build documentation
-        run: julia docs/make.jl
+        run: |
+          julia -e 'using Pkg; Pkg.add("Documenter")'
+          julia docs/make.jl
       - name: put documentation in the website
         run: |
           git clone https://github.com/$GITHUB_REPOSITORY --branch gh-pages gh-pages
