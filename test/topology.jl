@@ -105,4 +105,20 @@
         @test impropers_count(topology) == 1
         @test impropers(topology) == reshape(UInt64[1, 0, 2, 3], (4,1))
     end
+
+    @testset "Topology indexing" begin
+        topology = Topology()
+        add_atom!(topology, Atom("N"))
+        add_atom!(topology, Atom("H"))
+
+        @test name(topology[0]) == "N"
+        @test name(topology[1]) == "H"
+
+        # @view is required to reference an atom without create a copy
+        # Modifying an atom requires view, as normal indexing creates a copy
+        set_type!(topology[0], "O")
+        @test type(topology[0]) == "N"
+        set_type!(@view(topology[0]), "O")
+        @test type(topology[0]) == "O"
+    end
 end

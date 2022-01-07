@@ -135,6 +135,24 @@
         @test count_residues(Topology(frame)) == 1
     end
 
+    @testset "Frame indexing" begin
+        frame = Frame()
+        add_atom!(frame, Atom("Zn"), [0.0, 0.0, 0.0])
+        add_atom!(frame, Atom("Fe"), [1.0, 2.0, 3.0])
+
+        @test name(frame[0]) == "Zn"
+        @test name(frame[1]) == "Fe"
+
+        # @view is required to reference an atom without create a copy
+        @test name(@view frame[1]) == "Fe"
+
+        # Modifying an atom requires view, as normal indexing creates a copy
+        set_charge!(frame[0], 2.0)
+        @test charge(frame[0]) == 0.0 # Didn't change
+        set_charge!(@view(frame[0]), 2.0)
+        @test charge(frame[0]) ≈ 2.0 # Now changed
+    end
+
     @testset "Frame iteration" begin
         frame = Frame()
         add_atom!(frame, Atom(""), [0.0, 0.0, 0.0])

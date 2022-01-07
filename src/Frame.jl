@@ -292,12 +292,48 @@ function Base.deepcopy(frame::Frame)
     return Frame(CxxPointer(ptr, is_const=false))
 end
 
+# Indexing support
+"""
+Get the `Atom` at the given `index` of the `frame`. By default this creates a
+copy so as to be safe. To not create a copy, use `@view frame[index]`.
+
+See also [`Base.view(frame::Frame, index::Integer)`](@ref)
+"""
+Base.getindex(frame::Frame, index::Integer) = Atom(frame, index)
+
+"""
+Get the `Atom` at the given `index` of the `frame` without creating a copy.
+
+!!! warning
+
+    This function can lead to unefined behavior when keeping the returned `Atom`
+    around. Whith code like this:
+
+    ```
+    frame = Frame()
+    resize!(frame, 3)
+
+    atom = @view frame[0]
+    resize!(frame, 4)
+    ```
+
+    `atom` contains a pointer to memory owned by `frame`, but this
+    pointer has been invalidated when resizing the frame. Using `atom` after
+    the second call to `resize!` might trigger undefined behavior (segmentation
+    fault in the best case, silent data corruption in the worst case).
+"""
+function Base.view(frame::Frame, index::Integer)
+    ptr = @__check_ptr(lib.chfl_atom_from_frame(__ptr(frame), UInt64(index)))
+    atom = Atom(CxxPointer(ptr, is_const=false))
+    return atom
+end
+
 # Iteration support
 function Base.iterate(frame::Frame, atom=0)
     if atom >= size(frame)
         return nothing
     else
-        return (Atom(frame, atom), atom + 1)
+        return (frame[atom], atom + 1)
     end
 end
 Base.eltype(::Frame) = Atom
