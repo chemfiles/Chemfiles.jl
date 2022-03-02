@@ -2,7 +2,7 @@
 # Any copyright is dedicated to the Public Domain.
 # http://creativecommons.org/publicdomain/zero/1.0/
 #!/usr/bin/env julia
-using chemfiles
+using Chemfiles
 
 trajectory = Trajectory("filename.xyz")
 frame = read(trajectory)
