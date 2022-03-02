@@ -16,7 +16,7 @@ frame = Frame()
 resize!(frame, 3)
 set_topology!(frame, topology)
 
-pos = frame.positions()
+pos = positions(frame)
 pos[1, :] = [1.0, 0.0, 0.0]
 pos[2, :] = [0.0, 0.0, 0.0]
 pos[3, :] = [0.0, 1.0, 0.0]
@@ -27,7 +27,7 @@ add_atom!(frame, Atom("O"), [7.0, 0.0, 0.0])
 add_bond!(frame, 3, 4)
 add_bond!(frame, 4, 5)
 
-set_cell!(frame, UnitCell(10, 10, 10))
+set_cell!(frame, UnitCell([10.0, 10.0, 10.0]))
 
 Trajectory("water-co2.pdb", 'w') do trajectory
     write(trajectory, frame)
