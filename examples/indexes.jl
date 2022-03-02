@@ -10,7 +10,7 @@ frame = read(trajectory)
 less_than_five = UInt64[]
 pos = positions(frame)
 
-for i in 0:size(frame)
+for i in 1:size(frame)
     if pos[1, i] < 5
         push!(less_than_five, i)
     end
