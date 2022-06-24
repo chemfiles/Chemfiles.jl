@@ -11,14 +11,14 @@ __const_ptr(topology::Topology) = __const_ptr(topology.__handle)
 
 """
 Possible bond orders in Chemfiles:
-    - `Chemfiles.UnknownBond`: when the bond order is not specified
-    - `Chemfiles.SingleBond`: for single bonds
-    - `Chemfiles.DoubleBond`: for double bonds
-    - `Chemfiles.TripleBond`: for triple bonds
-    - `Chemfiles.QuadrupleBond`: for quadruple bonds (present in some metals)
-    - `Chemfiles.QuintupletBond`: for qintuplet bonds (present in some metals)
-    - `Chemfiles.AmideBond`: for amide bonds
-    - `Chemfiles.AromaticBond`: for aromatic bonds
+- `Chemfiles.UnknownBond`: when the bond order is not specified
+- `Chemfiles.SingleBond`: for single bonds
+- `Chemfiles.DoubleBond`: for double bonds
+- `Chemfiles.TripleBond`: for triple bonds
+- `Chemfiles.QuadrupleBond`: for quadruple bonds (present in some metals)
+- `Chemfiles.QuintupletBond`: for qintuplet bonds (present in some metals)
+- `Chemfiles.AmideBond`: for amide bonds
+- `Chemfiles.AromaticBond`: for aromatic bonds
 """
 @enum BondOrder begin
     UnknownBond = lib.CHFL_BOND_UNKNOWN
