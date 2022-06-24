@@ -2,7 +2,6 @@
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
 module Chemfiles
-    import Compat
     using DocStringExtensions
 
     @template METHODS =
