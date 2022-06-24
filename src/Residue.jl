@@ -1,7 +1,13 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-using Compat: contains
+@static if VERSION < v"1.5.0" # defined here for retro-compatibility
+    contains(haystack::AbstractString, needle) = occursin(needle, haystack)
+    contains(needle) = Base.Fix2(contains, needle)
+else
+    import Base: contains
+end
+
 export id, residue_for_atom, atoms, contains
 
 __ptr(residue::Residue) = __ptr(residue.__handle)
@@ -91,7 +97,7 @@ end
 """
 Check if the atom at the given `index` is in the `residue`.
 """
-function Compat.contains(residue::Residue, index::Integer)
+function contains(residue::Residue, index::Integer)
     result = Ref{UInt8}(0)
     __check(lib.chfl_residue_contains(__const_ptr(residue), UInt64(index), result))
     return convert(Bool, result[])

@@ -6,15 +6,13 @@ version = "0.10.2"
 [deps]
 BinaryProvider = "b99e7846-7c00-51b0-8f62-c81ae34c0232"
 Chemfiles_jll = "78a364fa-1a3c-552a-b4bb-8fa0f9c1fcca"
-Compat = "34da2185-b29b-5c13-b0c7-acf172513d20"
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
 [compat]
 BinaryProvider = "0.5.8"
 Chemfiles_jll = "= 0.10.2"
-Compat = "3.15"
-DocStringExtensions = "0.8.3"
+DocStringExtensions = "0.8.3, 0.9"
 julia = "1.0"
 
 [extras]
