@@ -15,12 +15,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04]
-        julia-version: ["1.0", "1.5", "1.6", "nightly"]
+        os: [ubuntu-20.04]
+        julia-version: ["1.6", "1.8", "nightly"]
         julia-arch: [x64]
         include:
           - name: Linux 32-bit
-            os: ubuntu-18.04
+            os: ubuntu-20.04
             julia-version: "1.6"
             julia-arch: x86
           # This fails with "A dynamic link library (DLL) initialization routine failed."
@@ -47,7 +47,7 @@ jobs:
       - name: run tests
         run: julia --check-bounds=yes --inline=no --project -e 'using Pkg; Pkg.test("Chemfiles"; coverage=true)'
       - name: run extra checks
-        if: matrix.os == 'ubuntu-18.04'
+        if: matrix.os == 'ubuntu-20.04'
         run: ./scripts/check_used_functions.py
       - name: upload coverage
         run: julia --project -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
