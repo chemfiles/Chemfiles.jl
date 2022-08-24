@@ -12,16 +12,7 @@ module Chemfiles
     """
 
     module lib
-        if VERSION >= v"1.3.0"
-            using Chemfiles_jll
-        else
-            const depsfile = normpath(joinpath(dirname(@__FILE__), "..", "deps", "deps.jl"))
-            if isfile(depsfile)
-                include(depsfile)
-            else
-                error("'$depsfile' is missing, please run Pkg.build(\"Chemfiles\")")
-            end
-        end
+        using Chemfiles_jll
         include("generated/types.jl")
         include("generated/cdef.jl")
     end
@@ -144,8 +135,7 @@ module Chemfiles
         if !startswith(version(), "0.10")
             error(
                 """Chemfiles.jl requires the 0.10 version of libchemfiles,
-                but $(version()) is installed. You can try to run
-                Pkg.build(\"Chemfiles\") to update libchemfiles."""
+                but $(version()) is installed."""
             )
         end
         set_warning_callback(__default_warning_callback)

@@ -1,12 +1,7 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
-@static if VERSION < v"1.5.0" # defined here for retro-compatibility
-    contains(haystack::AbstractString, needle) = occursin(needle, haystack)
-    contains(needle) = Base.Fix2(contains, needle)
-else
-    import Base: contains
-end
+import Base: contains
 
 export id, residue_for_atom, atoms, contains
 
