@@ -1,7 +1,7 @@
 name = "Chemfiles"
 uuid = "46823bd8-5fb3-5f92-9aa0-96921f3dd015"
 authors = ["Guillaume Fraux <guillaume.fraux@epfl.ch>"]
-version = "0.10.2"
+version = "0.10.3"
 
 [deps]
 BinaryProvider = "b99e7846-7c00-51b0-8f62-c81ae34c0232"
