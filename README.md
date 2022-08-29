@@ -37,7 +37,7 @@ trajectory = Trajectory("filename.xyz")
 frame = read(trajectory)
 
 println("There are $(size(frame)) atoms in the frame")
-positions = positions(frame)
+pos = positions(frame)
 
 # Do awesome things with the positions here !
 ```
