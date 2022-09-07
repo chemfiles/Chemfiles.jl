@@ -1,4 +1,21 @@
-identity(obj) = obj
+abstract type BoundaryCondition end
+struct DirichletZero <: BoundaryCondition end  # Dirichlet zero boundary (i.e. molecular context)
+struct Periodic <: BoundaryCondition end  # Periodic BCs
+
+bounding_box(frame::Frame) = collect.(eachrow(UnitCell(frame)))
+
+boundary_conditions(frame::Frame) = shape(UnitCell(frame)) == Chemfiles.Infinite ? [DirichletZero(), DirichletZero(), DirichletZero()] : [Periodic(), Periodic(), Periodic()] 
+
+#???
+function periodicity end
+
+n_dimensions(frame::Frame) = 3
+
+#???
+function species_type end
+
+#???
+function element end
 
 function position(frame::Frame)
     cf_pos = positions(frame)
@@ -16,17 +33,12 @@ end
 
 velocity(frame::Frame, index) = velocity(frame)[index]
 
-function atomic_mass(frame::Frame)
-end
+atomic_mass(frame::Frame) = mass.(frame)
+atomic_mass(frame::Frame, index) = mass(Atom(frame, index))
 
-function atomic_mass(frame::Frame, index)
-end
+atomic_symbol(frame::Frame) = Symbol.(type.(frame))
+atomic_symbol(frame::Frame, index) = Symbol(type(Atom(frame, index)))
+ 
 
-function atomic_symbol(frame::Frame)
-end
-
-function atomic_symbol(frame::Frame, index)
-end
-
-#atomic_number(frame::Frame) = atomic_number.(frame, 0:length(frame)-1)
+atomic_number(frame::Frame) = atomic_number.(frame)
 atomic_number(frame::Frame, index) = atomic_number(Atom(frame, index))
