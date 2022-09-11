@@ -1,5 +1,5 @@
 @testset "AtomsBase" begin
-    trajectory = Trajectory(joinpath(DATAPATH, "water.xyz"))
+    trajectory = Trajectory(joinpath(DATAPATH, "Mn3Si.cif"))
     frame = read(trajectory)
 
     @test positions(frame)[:, 1] == Chemfiles.position(frame)[1]
@@ -9,6 +9,7 @@
     @test Chemfiles.atomic_number(frame, 0) == Chemfiles.atomic_number(frame)[1]
     @test Chemfiles.atomic_mass(frame, 0) == Chemfiles.atomic_mass(frame)[1]
     @test Chemfiles.atomic_symbol(frame, 0) == Chemfiles.atomic_symbol(frame)[1]
-    println(Chemfiles.bounding_box(frame))
-    println(Chemfiles.boundary_conditions(frame))
+    @test Chemfiles.bounding_box(frame)[1] == [3.9998697199999995, 0.0, 0.0]
+    @test Chemfiles.boundary_conditions(frame) == [Chemfiles.Periodic(), Chemfiles.Periodic(), Chemfiles.Periodic()]
+    @test Chemfiles.periodicity(frame) == [true, true, true]
 end

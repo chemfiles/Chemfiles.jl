@@ -3,6 +3,7 @@
 
 module Chemfiles
     using DocStringExtensions
+    using AtomsBase
 
     @template METHODS =
     """
@@ -86,7 +87,7 @@ module Chemfiles
     - The [`Topology`](@ref) of the system;
     - The [`UnitCell`](@ref) of the system.
     """
-    struct Frame
+    struct Frame <: AbstractSystem{3}
         __handle :: CxxPointer{lib.CHFL_FRAME}
     end
 

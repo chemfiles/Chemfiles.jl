@@ -4,6 +4,7 @@ authors = ["Guillaume Fraux <guillaume.fraux@epfl.ch>"]
 version = "0.10.3"
 
 [deps]
+AtomsBase = "a963bdd2-2df7-4f54-a1ee-49d51e6be12a"
 BinaryProvider = "b99e7846-7c00-51b0-8f62-c81ae34c0232"
 Chemfiles_jll = "78a364fa-1a3c-552a-b4bb-8fa0f9c1fcca"
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
