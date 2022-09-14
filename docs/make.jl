@@ -67,5 +67,6 @@ makedocs(
         "reference/residue.md",
         "reference/selection.md",
         "reference/misc.md",
+        "reference/atomsbase.md",
     ]
 )
