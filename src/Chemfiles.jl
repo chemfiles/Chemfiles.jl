@@ -4,6 +4,7 @@
 module Chemfiles
     using DocStringExtensions
     using AtomsBase
+    using Unitful
 
     @template METHODS =
     """

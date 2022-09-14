@@ -1,5 +1,6 @@
 using Chemfiles
 using Test
+using Unitful
 
 TESTS = [
     "atom.jl",
