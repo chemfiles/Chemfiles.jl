@@ -1,9 +1,5 @@
-#export position, velocity, bounding_box, boundary_conditions, periodicity
-#export n_dimensions, species_type, atomic_mass, atomic_symbol, atomic_number
-
-#TODO Eigene Markdown Erklärung D:
-
-import AtomsBase: velocity
+import AtomsBase: velocity, position, bounding_box, boundary_conditions, periodicity
+import AtomsBase: n_dimensions, atomic_mass, atomic_number, atomic_symbol, element
 
 """
     position(frame::Frame)
@@ -22,7 +18,7 @@ function position(frame::Frame)
     return ab_pos
 end
 position(frame::Frame, index) = position(frame)[index] 
-#TODO
+#ISSUE position not saved in Atom 
 position(atom::Atom) = [0, 0, 0]
 
 """
@@ -47,7 +43,7 @@ function velocity(frame::Frame)
     end
 end
 velocity(frame::Frame, index) = velocity(frame)[index]
-#TODO
+#ISSUE velocity not saved in Atom
 velocity(atom::Atom) = missing
 
 """
