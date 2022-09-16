@@ -5,6 +5,7 @@ module Chemfiles
     using DocStringExtensions
     using AtomsBase
     using Unitful
+    using PeriodicTable
 
     @template METHODS =
     """

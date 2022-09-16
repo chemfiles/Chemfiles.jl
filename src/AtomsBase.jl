@@ -2,7 +2,8 @@
 #export n_dimensions, species_type, atomic_mass, atomic_symbol, atomic_number
 
 #TODO Eigene Markdown Erklärung D:
-#TODO Funktionen für Atom?!
+
+import AtomsBase: velocity
 
 """
     position(frame::Frame)
@@ -21,6 +22,8 @@ function position(frame::Frame)
     return ab_pos
 end
 position(frame::Frame, index) = position(frame)[index] 
+#TODO
+position(atom::Atom) = [0, 0, 0]
 
 """
     velocity(frame::Frame)
@@ -44,6 +47,8 @@ function velocity(frame::Frame)
     end
 end
 velocity(frame::Frame, index) = velocity(frame)[index]
+#TODO
+velocity(atom::Atom) = missing
 
 """
     bounding_box(frame::Frame)
@@ -79,6 +84,7 @@ This function is part of the AtomsBase.jl interface
 Return number of dimensions, which is always 3 for every frame.
 """
 n_dimensions(frame::Frame) = 3
+n_dimensions(atom::Atom) = 3
 
 """
     species_type(frame::Frame)
@@ -100,6 +106,7 @@ the `index`th species in `frame`. The elements are `<: Unitful.Mass`.
 """
 atomic_mass(frame::Frame) = mass.(frame)*u"u"
 atomic_mass(frame::Frame, index) = mass(Atom(frame, index))*u"u"
+atomic_mass(atom::Atom) = mass(atom)*u"u"
 
 """
     atomic_symbol(frame::Frame)
@@ -112,6 +119,9 @@ the `index`th species in `frame`.
 """
 atomic_symbol(frame::Frame) = Symbol.(type.(frame))
 atomic_symbol(frame::Frame, index) = Symbol(type(Atom(frame, index)))
+atomic_symbol(atom::Atom) = Symbol(type(atom))
+
+element(atom::Atom) = elements[atomic_symbol(atom)]
 
 """
     atomic_number(frame::Frame)
@@ -124,3 +134,4 @@ the `index`th species in `frame`.
 """
 atomic_number(frame::Frame) = atomic_number.(frame)
 atomic_number(frame::Frame, index) = atomic_number(Atom(frame, index))
+#atomic_number(atom::Atom) already implemented by Chemfiles
