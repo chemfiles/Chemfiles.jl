@@ -125,7 +125,7 @@ element(atom::Atom) = elements[atomic_symbol(atom)]
 
 This function is part of the AtomsBase.jl interface
 
-Vector of atomic numbers in the system `frNW` or the atomic number of a particular `aTOM` /
+Vector of atomic numbers in the system `frame` or the atomic number of a particular `Atom` /
 the `index`th species in `frame`.
 """
 atomic_number(frame::Frame) = atomic_number.(frame)
