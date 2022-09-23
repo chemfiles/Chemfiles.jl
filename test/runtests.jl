@@ -1,5 +1,6 @@
 using Chemfiles
 using Test
+using Unitful
 
 TESTS = [
     "atom.jl",
@@ -11,6 +12,7 @@ TESTS = [
     "trajectory.jl",
     "selection.jl",
     "misc.jl",
+    "atomsbase.jl",
 ]
 
 include("utils.jl")

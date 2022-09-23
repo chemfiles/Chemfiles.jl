@@ -3,6 +3,9 @@
 
 module Chemfiles
     using DocStringExtensions
+    using AtomsBase
+    using Unitful
+    using PeriodicTable
 
     @template METHODS =
     """
@@ -86,7 +89,7 @@ module Chemfiles
     - The [`Topology`](@ref) of the system;
     - The [`UnitCell`](@ref) of the system.
     """
-    struct Frame
+    struct Frame <: AbstractSystem{3}
         __handle :: CxxPointer{lib.CHFL_FRAME}
     end
 
@@ -130,6 +133,7 @@ module Chemfiles
     include("Frame.jl")
     include("Selection.jl")
     include("Trajectory.jl")
+    include("AtomsBase.jl")
 
     function __init__()
         if !startswith(version(), "0.10")
