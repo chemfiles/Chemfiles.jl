@@ -1,14 +1,14 @@
 name = "Chemfiles"
 uuid = "46823bd8-5fb3-5f92-9aa0-96921f3dd015"
 authors = ["Guillaume Fraux <guillaume.fraux@epfl.ch>"]
-version = "0.10.31"
+version = "0.10.40"
 
 [deps]
 Chemfiles_jll = "78a364fa-1a3c-552a-b4bb-8fa0f9c1fcca"
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 
 [compat]
-Chemfiles_jll = "= 0.10.3"
+Chemfiles_jll = "= 0.10.4"
 DocStringExtensions = "0.8.3, 0.9"
 julia = "1.6"
 
