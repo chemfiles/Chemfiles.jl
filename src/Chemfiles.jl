@@ -131,6 +131,8 @@ module Chemfiles
     include("Selection.jl")
     include("Trajectory.jl")
 
+    include("atomsbase.jl")
+
     function __init__()
         if !startswith(version(), "0.10")
             error(
