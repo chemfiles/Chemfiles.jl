@@ -10,6 +10,10 @@ around the main types of chemfiles: [`Trajectory`](@ref), [`Frame`](@ref),
 [`UnitCell`](@ref), [`Topology`](@ref), [`Residue`](@ref), [`Atom`](@ref), and
 [`Selection`](@ref).
 
+Note that the integrates with the [AtomsBase](https://github.com/JuliaMolSim/AtomsBase.jl)
+ecosystem via appropriate conversion routines. See [AtomsBase integration](@ref)
+for more details.
+
 !!! warning
 
     All indexing in chemfiles is 0-based! That means that the first atom in a
@@ -46,5 +50,6 @@ Pages = [
     "reference/residue.md",
     "reference/selection.md",
     "reference/misc.md",
+    "reference/atomsbase.md"
 ]
 ```

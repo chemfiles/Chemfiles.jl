@@ -5,6 +5,9 @@ using UnitfulAtomic
 import PeriodicTable
 
 
+"""
+Construct an AtomsBase `FlexibleSystem` from a Chemfiles Frame.
+"""
 function AtomsBase.FlexibleSystem(frame::Chemfiles.Frame)
     atoms = map(1:length(frame), frame) do i, atom
         pos = Chemfiles.positions(frame)[:, i]u"Å"
@@ -61,9 +64,20 @@ function AtomsBase.FlexibleSystem(frame::Chemfiles.Frame)
         AtomsBase.periodic_system(atoms, box; sysprops...)
     end
 end
+
+"""
+Construct an AtomsBase `AbstractSystem` from a Chemfiles Frame.
+"""
 AtomsBase.AbstractSystem(frame::Chemfiles.Frame) = FlexibleSystem(frame)
 
+"""
+Convert a Chemfiles Frame to an AtomsBase `AbstractSystem`
+"""
 Base.convert(::Type{AbstractSystem}, frame::Chemfiles.Frame) = AbstractSystem(frame)
+
+"""
+Convert a Chemfiles Frame to an AtomsBase `FlexibleSystem`
+"""
 Base.convert(::Type{FlexibleSystem}, frame::Chemfiles.Frame) = FlexibleSystem(frame)
 
 
