@@ -67,7 +67,7 @@ using UnitfulAtomic
         system, atoms, atprop, sysprop, box, bcs = make_test_system()
         frame  = @test_logs((:warn, r"Atom vdw_radius in Chemfiles cannot be mutated"),
                             (:warn, r"Atom covalent_radius in Chemfiles cannot be mutated"),
-                            (:warn, r"Ignoring unsupported property type Int64.*key extra_data"),
+                            (:warn, r"Ignoring unsupported property type Int[0-9]+.*key extra_data"),
                             (:warn, r"Ignoring specified boundary conditions:"),
                             match_mode=:any, convert(Frame, system))
 
