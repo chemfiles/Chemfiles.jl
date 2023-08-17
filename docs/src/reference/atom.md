@@ -1,7 +1,7 @@
 # Atom
 
 ```@docs
-Atom
+Chemfiles.Atom
 ```
 
 ```@autodocs

@@ -47,6 +47,7 @@ using Pkg
 Pkg.activate(joinpath(@__DIR__, ".."))
 Pkg.instantiate()
 using Chemfiles
+using AtomsBase
 
 makedocs(
     sitename="Chemfiles.jl",
@@ -67,5 +68,6 @@ makedocs(
         "reference/residue.md",
         "reference/selection.md",
         "reference/misc.md",
+        "reference/atomsbase.md"
     ]
 )

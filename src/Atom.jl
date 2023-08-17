@@ -1,6 +1,7 @@
 # Chemfiles.jl, a modern library for chemistry file reading and writing
 # Copyright (C) Guillaume Fraux and contributors -- BSD license
 
+import AtomsBase: atomic_number
 export mass, set_mass!, charge, set_charge!, name, set_name!, type , set_type!
 export vdw_radius, covalent_radius, atomic_number
 export set_property!, property, properties_count, list_properties

@@ -7,8 +7,12 @@ The Julia interface to chemfiles wraps around the C interface providing a Julian
 API. All the functionalities are in the `Chemfiles` module, which can be
 imported by the `using Chemfiles` expression. The `Chemfiles` module is built
 around the main types of chemfiles: [`Trajectory`](@ref), [`Frame`](@ref),
-[`UnitCell`](@ref), [`Topology`](@ref), [`Residue`](@ref), [`Atom`](@ref), and
+[`UnitCell`](@ref), [`Topology`](@ref), [`Residue`](@ref), [`Chemfiles.Atom`](@ref), and
 [`Selection`](@ref).
+
+Note that the integrates with the [AtomsBase](https://github.com/JuliaMolSim/AtomsBase.jl)
+ecosystem via appropriate conversion routines. See [AtomsBase integration](@ref)
+for more details.
 
 !!! warning
 
@@ -46,5 +50,6 @@ Pages = [
     "reference/residue.md",
     "reference/selection.md",
     "reference/misc.md",
+    "reference/atomsbase.md"
 ]
 ```

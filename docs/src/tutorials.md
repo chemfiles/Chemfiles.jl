@@ -72,7 +72,7 @@ package
 ```
 
 Everything starts in a [`Topology`](@ref). This is the class that defines the
-atoms and the connectivity in a system. Here, we add three [`Atom`](@ref) and
+atoms and the connectivity in a system. Here, we add three [`Chemfiles.Atom`](@ref) and
 two bonds to create a water molecule.
 
 ```@literalinclude ../examples/generate.jl 7-13

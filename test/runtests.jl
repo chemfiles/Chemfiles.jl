@@ -11,6 +11,7 @@ TESTS = [
     "trajectory.jl",
     "selection.jl",
     "misc.jl",
+    "atomsbase.jl",
 ]
 
 include("utils.jl")
