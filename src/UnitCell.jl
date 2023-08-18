@@ -35,6 +35,7 @@ Create an `UnitCell` from the given 3x3 cell `matrix`.
 """
 function UnitCell(matrix::Array{Float64,2})
     @assert size(matrix) == (3, 3)
+    matrix = Matrix(transpose(matrix))
     ptr = @__check_ptr(lib.chfl_cell_from_matrix(pointer(matrix)))
     return UnitCell(CxxPointer(ptr, is_const=false))
 end
@@ -107,7 +108,7 @@ three base vectors as:
 function matrix(cell::UnitCell)
     result = Array{Float64}(undef, 3, 3)
     __check(lib.chfl_cell_matrix(__const_ptr(cell), pointer(result)))
-    return result
+    return Matrix(transpose(result))
 end
 
 """
