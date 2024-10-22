@@ -1,8 +1,7 @@
 import AtomsBase
-using AtomsBase: AbstractSystem, FlexibleSystem
+using AtomsBase: AbstractSystem, FlexibleSystem, ChemialSpecies, PeriodicCell, IsolatedCell
 using Unitful
 using UnitfulAtomic
-import PeriodicTable
 
 
 """
@@ -11,17 +10,20 @@ Construct an AtomsBase `FlexibleSystem` from a Chemfiles Frame.
 function AtomsBase.FlexibleSystem(frame::Chemfiles.Frame)
     atoms = map(1:length(frame), frame) do i, atom
         pos = Chemfiles.positions(frame)[:, i]u"Å"
+        velocity_arg = ()
         if Chemfiles.has_velocities(frame)
-            velocity = Chemfiles.velocities(frame)[:, i]u"Å/ps"
-        else
-            velocity = zeros(3)u"Å/ps"
+            velocity_arg = (Chemfiles.velocities(frame)[:, i]u"Å/ps", )
+        end
+
+        species = AtomsBase.ChemicalSpecies(Chemfiles.atomic_number(atom))
+        if Symbol(species) != Symbol(Chemfiles.name(atom))
+            @warn "Ignoring non-standard atom name $(Chemfiles.name(atom)) for atom $i."
         end
 
         # Collect atomic properties
         atprops = Dict(
-            :atomic_mass     => Chemfiles.mass(atom)u"u",
-            :atomic_symbol   => Symbol(Chemfiles.name(atom)),
-            :atomic_number   => Chemfiles.atomic_number(atom),
+            :mass            => Chemfiles.mass(atom)u"u",
+            :species         => AtomsBase.ChemicalSpecies(Chemfiles.atomic_number(atom)),
             :charge          => Chemfiles.charge(atom)u"e_au",
             :covalent_radius => Chemfiles.covalent_radius(atom)u"Å",
             :vdw_radius      => Chemfiles.vdw_radius(atom)*u"Å",
@@ -33,7 +35,7 @@ function AtomsBase.FlexibleSystem(frame::Chemfiles.Frame)
             end
         end
 
-        AtomsBase.Atom(Chemfiles.atomic_number(atom), pos, velocity; atprops...)
+        AtomsBase.Atom(Chemfiles.atomic_number(atom), pos, velocity_arg...; atprops...)
     end
 
     # Collect system properties
@@ -57,12 +59,14 @@ function AtomsBase.FlexibleSystem(frame::Chemfiles.Frame)
     # Construct flexible system
     cell_shape = Chemfiles.shape(Chemfiles.UnitCell(frame))
     if cell_shape == Chemfiles.Infinite
-        AtomsBase.isolated_system(atoms; sysprops...)
+        cell = IsolatedCell(3)
     else
         @assert cell_shape in (Chemfiles.Triclinic, Chemfiles.Orthorhombic)
-        box = collect(eachrow(Chemfiles.matrix(Chemfiles.UnitCell(frame))))u"Å"
-        AtomsBase.periodic_system(atoms, box; sysprops...)
+        cell_vectors = collect(eachrow(Chemfiles.matrix(Chemfiles.UnitCell(frame))))u"Å"
+        cell = PeriodicCell(; cell_vectors, periodicity=(true, true, true))
     end
+
+    AtomsBase.FlexibleSystem(atoms, cell; sysprops...)
 end
 
 """
@@ -86,12 +90,12 @@ function Base.convert(::Type{Frame}, system::AbstractSystem{D}) where {D}
     frame = Chemfiles.Frame()
 
     # Cell and boundary conditions
-    if AtomsBase.bounding_box(system) == AtomsBase.infinite_box(D)  # System is infinite
+    if AtomsBase.cell(system) isa IsolatedCell
         cell = Chemfiles.UnitCell(zeros(3, 3))
         Chemfiles.set_shape!(cell, Chemfiles.Infinite)
         Chemfiles.set_cell!(frame, cell)
     else
-        if any(!isequal(AtomsBase.Periodic()), AtomsBase.boundary_conditions(system))
+        if !all(AtomsBase.periodicity(system))
             @warn("Ignoring specified boundary conditions: Chemfiles only supports " *
                   "infinite or all-periodic boundary conditions.")
         end
@@ -109,16 +113,15 @@ function Base.convert(::Type{Frame}, system::AbstractSystem{D}) where {D}
     end
     for atom in system
         # We are using the atomic_number here, since in AtomsBase the atomic_symbol
-        # can be more elaborate (e.g. D instead of H or "¹⁸O" instead of just "O").
-        # In Chemfiles this is solved using the "name" of an atom ... to which we
-        # map the AtomsBase.atomic_symbol.
-        cf_atom = Chemfiles.Atom(PeriodicTable.elements[atomic_number(atom)].symbol)
+        # usually has things like annotations for the isotopes etc., which in
+        # Chemfiles is mapped to the "name" of an atom
+        cf_atom = Chemfiles.Atom(AtomsBase.element(AtomsBase.species(atom)).symbol)
         Chemfiles.set_name!(cf_atom, string(AtomsBase.atomic_symbol(atom)))
-        Chemfiles.set_mass!(cf_atom, ustrip(u"u", AtomsBase.atomic_mass(atom)))
+        Chemfiles.set_mass!(cf_atom, ustrip(u"u", AtomsBase.mass(atom)))
         @assert Chemfiles.atomic_number(cf_atom) == AtomsBase.atomic_number(atom)
 
         for (k, v) in pairs(atom)
-            if k in (:atomic_symbol, :atomic_number, :atomic_mass, :velocity, :position)
+            if k in (:species, :mass, :velocity, :position)
                 continue  # Dealt with separately
             elseif k == :charge
                 Chemfiles.set_charge!(cf_atom, ustrip(u"e_au", v))
@@ -147,7 +150,7 @@ function Base.convert(::Type{Frame}, system::AbstractSystem{D}) where {D}
     end
 
     for (k, v) in pairs(system)
-        if k in (:bounding_box, :boundary_conditions)
+        if k in (:bounding_box, :periodicity)
             continue  # Already dealt with
         elseif k in (:charge, )
             Chemfiles.set_property!(frame, string(k), Float64(ustrip(u"e_au", v)))

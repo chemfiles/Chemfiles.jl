@@ -4,6 +4,8 @@ using UnitfulAtomic
 @testset "AtomsBase support" begin
     import AtomsBase
     using AtomsBase: AbstractSystem, FlexibleSystem
+    using AtomsBase: PeriodicCell, IsolatedCell
+    using AtomsBase: atomic_symbol, atomic_species
     using AtomsBaseTesting
 
     function make_chemfiles_system(D=3; drop_atprop=Symbol[], infinite=false, kwargs...)
@@ -13,10 +15,11 @@ using UnitfulAtomic
                                 cellmatrix=:upper_triangular,
                                 kwargs...)
         if infinite
-            system = AtomsBase.isolated_system(data.atoms; data.sysprop...)
+            cell = IsolatedCell(3)
         else
-            system = AtomsBase.periodic_system(data.atoms, data.box; data.sysprop...)
+            cell = PeriodicCell(; cell_vectors=data.box, periodicity=(true, true, true))
         end
+        system = AtomsBase.FlexibleSystem(data.atoms, cell; data.sysprop...)
         merge(data, (; system))
     end
 
@@ -37,14 +40,15 @@ using UnitfulAtomic
             @test(Chemfiles.velocities(frame)[:, i]
                   ≈ ustrip.(u"Å/ps", atprop.velocity[i]), atol=1e-12)
 
-            @test Chemfiles.name(atom)            == string(atprop.atomic_symbol[i])
-            @test Chemfiles.atomic_number(atom)   == atprop.atomic_number[i]
-            @test Chemfiles.mass(atom)            == ustrip(u"u", atprop.atomic_mass[i])
+            species_i = atprop.species[i]
+            @test Chemfiles.name(atom)            == string(atomic_symbol(species_i))
+            @test Chemfiles.atomic_number(atom)   == atomic_number(species_i)
+            @test Chemfiles.mass(atom)            == ustrip(u"u", atprop.mass[i])
             @test Chemfiles.charge(atom)          == ustrip(u"e_au", atprop.charge[i])
             @test Chemfiles.list_properties(atom) == ["magnetic_moment"]
             @test Chemfiles.property(atom, "magnetic_moment") == atprop.magnetic_moment[i]
 
-            if atprop.atomic_number[i] == 1
+            if atomic_number(atprop.species[i]) == 1
                 @test Chemfiles.vdw_radius(atom)      == 1.2
                 @test Chemfiles.covalent_radius(atom) == 0.37
             end
