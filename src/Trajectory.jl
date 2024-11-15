@@ -16,7 +16,7 @@ format to use when opening the file.
 """
 function Trajectory(path::AbstractString, mode::Char='r', format::AbstractString="")
     ptr = @__check_ptr(lib.chfl_trajectory_with_format(
-        pointer(path), Int8(mode), pointer(format),
+        pointer(path), Cchar(mode), pointer(format),
     ))
     return Trajectory(CxxPointer(ptr, is_const=false), nothing)
 end
