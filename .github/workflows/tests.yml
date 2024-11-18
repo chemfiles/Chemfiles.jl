@@ -15,43 +15,29 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04]
-        julia-version: ["1.6", "1.8", "nightly"]
-        julia-arch: [x64]
+        os: [ubuntu-24.04]
+        julia-version: [lts, "1.11", "nightly"]
         include:
-          - name: Linux 32-bit
-            os: ubuntu-20.04
-            julia-version: "1.6"
-            julia-arch: x86
-          # This fails with "A dynamic link library (DLL) initialization routine failed."
-          # - name: Windows 32-bit
-          #   os: windows-2019
-          #   julia-version: "1.6"
-          #   julia-arch: x86
-          - name: Windows 64-bit
-            os: windows-2019
-            julia-version: "1.6"
-            julia-arch: x64
-          - os: macos-11
-            julia-version: "1.6"
-            julia-arch: x64
+          - os: windows-2022
+            julia-version: lts
+          - os: macos-14
+            julia-version: lts
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup Julia
-        uses: julia-actions/setup-julia@v1
+        uses: julia-actions/setup-julia@v2
         with:
           version: ${{ matrix.julia-version }}
-          arch: ${{ matrix.julia-arch }}
       - name: build package
         run: julia --check-bounds=yes --inline=no --project -e 'using Pkg; Pkg.build("Chemfiles")'
       - name: run tests
         run: julia --check-bounds=yes --inline=no --project -e 'using Pkg; Pkg.test("Chemfiles"; coverage=true)'
       - name: run extra checks
-        if: matrix.os == 'ubuntu-20.04'
+        if: matrix.os == 'ubuntu-24.04'
         run: ./scripts/check_used_functions.py
       - uses: julia-actions/julia-processcoverage@v1
-      - uses: codecov/codecov-action@v3
-        if: matrix.os == 'ubuntu-20.04'
+      - uses: codecov/codecov-action@v5
+        if: matrix.os == 'ubuntu-24.04'
         with:
           fail_ci_if_error: true
           verbose: true
