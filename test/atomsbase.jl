@@ -93,4 +93,17 @@ using UnitfulAtomic
         test_approx_eq(system, newsystem;
                        rtol=1e-12, ignore_atprop=[:covalent_radius, :vdw_radius])
     end
+
+    @testset "Make sure the example data files can be parsed" begin
+        import AtomsBase
+        using AtomsBase: AbstractSystem, FlexibleSystem
+
+        const DATAPATH = joinpath(@__DIR__, "data")
+        for file in ["empty.unknown", "topology.xyz", "water.xyz"]
+            traj  = Chemfiles.Trajectory(joinpath(DATAPATH, file))
+            frame = Chemfiles.read_step(traj, 1)
+            sys   = convert(FlexibleSystem, traj)
+            @test length(sys) == length(frame)
+        end
+    end
 end
