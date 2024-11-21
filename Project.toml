@@ -11,8 +11,8 @@ Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 UnitfulAtomic = "a7773ee8-282e-5fa2-be4e-bd808c38a91a"
 
 [compat]
-AtomsBase = "0.4"
-AtomsBaseTesting = "0.2"
+AtomsBase = "0.5"
+AtomsBaseTesting = "0.4"
 Chemfiles_jll = "= 0.10.4"
 DocStringExtensions = "0.8.3, 0.9"
 Unitful = "1"

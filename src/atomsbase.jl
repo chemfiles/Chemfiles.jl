@@ -15,9 +15,11 @@ function AtomsBase.FlexibleSystem(frame::Chemfiles.Frame)
             velocity_arg = (Chemfiles.velocities(frame)[:, i]u"Å/ps", )
         end
 
-        species = AtomsBase.ChemicalSpecies(Chemfiles.atomic_number(atom))
-        if Symbol(species) != Symbol(Chemfiles.name(atom))
-            @warn "Ignoring non-standard atom name $(Chemfiles.name(atom)) for atom $i."
+        species = AtomsBase.ChemicalSpecies(Chemfiles.atomic_number(atom);
+                                            atom_name=Chemfiles.name(atom))
+        if Symbol(species) != Symbol(Chemfiles.type(atom))
+            @warn("Ignoring non-standard atom type $(Chemfiles.type(atom)) " *
+                  "for atom $i.")
         end
 
         # Collect atomic properties
@@ -102,7 +104,7 @@ function Base.convert(::Type{Frame}, system::AbstractSystem{D}) where {D}
 
         box = zeros(3, 3)
         for i = 1:D
-            box[i, 1:D] = ustrip.(u"Å", AtomsBase.bounding_box(system)[i])
+            box[i, 1:D] = ustrip.(u"Å", AtomsBase.cell_vectors(system)[i])
         end
         cell = Chemfiles.UnitCell(box)
         Chemfiles.set_cell!(frame, cell)
@@ -112,12 +114,16 @@ function Base.convert(::Type{Frame}, system::AbstractSystem{D}) where {D}
         Chemfiles.add_velocities!(frame)
     end
     for atom in system
-        # We are using the atomic_number here, since in AtomsBase the atomic_symbol
-        # usually has things like annotations for the isotopes etc., which in
-        # Chemfiles is mapped to the "name" of an atom
-        cf_atom = Chemfiles.Atom(AtomsBase.element(AtomsBase.species(atom)).symbol)
-        Chemfiles.set_name!(cf_atom, string(AtomsBase.atomic_symbol(atom)))
+        # We are using the symbol of the symbol from the element here
+        # instead of the AtomsBase.atomic_symbol because the latter may have
+        # isotope information attached (e.g. C13), which Chemfiles cannot parse.
+        cf_atom = Chemfiles.Atom(string(element(atom).symbol))
+        Chemfiles.set_name!(cf_atom, string(AtomsBase.atom_name(atom)))
         Chemfiles.set_mass!(cf_atom, ustrip(u"u", AtomsBase.mass(atom)))
+
+        if string(atomic_symbol(atom)) != string(element(atom).symbol)
+            @warn "Custom neutron count or custom atomic symbol not supported."
+        end
         @assert Chemfiles.atomic_number(cf_atom) == AtomsBase.atomic_number(atom)
 
         for (k, v) in pairs(atom)
@@ -150,7 +156,7 @@ function Base.convert(::Type{Frame}, system::AbstractSystem{D}) where {D}
     end
 
     for (k, v) in pairs(system)
-        if k in (:bounding_box, :periodicity)
+        if k in (:cell_vectors, :periodicity)
             continue  # Already dealt with
         elseif k in (:charge, )
             Chemfiles.set_property!(frame, string(k), Float64(ustrip(u"e_au", v)))
