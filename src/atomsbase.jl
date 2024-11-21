@@ -16,7 +16,7 @@ function AtomsBase.FlexibleSystem(frame::Chemfiles.Frame)
         end
 
         species = AtomsBase.ChemicalSpecies(Chemfiles.atomic_number(atom);
-                                            atom_name=Chemfiles.name(atom))
+                                            atom_name=Symbol(Chemfiles.name(atom)))
         if Symbol(species) != Symbol(Chemfiles.type(atom))
             @warn("Ignoring non-standard atom type $(Chemfiles.type(atom)) " *
                   "for atom $i.")
