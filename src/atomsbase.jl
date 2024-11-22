@@ -1,5 +1,5 @@
 import AtomsBase
-using AtomsBase: AbstractSystem, FlexibleSystem, ChemialSpecies, PeriodicCell, IsolatedCell
+using AtomsBase: AbstractSystem, FlexibleSystem, ChemicalSpecies, PeriodicCell, IsolatedCell
 using Unitful
 using UnitfulAtomic
 
@@ -15,8 +15,8 @@ function AtomsBase.FlexibleSystem(frame::Chemfiles.Frame)
             velocity_arg = (Chemfiles.velocities(frame)[:, i]u"Å/ps", )
         end
 
-        species = AtomsBase.ChemicalSpecies(Chemfiles.atomic_number(atom);
-                                            atom_name=Symbol(Chemfiles.name(atom)))
+        species = ChemicalSpecies(Chemfiles.atomic_number(atom);
+                                  atom_name=Symbol(Chemfiles.name(atom)))
         if Symbol(species) != Symbol(Chemfiles.type(atom))
             @warn("Ignoring non-standard atom type $(Chemfiles.type(atom)) " *
                   "for atom $i.")
@@ -25,7 +25,7 @@ function AtomsBase.FlexibleSystem(frame::Chemfiles.Frame)
         # Collect atomic properties
         atprops = Dict(
             :mass            => Chemfiles.mass(atom)u"u",
-            :species         => AtomsBase.ChemicalSpecies(Chemfiles.atomic_number(atom)),
+            :species         => ChemicalSpecies(Chemfiles.atomic_number(atom)),
             :charge          => Chemfiles.charge(atom)u"e_au",
             :covalent_radius => Chemfiles.covalent_radius(atom)u"Å",
             :vdw_radius      => Chemfiles.vdw_radius(atom)*u"Å",
