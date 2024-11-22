@@ -98,7 +98,7 @@ using UnitfulAtomic
         import AtomsBase
         using AtomsBase: AbstractSystem, FlexibleSystem
 
-        const DATAPATH = joinpath(@__DIR__, "data")
+        DATAPATH = joinpath(@__DIR__, "data")
         for file in ["empty.unknown", "topology.xyz", "water.xyz"]
             traj  = Chemfiles.Trajectory(joinpath(DATAPATH, file))
             frame = Chemfiles.read_step(traj, 1)
