@@ -18,8 +18,8 @@ function AtomsBase.FlexibleSystem(frame::Chemfiles.Frame)
         species = ChemicalSpecies(Chemfiles.atomic_number(atom);
                                   atom_name=Symbol(Chemfiles.name(atom)))
         if Symbol(species) != Symbol(Chemfiles.type(atom))
-            @warn("Ignoring non-standard atom type $(Chemfiles.type(atom)) " *
-                  "for atom $i.")
+            @warn("Non-standard atom type $(Chemfiles.type(atom)) " *
+                  "for atom $i taken as $(Symbol(species)) in AtomsBase.")
         end
 
         # Collect atomic properties
@@ -117,11 +117,11 @@ function Base.convert(::Type{Frame}, system::AbstractSystem{D}) where {D}
         # We are using the symbol of the symbol from the element here
         # instead of the AtomsBase.atomic_symbol because the latter may have
         # isotope information attached (e.g. C13), which Chemfiles cannot parse.
-        cf_atom = Chemfiles.Atom(string(element(atom).symbol))
+        cf_atom = Chemfiles.Atom(string(AtomsBase.element(atom).symbol))
         Chemfiles.set_name!(cf_atom, string(AtomsBase.atom_name(atom)))
         Chemfiles.set_mass!(cf_atom, ustrip(u"u", AtomsBase.mass(atom)))
 
-        if string(atomic_symbol(atom)) != string(element(atom).symbol)
+        if string(AtomsBase.atomic_symbol(atom)) != string(AtomsBase.element(atom).symbol)
             @warn "Custom neutron count or custom atomic symbol not supported."
         end
         @assert Chemfiles.atomic_number(cf_atom) == AtomsBase.atomic_number(atom)

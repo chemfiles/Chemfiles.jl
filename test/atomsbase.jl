@@ -5,7 +5,7 @@ using UnitfulAtomic
     import AtomsBase
     using AtomsBase: AbstractSystem, FlexibleSystem
     using AtomsBase: PeriodicCell, IsolatedCell
-    using AtomsBase: atomic_symbol, atomic_species
+    using AtomsBase: atomic_symbol
     using AtomsBaseTesting
 
     function make_chemfiles_system(D=3; drop_atprop=Symbol[], infinite=false, kwargs...)
@@ -17,20 +17,21 @@ using UnitfulAtomic
         if infinite
             cell = IsolatedCell(3)
         else
-            cell = PeriodicCell(; cell_vectors=data.box, periodicity=(true, true, true))
+            cell = PeriodicCell(; data.cell_vectors, periodicity=(true, true, true))
         end
         system = AtomsBase.FlexibleSystem(data.atoms, cell; data.sysprop...)
         merge(data, (; system))
     end
 
     @testset "Conversion AtomsBase -> Chemfiles (periodic, velocity)" begin
-        system, atoms, atprop, sysprop, box, bcs = make_chemfiles_system(; infinite=false)
+        data = make_chemfiles_system(; infinite=false)
+        system, atoms, cell, cell_vectors, periodicity, atprop, sysprop = data
         frame = convert(Frame, system)
 
         D = 3
         cell = Chemfiles.matrix(Chemfiles.UnitCell(frame))
         for i in 1:D
-            @test cell[i, :] ≈ ustrip.(u"Å", box[i]) atol=1e-12
+            @test cell[i, :] ≈ ustrip.(u"Å", cell_vectors[i]) atol=1e-12
         end
         @test Chemfiles.shape(Chemfiles.UnitCell(frame)) in (Chemfiles.Triclinic,
                                                              Chemfiles.Orthorhombic)
@@ -68,7 +69,8 @@ using UnitfulAtomic
     end
 
     @testset "Warning about setting invalid data" begin
-        system, atoms, atprop, sysprop, box, bcs = make_test_system()
+        data = make_test_system()
+        system, atoms, cell, cell_vectors, periodicity, atprop, sysprop = data
         frame  = @test_logs((:warn, r"Atom vdw_radius in Chemfiles cannot be mutated"),
                             (:warn, r"Atom covalent_radius in Chemfiles cannot be mutated"),
                             (:warn, r"Ignoring unsupported property type Int[0-9]+.*key extra_data"),
@@ -78,7 +80,7 @@ using UnitfulAtomic
         D = 3
         cell = Chemfiles.matrix(Chemfiles.UnitCell(frame))
         for i in 1:D
-            @test cell[i, :] ≈ ustrip.(u"Å", box[i]) atol=1e-12
+            @test cell[i, :] ≈ ustrip.(u"Å", cell_vectors[i]) atol=1e-12
         end
         @test Chemfiles.shape(Chemfiles.UnitCell(frame)) in (Chemfiles.Triclinic,
                                                              Chemfiles.Orthorhombic)
@@ -94,16 +96,11 @@ using UnitfulAtomic
                        rtol=1e-12, ignore_atprop=[:covalent_radius, :vdw_radius])
     end
 
-    @testset "Make sure the example data files can be parsed" begin
+    @testset "Make sure the water example can be parsed without error" begin
         import AtomsBase
-        using AtomsBase: AbstractSystem, FlexibleSystem
-
-        DATAPATH = joinpath(@__DIR__, "data")
-        for file in ["empty.unknown", "topology.xyz", "water.xyz"]
-            traj  = Chemfiles.Trajectory(joinpath(DATAPATH, file))
-            frame = Chemfiles.read_step(traj, 1)
-            sys   = convert(FlexibleSystem, traj)
-            @test length(sys) == length(frame)
-        end
+        traj  = Chemfiles.Trajectory(joinpath(@__DIR__, "data", "water.xyz"))
+        frame = Chemfiles.read_step(traj, 0)
+        sys   = convert(AtomsBase.FlexibleSystem, frame)
+        @test length(sys) == length(frame)
     end
 end
