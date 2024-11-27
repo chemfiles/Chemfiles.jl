@@ -4,6 +4,8 @@ using UnitfulAtomic
 @testset "AtomsBase support" begin
     import AtomsBase
     using AtomsBase: AbstractSystem, FlexibleSystem
+    using AtomsBase: PeriodicCell, IsolatedCell
+    using AtomsBase: atomic_symbol
     using AtomsBaseTesting
 
     function make_chemfiles_system(D=3; drop_atprop=Symbol[], infinite=false, kwargs...)
@@ -13,21 +15,23 @@ using UnitfulAtomic
                                 cellmatrix=:upper_triangular,
                                 kwargs...)
         if infinite
-            system = AtomsBase.isolated_system(data.atoms; data.sysprop...)
+            cell = IsolatedCell(3)
         else
-            system = AtomsBase.periodic_system(data.atoms, data.box; data.sysprop...)
+            cell = PeriodicCell(; data.cell_vectors, periodicity=(true, true, true))
         end
+        system = AtomsBase.FlexibleSystem(data.atoms, cell; data.sysprop...)
         merge(data, (; system))
     end
 
     @testset "Conversion AtomsBase -> Chemfiles (periodic, velocity)" begin
-        system, atoms, atprop, sysprop, box, bcs = make_chemfiles_system(; infinite=false)
+        data = make_chemfiles_system(; infinite=false)
+        system, atoms, cell, cell_vectors, periodicity, atprop, sysprop = data
         frame = convert(Frame, system)
 
         D = 3
         cell = Chemfiles.matrix(Chemfiles.UnitCell(frame))
         for i in 1:D
-            @test cell[i, :] ≈ ustrip.(u"Å", box[i]) atol=1e-12
+            @test cell[i, :] ≈ ustrip.(u"Å", cell_vectors[i]) atol=1e-12
         end
         @test Chemfiles.shape(Chemfiles.UnitCell(frame)) in (Chemfiles.Triclinic,
                                                              Chemfiles.Orthorhombic)
@@ -37,14 +41,15 @@ using UnitfulAtomic
             @test(Chemfiles.velocities(frame)[:, i]
                   ≈ ustrip.(u"Å/ps", atprop.velocity[i]), atol=1e-12)
 
-            @test Chemfiles.name(atom)            == string(atprop.atomic_symbol[i])
-            @test Chemfiles.atomic_number(atom)   == atprop.atomic_number[i]
-            @test Chemfiles.mass(atom)            == ustrip(u"u", atprop.atomic_mass[i])
+            species_i = atprop.species[i]
+            @test Chemfiles.name(atom)            == string(atomic_symbol(species_i))
+            @test Chemfiles.atomic_number(atom)   == atomic_number(species_i)
+            @test Chemfiles.mass(atom)            == ustrip(u"u", atprop.mass[i])
             @test Chemfiles.charge(atom)          == ustrip(u"e_au", atprop.charge[i])
             @test Chemfiles.list_properties(atom) == ["magnetic_moment"]
             @test Chemfiles.property(atom, "magnetic_moment") == atprop.magnetic_moment[i]
 
-            if atprop.atomic_number[i] == 1
+            if atomic_number(atprop.species[i]) == 1
                 @test Chemfiles.vdw_radius(atom)      == 1.2
                 @test Chemfiles.covalent_radius(atom) == 0.37
             end
@@ -64,7 +69,8 @@ using UnitfulAtomic
     end
 
     @testset "Warning about setting invalid data" begin
-        system, atoms, atprop, sysprop, box, bcs = make_test_system()
+        data = make_test_system()
+        system, atoms, cell, cell_vectors, periodicity, atprop, sysprop = data
         frame  = @test_logs((:warn, r"Atom vdw_radius in Chemfiles cannot be mutated"),
                             (:warn, r"Atom covalent_radius in Chemfiles cannot be mutated"),
                             (:warn, r"Ignoring unsupported property type Int[0-9]+.*key extra_data"),
@@ -74,7 +80,7 @@ using UnitfulAtomic
         D = 3
         cell = Chemfiles.matrix(Chemfiles.UnitCell(frame))
         for i in 1:D
-            @test cell[i, :] ≈ ustrip.(u"Å", box[i]) atol=1e-12
+            @test cell[i, :] ≈ ustrip.(u"Å", cell_vectors[i]) atol=1e-12
         end
         @test Chemfiles.shape(Chemfiles.UnitCell(frame)) in (Chemfiles.Triclinic,
                                                              Chemfiles.Orthorhombic)
@@ -88,5 +94,13 @@ using UnitfulAtomic
         newsystem = convert(AtomsBase.AbstractSystem, frame)
         test_approx_eq(system, newsystem;
                        rtol=1e-12, ignore_atprop=[:covalent_radius, :vdw_radius])
+    end
+
+    @testset "Make sure the water example can be parsed without error" begin
+        import AtomsBase
+        traj  = Chemfiles.Trajectory(joinpath(@__DIR__, "data", "water.xyz"))
+        frame = Chemfiles.read_step(traj, 0)
+        sys   = convert(AtomsBase.FlexibleSystem, frame)
+        @test length(sys) == length(frame)
     end
 end
