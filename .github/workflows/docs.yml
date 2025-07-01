@@ -18,7 +18,8 @@ jobs:
           version: lts
       - name: build documentation
         run: |
-          julia -e 'using Pkg; Pkg.add("Documenter")'
+          julia -e 'using Pkg; Pkg.add(name="Documenter", version="1.13.0")'
+          julia -e 'using Pkg; Pkg.add(name="MarkdownAST", version="0.1.2")'
           julia docs/make.jl
       - name: put documentation in the website
         run: |

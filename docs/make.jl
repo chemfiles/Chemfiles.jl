@@ -1,21 +1,20 @@
 using Documenter
 using Documenter: Selectors, Expanders
-using Markdown
+using MarkdownAST
 
 
 # Include external code inside documentation
 struct LiteralInclude <: Expanders.ExpanderPipeline end
 
 Selectors.order(::Type{LiteralInclude}) = 0.5
-Selectors.matcher(::Type{LiteralInclude}, node::Markdown.Code, page, doc) = occursin("@literalinclude", node.language)
-Selectors.matcher(::Type{LiteralInclude}, node, page, doc) = false
+Selectors.matcher(::Type{LiteralInclude}, node, page, doc) = Documenter.iscode(node, r"^@literalinclude")
 
 function Selectors.runner(::Type{LiteralInclude}, node, page, doc)
-    if node.code != ""
+    if node.element.code != ""
         error("content is not supported in @literalinclude")
     end
 
-    matched = match(r"@literalinclude (.*) (\d+)-(\d*)", node.language)
+    matched = match(r"@literalinclude (.*) (\d+)-(\d*)", node.element.info)
     if matched === nothing
         error("@literalinclude should look like '@literalinclude path/to/file.jl 3-5'")
     end
@@ -39,7 +38,10 @@ function Selectors.runner(::Type{LiteralInclude}, node, page, doc)
             join(lines[start:end], '\n')
         end
     end
-    page.mapping[node] = Markdown.Code("julia", content)
+
+    code = MarkdownAST.CodeBlock("julia", content)
+    MarkdownAST.insert_after!(node, MarkdownAST.Node(code))
+    MarkdownAST.unlink!(node)
 end
 
 
