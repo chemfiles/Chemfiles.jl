@@ -32,9 +32,10 @@ function AtomsBase.FlexibleSystem(frame::Chemfiles.Frame)
         )
         for prop in Chemfiles.list_properties(atom)
             symbol = Symbol(prop)
-            if !hasfield(AtomsBase.Atom, symbol) && !(symbol in keys(atprops))
-                atprops[symbol] = Chemfiles.property(atom, prop)
-            end
+            prop in ("atomic_number", "atomic_symbol") && continue  # Reserved name, don't use
+            hasfield(AtomsBase.Atom, symbol) && continue  # Reserved name, don't use as property
+            symbol in keys(atprops) && continue  # Already done
+            atprops[symbol] = Chemfiles.property(atom, prop)
         end
 
         AtomsBase.Atom(Chemfiles.atomic_number(atom), pos, velocity_arg...; atprops...)
