@@ -1,7 +1,7 @@
 name = "Chemfiles"
 uuid = "46823bd8-5fb3-5f92-9aa0-96921f3dd015"
 authors = ["Guillaume Fraux <guillaume.fraux@epfl.ch>"]
-version = "0.10.42"
+version = "0.10.43"
 
 [deps]
 AtomsBase = "a963bdd2-2df7-4f54-a1ee-49d51e6be12a"
